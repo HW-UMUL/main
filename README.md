@@ -1,4 +1,4 @@
-# TEMA 1 KMS
+# TEAM 1 KMS
 
 ### MEMBER
 - 이경민 : PR(Project Manager)
