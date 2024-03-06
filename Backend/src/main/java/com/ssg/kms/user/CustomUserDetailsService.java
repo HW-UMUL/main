@@ -10,7 +10,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
@@ -18,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserRepository userRepository;
+    private final UserRoleRepository userRoleRepository;
 
     @Override
     @Transactional
@@ -31,10 +31,13 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private org.springframework.security.core.userdetails.User createUser(String username, User user) {
 
-        List<GrantedAuthority> grantedAuthorities = user.getUserRoles().stream()
+    	List<UserRole> userRoles = userRoleRepository.findAllByUser(user);
+    	
+        List<GrantedAuthority> grantedAuthorities = userRoles.stream()
                 .map(authority -> new SimpleGrantedAuthority(authority.getRole().getRole().name()))  //    .getRole().name()))
                 .collect(Collectors.toList());
 
+    	
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(),
                 grantedAuthorities);

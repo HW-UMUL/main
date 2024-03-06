@@ -8,4 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
+//	UserRole findByUser(User user);
+
+	List<UserRole> findAllByUser(User user);
+
 }

@@ -55,21 +55,33 @@ public class UserService {
                 .id(roleRepository.findByRole(ERole.ROLE_USER).getId())
                 .build();
 
+        Role authority2 = Role.builder()
+                .role(ERole.ROLE_ADMIN)
+                .id(roleRepository.findByRole(ERole.ROLE_ADMIN).getId())
+                .build();
+
         // 유저 정보를 만들어서 save
         User user = User.builder()
                 .username(userDto.getUsername())
                 .password(passwordEncoder.encode(userDto.getPassword()))
                 .email(userDto.getEmail())
-                .userRoles(new HashSet<>())
                 .build();
         
         UserRole userRole = UserRole.builder()
-//        		.user(user)
+        		.user(user)
         		.role(authority)
         		.build();
-        
-        user.getUserRoles().add(userRole);        
+
+        UserRole userRole2 = UserRole.builder()
+        		.user(user)
+        		.role(authority2)
+        		.build();
+
+//        user.getUserRoles().add(userRole);        
+//        userRole.setUser(user);
         userRepository.save(user);
+        userRoleRepository.save(userRole);
+        userRoleRepository.save(userRole2);
         
         return user;
     }

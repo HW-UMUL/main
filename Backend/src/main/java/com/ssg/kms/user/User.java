@@ -52,6 +52,6 @@ public class User {
     @Email
     private String email;
 
-    @OneToMany(cascade = CascadeType.ALL)    
-    private Set<UserRole> userRoles = new HashSet<>();
+//    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)    
+//    private Set<UserRole> userRoles = new HashSet<>();
 }
