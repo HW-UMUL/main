@@ -1,9 +1,11 @@
-package com.ssg.kms.mainpage;
+package com.ssg.kms.search;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import com.ssg.kms.post.Post;
 
 @Service
 public class SearchService {
@@ -11,11 +13,11 @@ public class SearchService {
 	@Autowired
 	private SearchRepository searchRepository;
 	
-	public List<SearchModel> postList(){
+	public List<Post> postList(){
 		return searchRepository.findAll();
 	};
 	
-	public List<SearchModel> postSearchList(String searchKeyword){
+	public List<Post> postSearchList(String searchKeyword){
 		return searchRepository.findByTitleContaining(searchKeyword);
 	}
 

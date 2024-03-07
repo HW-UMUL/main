@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-@Repository
-public interface SearchRepository extends JpaRepository<SearchModel, Integer> {
+import com.ssg.kms.post.Post;
 
-	List<SearchModel> findByTitleContaining(String searchKeyword);
+@Repository
+public interface SearchRepository extends JpaRepository<Post, Integer> {
+
+	List<Post> findByTitleContaining(String searchKeyword);
 	
 }
