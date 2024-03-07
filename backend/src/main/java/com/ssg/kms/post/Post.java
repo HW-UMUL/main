@@ -48,7 +48,7 @@ public class Post {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     
-	@ManyToOne(cascade = CascadeType.ALL)    
+	@ManyToOne //(cascade = CascadeType.ALL)    
 	private User user;
 
 }
