@@ -13,7 +13,7 @@ public class SearchController {
 	@Autowired
 	SearchService searchService;
 	
-	@GetMapping("post")
+	@GetMapping("post/search")
 	public String searchPageForm(Model model, String searchKeyword) {
 		
 		List<SearchModel> list = null;
