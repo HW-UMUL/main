@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.like.wiki.WikiLikeRepository;
+import com.ssg.kms.star.wiki.WikiStarRepository;
 import com.ssg.kms.user.User;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WikiService {
     private final WikiRepository wikiRepository;
+    private final WikiLikeRepository wikiLikeRepository;
+    private final WikiStarRepository wikiStarRepository;
     
     @Transactional
     public Wiki createWiki(WikiDTO wikiDto, Optional<User> user) {
@@ -48,6 +52,10 @@ public class WikiService {
     @Transactional
     public Wiki deleteWiki(Long wikiId, Optional<User> user) {
     	Wiki wiki = wikiRepository.findById(wikiId).get();
+    	
+    	wikiLikeRepository.deleteAllByWikiId(wiki.getId());
+    	wikiStarRepository.deleteAllByWikiId(wiki.getId());
+
     	wiki.setUser(null);
     	wikiRepository.deleteById(wikiId);
     	wiki.setUser(user.get());

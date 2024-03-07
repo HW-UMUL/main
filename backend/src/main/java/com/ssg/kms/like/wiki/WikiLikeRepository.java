@@ -14,4 +14,6 @@ public interface WikiLikeRepository extends JpaRepository<WikiLike, Long> {
 
 	Set<WikiLike> findAllByWikiId(Long wikiId);
 
+	void deleteAllByWikiId(Long id);
+
 }

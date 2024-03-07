@@ -3,6 +3,7 @@ package com.ssg.kms.like.post;
 import com.ssg.kms.post.Post;
 import com.ssg.kms.user.User;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;

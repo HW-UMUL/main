@@ -14,4 +14,6 @@ public interface WikiStarRepository extends JpaRepository<WikiStar, Long> {
 
 	Set<WikiStar> findAllByWikiId(Long wikiId);
 
+	void deleteAllByWikiId(Long id);
+
 }

@@ -15,4 +15,6 @@ public interface PostStarRepository extends JpaRepository<PostStar, Long> {
 
 	Set<PostStar> findAllByPostId(Long postId);
 
+	void deleteAllByPostId(Long id);
+
 }

@@ -45,5 +45,4 @@ public class WikiStarService {
     public int readStar(Long wikiId, Optional<User> user) {
     	return wikiStarRepository.findAllByWikiId(wikiId).size();
     }
-    
 }
