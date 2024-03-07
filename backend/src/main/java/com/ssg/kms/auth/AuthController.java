@@ -25,7 +25,7 @@ public class AuthController {
     @PostMapping("/auth")
     public ResponseEntity<TokenDto> authorize(@Valid @RequestBody LoginDto loginDto) {
 
-    	String jwt = authService.authorize(loginDto);
+    	String jwt = authService.authorize(loginDto); //test2
     	HttpHeaders httpHeaders = new HttpHeaders();
     	// response header에 jwt token에 넣어줌
     	httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, jwt);
