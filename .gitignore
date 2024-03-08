@@ -31,6 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
-
-application.properties
 /.metadata/
+
+### Vue ###
+node_modules
+
+### Spring Boot ###
+application.properties
