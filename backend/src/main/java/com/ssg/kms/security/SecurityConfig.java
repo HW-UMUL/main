@@ -1,6 +1,5 @@
 package com.ssg.kms.security;
 
-import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -62,26 +61,28 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth").permitAll() // 로그인 api
                 .requestMatchers("/api/signup").permitAll() // 회원가입 api
                 .requestMatchers("/api/testtest").permitAll() // 회원가입 api
+                .requestMatchers("/api/login").permitAll() // 회원가입 api
                 
                 
-                .requestMatchers("/favicon.ico").permitAll()
+//                .requestMatchers("/favicon.ico").permitAll()
 //                .requestMatchers("/resources/**").permitAll()
-                .requestMatchers("/js/**").permitAll()
-                .requestMatchers("/css/**").permitAll()
-                .requestMatchers("/resources/**").permitAll()
-                .requestMatchers("/layout/**").permitAll()
-                .requestMatchers("/fragment/**").permitAll()
-                .requestMatchers("/bootstrap/**").permitAll()
-                
-                
-                .requestMatchers("/signup").permitAll()
-                .requestMatchers("/login").permitAll()
-                .requestMatchers("/user/logout").permitAll()                
+//                .requestMatchers("/js/**").permitAll()
+//                .requestMatchers("/css/**").permitAll()
+//                .requestMatchers("/resources/**").permitAll()
+//                .requestMatchers("/layout/**").permitAll()
+//                .requestMatchers("/fragment/**").permitAll()
+//                .requestMatchers("/bootstrap/**").permitAll()
+//                
+//                
+//                .requestMatchers("/signup").permitAll()
+//                .requestMatchers("/login").permitAll()
+//                .requestMatchers("/user/logout").permitAll()                
                 .anyRequest().authenticated() // 그 외 인증 없이 접근X
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider)); // JwtFilter를 addFilterBefore로 등록했던 JwtSecurityConfig class 적용
 
+        httpSecurity.cors();
 
         return httpSecurity.build();
     }

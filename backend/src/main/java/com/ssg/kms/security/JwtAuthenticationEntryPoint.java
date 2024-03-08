@@ -16,8 +16,8 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 	public void commence(HttpServletRequest request, HttpServletResponse response,
 			org.springframework.security.core.AuthenticationException authException)
 			throws java.io.IOException, ServletException {
-//		response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
-		response.sendRedirect("/login");
+		response.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+//		response.sendRedirect("/login");
 		
 	}
 
