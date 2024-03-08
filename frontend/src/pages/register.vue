@@ -29,7 +29,7 @@ const formData = {
   password: form.value.password,
   email: form.value.email
 }
-  
+
 const response = await fetch(
     `http://localhost:8080/api/signup`,
     {

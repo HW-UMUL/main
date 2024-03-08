@@ -1,5 +1,7 @@
 <script setup>
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
+import Post from '@/views/post/Post.vue';
+
 // import post from '@/views/'
 
 const totalProfit = {
@@ -28,10 +30,15 @@ const newProject = {
       md="8"
       class="mb-4"
     >
-        <AnalyticsAward style="margin-bottom: 20px;"/>
-        <AnalyticsAward style="margin-bottom: 20px;"/>
-        <AnalyticsAward style="margin-bottom: 20px;"/>
-        <AnalyticsAward style="margin-bottom: 20px;"/>
+    <div>
+        <div v-for="(item, index) in paginatedQuestions" :key="index" 
+        @click="callAnswerHandler(item.id)">
+            {{ item.title }} - {{ item.content }}
+        </div>
+    </div>
+        <Post style="margin-bottom: 20px;"/>
+        <Post style="margin-bottom: 20px;"/>
+        <Post style="margin-bottom: 20px;"/>
     </VCol>  
     <VCol
       cols="12"
