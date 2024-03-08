@@ -1,6 +1,7 @@
 package com.ssg.kms.wiki;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -39,7 +40,12 @@ public class WikiService {
     	
 		return wiki;
     }
-    
+
+    @Transactional(readOnly = true)
+    public List<Wiki> readWikiAll(Optional<User> user) {
+		return wikiRepository.findAll();
+    }
+
     @Transactional(readOnly = true)
     public Wiki readWiki(Long wikiId, Optional<User> user) {
 		return wikiRepository.findById(wikiId).get();

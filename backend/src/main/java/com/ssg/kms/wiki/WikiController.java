@@ -1,7 +1,5 @@
 package com.ssg.kms.wiki;
 
-import java.util.Optional;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssg.kms.user.User;
 import com.ssg.kms.user.UserService;
 
 import jakarta.validation.Valid;
@@ -30,6 +27,11 @@ public class WikiController {
 		return ResponseEntity.ok(wikiService.createWiki(wikiDto, userService.getMyUserWithAuthorities()));
 	}
 	
+    @GetMapping("/readall")
+    public ResponseEntity<Wiki> readWikiAll() {
+        return (ResponseEntity)ResponseEntity.ok(wikiService.readWikiAll(userService.getMyUserWithAuthorities()));
+    }
+
 	@GetMapping("/read/{wikiId}")
     public ResponseEntity<Wiki> readWiki(@PathVariable Long wikiId) {
         return ResponseEntity.ok(wikiService.readWiki(wikiId, userService.getMyUserWithAuthorities()));
