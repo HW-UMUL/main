@@ -14,13 +14,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ssg.kms.post.Post;
 
 @RestController
-@RequestMapping("/api/post")
+@RequestMapping("/api/search")
 public class SearchController {
 
 	@Autowired
 	SearchService searchService;
 	
-	@GetMapping("/search")
+	@GetMapping("/post")
     public ResponseEntity<List<Post>> searchPage(String searchKeyword) {
 		
 		List<Post> list = null;
