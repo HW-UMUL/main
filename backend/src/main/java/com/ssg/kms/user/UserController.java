@@ -1,8 +1,9 @@
 package com.ssg.kms.user;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,16 +32,19 @@ public class UserController {
 	}
 	
 	@PostMapping("/login")
-	public ResponseEntity login(HttpServletResponse response, @Valid @RequestBody LoginDto loginDto) {
+	public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto) {
 		
 		String jwtToken = authService.authorize(loginDto);
         // 서버에서 쿠키 설정
-        Cookie cookie = new Cookie("jwtToken", jwtToken.substring(7));
-        cookie.setMaxAge(60 * 60 * 24); // 쿠키의 유효기간 설정
-        cookie.setPath("/");
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("jwtToken", jwtToken.substring(7));
+//        cookie.setMaxAge(60 * 60 * 24); // 쿠키의 유효기간 설정
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
 
-		return ResponseEntity.ok(loginDto.getUsername());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Set-Cookie", "jwtToken=" + jwtToken.substring(7) + "; Path=/; Max-Age=3600"); //3600초
+
+		return ResponseEntity.ok().headers(headers).body(loginDto.getUsername());
 	}
 
 

@@ -1,5 +1,7 @@
 package com.ssg.kms.reply;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +32,11 @@ public class ReplyController {
 	@GetMapping("/read/{replyId}")
     public ResponseEntity<Reply> readReply(@PathVariable Long replyId) {
         return ResponseEntity.ok(replyService.readReply(replyId, userService.getMyUserWithAuthorities()));
+    }
+	
+	@GetMapping("/readpost/{postId}")
+    public ResponseEntity<List<Reply>> readAllReply(@PathVariable Long postId) {
+        return ResponseEntity.ok(replyService.readAllReply(postId, userService.getMyUserWithAuthorities()));
     }
 	
 	@PutMapping("/update/{replyId}")

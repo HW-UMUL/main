@@ -1,12 +1,12 @@
 package com.ssg.kms.post;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.ssg.kms.like.post.PostLike;
 import com.ssg.kms.like.post.PostLikeRepository;
 import com.ssg.kms.star.post.PostStarRepository;
 import com.ssg.kms.user.User;
@@ -39,7 +39,12 @@ public class PostService {
     public Post readPost(Long postId, Optional<User> user) {
 		return postRepository.findById(postId).get();
     }
-    
+
+    @Transactional(readOnly = true)
+    public List<Post> readAllPost(Optional<User> user) {
+		return postRepository.findAll();
+    }
+
     @Transactional
     public Post updatePost(Long postId, PostDTO postDto, Optional<User> user) {
     	Post post = postRepository.findById(postId).get();

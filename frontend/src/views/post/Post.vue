@@ -13,6 +13,8 @@ const reply = ref({
   content: ''
 })
 
+const replys = ref([])
+
 async function checkLike(){
 
 const response = await fetch(
@@ -96,7 +98,6 @@ if(!response.ok) {
 }
 
 async function writeReply(postId){
-
   const formData = {
     content: reply.value.content
   }
@@ -116,7 +117,7 @@ const response = await fetch(
 if(!response.ok) {
   alert("실패!")
 } else{
-  getLikes()
+  getReply(postId)
 }
 }
 
@@ -128,26 +129,27 @@ const formData = {
 }
 
 const response = await fetch(
-  `http://localhost:8080/api/reply/readPost/${postId}`,
+  `http://localhost:8080/api/reply/readpost/${postId}`,
   {
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(formData),
     credentials: 'include'
   }
 )
 
-if(!response.ok) {
-alert("실패!")
-} else{
-getLikes()
-}
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    replys.value = await response.json()
+    reply.value.content = ''
+  }
 }
 
 getLikes()
 getStars()
+getReply(props.post.id)
 </script>
 
 <template>
@@ -171,6 +173,15 @@ getStars()
             <hr/>
             <div class="post-comments">
                 <p>댓글</p>
+                <div v-for="(item, index) in replys" :key="index">
+                  {{ item.content }}
+                </div>
+                <div>
+                  <form @submit.prevent="writeReply(post.id)">
+                    <div><label>내용</label><input type="text" v-model="reply.content"></input></div>
+                    <div><input type="submit"></input></div>
+                  </form>
+                </div>
             </div>
         </div>
     </div>

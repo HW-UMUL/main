@@ -1,6 +1,7 @@
 package com.ssg.kms.reply;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -55,5 +56,10 @@ public class ReplyService {
     	replyRepository.deleteById(replyId);
     	reply.setUser(user.get());
     	return reply;
+    }
+
+    @Transactional(readOnly = true)
+    public List<Reply> readAllReply(Long postId, Optional<User> user) {
+		return replyRepository.findAllByPostId(postId);
     }
 }

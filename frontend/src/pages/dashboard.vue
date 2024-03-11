@@ -41,7 +41,6 @@ async function getPosts(){
     alert("실패!")
   } else{
     posts.value = await response.json()
-    console.log(posts.value)
   }
 }
 
