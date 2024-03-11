@@ -27,7 +27,7 @@ async function login() {
     username: form.value.username,
     password: form.value.password
   }
-    
+   
   const response = await fetch(
       `http://localhost:8080/api/login`,
       {
@@ -35,7 +35,8 @@ async function login() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(formData),
+        credentials: 'include'
       }
   )
 

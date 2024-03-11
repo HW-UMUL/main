@@ -1,4 +1,99 @@
 <script setup>
+
+//const post = defineProps(['post'])
+const props = defineProps({
+    post: Object
+})
+
+
+const like = ref([])
+const star = ref([])
+
+async function checkLike(){
+
+const response = await fetch(
+    `http://localhost:8080/api/postlike/check/${props.post.id}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  getLikes()
+}
+}
+
+async function checkStar(){
+
+const response = await fetch(
+    `http://localhost:8080/api/poststar/check/${props.post.id}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  getStars()
+}
+}
+
+
+
+async function getLikes(){
+
+  const response = await fetch(
+      `http://localhost:8080/api/postlike/read/${props.post.id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    like.value = await response.json()
+  }
+}
+
+async function getStars(){
+
+const response = await fetch(
+    `http://localhost:8080/api/poststar/read/${props.post.id}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  star.value = await response.json()
+}
+}
+
+
+getLikes()
+getStars()
 </script>
 
 <template>
@@ -8,16 +103,16 @@
         <div class="post-details">
             <div class="post-header">
                 <span class="circle"></span>
-                <span class="post-name">이름</span>
-                <span class="post-title">제목</span>
-                <span class="post-date">날짜</span>
+                <span class="post-name">{{ post.user.username }}</span>
+                <span class="post-title">{{ post.title }}</span>
+                <span class="post-date">{{ post.date }}</span>
             </div>
             <hr/>
-            <p class="post-content">본문</p>
+            <p class="post-content">{{ post.content }}</p>
             <hr/>
             <div class="post-interactions">
-                <span class="post-interactions-item">좋아요 수</span>
-                <span class="post-interactions-item">즐겨찾기 수</span>
+                <span @click="checkLike" class="post-interactions-item">좋아요 : {{ like }}</span>
+                <span @click="checkStar" class="post-interactions-item">즐겨찾기 : {{ star }}</span>
             </div>
             <hr/>
             <div class="post-comments">

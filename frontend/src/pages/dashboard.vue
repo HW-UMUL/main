@@ -21,6 +21,31 @@ const newProject = {
   change: -18,
   subtitle: 'Yearly Project',
 }
+
+const posts = ref([])
+
+async function getPosts(){
+
+  const response = await fetch(
+      `http://localhost:8080/api/post/read`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    posts.value = await response.json()
+    console.log(posts.value)
+  }
+}
+
+getPosts()
 </script>
 
 <template>
@@ -30,15 +55,14 @@ const newProject = {
       md="8"
       class="mb-4"
     >
-    <div>
-        <div v-for="(item, index) in paginatedQuestions" :key="index" 
-        @click="callAnswerHandler(item.id)">
-            {{ item.title }} - {{ item.content }}
-        </div>
+    
+    <div v-for="(item, index) in posts" :key="index">
+      <!-- {{ item }}       -->
+      <Post :post="item" style="margin-bottom: 20px;"/>
     </div>
+        <!-- <Post style="margin-bottom: 20px;"/>
         <Post style="margin-bottom: 20px;"/>
-        <Post style="margin-bottom: 20px;"/>
-        <Post style="margin-bottom: 20px;"/>
+        <Post style="margin-bottom: 20px;"/> -->
     </VCol>  
     <VCol
       cols="12"

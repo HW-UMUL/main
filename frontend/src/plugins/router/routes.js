@@ -32,6 +32,10 @@ export const routes = [
         path: 'form-layouts',
         component: () => import('@/pages/form-layouts.vue'),
       },
+      {
+        path: 'writepost',
+        component: () => import('@/pages/writepost.vue')
+      }
     ],
   },
   {

@@ -1,10 +1,10 @@
 <script setup>
-import NavItems from '@/layouts/components/NavItems.vue'
-import logo from '@images/logo.svg?raw'
-import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import Footer from '@/layouts/components/Footer.vue'
+import NavItems from '@/layouts/components/NavItems.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
+import logo from '@images/logo.svg?raw'
+import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 </script>
 
 <template>
@@ -37,6 +37,9 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
         </div>
 
         <VSpacer />
+
+        <router-link to="/writepost">Post+</router-link>
+        <router-link to="/login">Wiki+</router-link>
 
         <IconBtn
           class="me-2"
