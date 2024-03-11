@@ -3,26 +3,25 @@ import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
 import Post from '@/views/post/Post.vue';
 
 // import post from '@/views/'
+import { watchEffect } from 'vue';
 
-const totalProfit = {
-  title: 'Total Profit',
-  color: 'secondary',
-  icon: 'ri-pie-chart-2-line',
-  stats: '$25.6k',
-  change: 42,
-  subtitle: 'Weekly Project',
-}
 
-const newProject = {
-  title: 'New Project',
-  color: 'primary',
-  icon: 'ri-file-word-2-line',
-  stats: '862',
-  change: -18,
-  subtitle: 'Yearly Project',
-}
+const props = defineProps({
+    keyword: String
+})
 
 const posts = ref([])
+
+watchEffect(() => {
+  // props를 감시하고, 변경될 때마다 실행되는 코드
+  console.log('Keyword has been updated:', props.keyword);
+  if(props.keyword == null){
+    getPosts()
+  } else{
+    searchPost()
+  }
+});
+
 
 async function getPosts(){
 
@@ -44,7 +43,30 @@ async function getPosts(){
   }
 }
 
-getPosts()
+async function searchPost(){
+  const response = await fetch(
+      `http://localhost:8080/api/post/search/${props.keyword}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    posts.value = await response.json()
+ }
+ 
+}
+
+
+if(props.keyword == null){
+  getPosts()
+} 
 </script>
 
 <template>

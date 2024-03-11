@@ -48,4 +48,9 @@ public class PostController {
     public ResponseEntity<Post> deletePost(@PathVariable Long postId) {
         return ResponseEntity.ok(postService.deletePost(postId, userService.getMyUserWithAuthorities()));
     }
+	
+	@GetMapping("/search/{searchKeyword}")
+    public ResponseEntity<List<Post>> searchPage(@PathVariable String searchKeyword) {        
+        return ResponseEntity.ok(postService.searchPost(searchKeyword, userService.getMyUserWithAuthorities()));
+    }
 }

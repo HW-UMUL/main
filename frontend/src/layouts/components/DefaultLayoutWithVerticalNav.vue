@@ -5,6 +5,50 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
+
+import { useRouter } from 'vue-router';
+
+//import router from '@/plugins/router/routes.js'
+
+const router = useRouter();
+
+const posts = ref([])
+const searchKeyword = ref({
+  keyword: ''
+})
+async function searchPost(){
+  if(searchKeyword.value.keyword.length != 0){
+    router.push({
+      path: `/search/${searchKeyword.value.keyword}`
+    })
+  } else {
+    alert('검색어를 입력해주세요!')
+  }
+
+  /*
+  const response = await fetch(
+      `http://localhost:8080/api/post/search/${searchKeyword.value.keyword}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    posts.value = await response.json()
+    router.push({
+      path: 'search',
+      params: { posts: posts} 
+    })
+  }
+  */
+
+}
 </script>
 
 <template>
@@ -26,6 +70,10 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
           style="user-select: none;"
         >
           <!-- 👉 Search Trigger button -->
+          <form @submit.prevent="searchPost()">
+            <input type="text" v-model="searchKeyword.keyword"></input>
+            <input type="submit"></input>
+          </form>
           <IconBtn>
             <VIcon icon="ri-search-line" />
           </IconBtn>

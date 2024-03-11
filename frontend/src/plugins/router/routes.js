@@ -35,6 +35,17 @@ export const routes = [
       {
         path: 'writepost',
         component: () => import('@/pages/writepost.vue')
+      },
+      {
+        path: '/search/:keyword',
+        name: 'search',
+        component: () => import('@/pages/dashboard.vue'),
+        props: true
+      },
+      {
+        path: '/search',
+        component: () => import('@/pages/dashboard.vue'),
+        props: true
       }
     ],
   },
@@ -57,3 +68,5 @@ export const routes = [
     ],
   },
 ]
+
+export default routes

@@ -70,4 +70,10 @@ public class PostService {
     	post.setUser(user.get());
     	return post;
     }
+
+    @Transactional
+    public List<Post> searchPost(String searchKeyword, Optional<User> user){
+        return postRepository.findAllByTitleContaining(searchKeyword);
+    }
+    
 }
