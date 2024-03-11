@@ -44,15 +44,20 @@ async function writePost(){
       md="8"
       class="mb-4"
     >
-    <div>
+    <VCard class="position-relative">
+    <VCardText>
+      <div class="mb-2">
         <form @submit.prevent="writePost()">
-            <input type="text" v-model="post.title"></input>
-            <input type="text" v-model="post.content"></input>
-            <input type="text" v-model="post.category"></input>
-            <input type="text" v-model="post.tag"></input>
-            <input type="submit">submit</input>
-        </form>
-    </div>
+            <div><label>제목</label><input type="text" v-model="post.title"></input></div>
+            <div><label>본문</label><input type="text" v-model="post.content"></input></div>
+            <div><label>카테고리</label><input type="text" v-model="post.category"></input></div>
+            <div><label>태그</label><input type="text" v-model="post.tag"></input></div>
+            <div><input type="submit"></input></div>
+        </form>      
+      </div>
+    </VCardText>
+  </VCard>
+    
     </VCol>  
 
   </VRow>

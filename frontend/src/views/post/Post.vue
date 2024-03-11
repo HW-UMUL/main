@@ -9,6 +9,10 @@ const props = defineProps({
 const like = ref([])
 const star = ref([])
 
+const reply = ref({
+  content: ''
+})
+
 async function checkLike(){
 
 const response = await fetch(
@@ -91,6 +95,56 @@ if(!response.ok) {
 }
 }
 
+async function writeReply(postId){
+
+  const formData = {
+    content: reply.value.content
+  }
+
+const response = await fetch(
+    `http://localhost:8080/api/reply/create/${postId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData),
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  getLikes()
+}
+}
+
+
+async function getReply(postId){
+
+const formData = {
+  content: reply.value.content
+}
+
+const response = await fetch(
+  `http://localhost:8080/api/reply/readPost/${postId}`,
+  {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(formData),
+    credentials: 'include'
+  }
+)
+
+if(!response.ok) {
+alert("실패!")
+} else{
+getLikes()
+}
+}
 
 getLikes()
 getStars()
