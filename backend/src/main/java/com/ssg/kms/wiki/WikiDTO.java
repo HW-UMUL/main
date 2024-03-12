@@ -25,5 +25,5 @@ public class WikiDTO {
 //    @DateTimeFormat(iso = ISO.DATE_TIME)
 //    private LocalDateTime endDate;
     
-    private String tag;
+    private String category;
 }

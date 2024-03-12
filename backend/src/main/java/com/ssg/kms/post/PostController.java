@@ -24,6 +24,9 @@ public class PostController {
 	private final PostService postService;
 	private final UserService userService;
 	
+	/////////////////////////////////////////////////
+	// Own
+	/////////////////////////////////////////////////
 	@PostMapping("/create")
 	public ResponseEntity<Post> createPost(@Valid @RequestBody PostDTO PostDto) {
 		return ResponseEntity.ok(postService.createPost(PostDto, userService.getMyUserWithAuthorities()));
@@ -53,4 +56,12 @@ public class PostController {
     public ResponseEntity<List<Post>> searchPage(@PathVariable String searchKeyword) {        
         return ResponseEntity.ok(postService.searchPost(searchKeyword, userService.getMyUserWithAuthorities()));
     }
+	/////////////////////////////////////////////////
+	// Table
+	/////////////////////////////////////////////////
+	@PostMapping("/create/{tableId}")
+	public ResponseEntity<Post> createTablePost(@PathVariable Long tableId, @Valid @RequestBody PostDTO PostDto) {
+		return ResponseEntity.ok(postService.createPost(tableId, PostDto, userService.getMyUserWithAuthorities()));
+	}
+
 }

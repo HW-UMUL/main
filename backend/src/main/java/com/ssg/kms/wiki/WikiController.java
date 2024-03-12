@@ -44,4 +44,12 @@ public class WikiController {
     public ResponseEntity<Wiki> deleteWiki(@PathVariable Long wikiId) {
         return ResponseEntity.ok(wikiService.deleteWiki(wikiId, userService.getMyUserWithAuthorities()));
     }
+	/////////////////////////////////////////////////
+	// Table
+	/////////////////////////////////////////////////
+	@PostMapping("/create/{tableId}")
+	public ResponseEntity<Wiki> createTableWiki(@PathVariable Long tableId, @Valid @RequestBody WikiDTO wikiDto) {
+		return ResponseEntity.ok(wikiService.createTableWiki(tableId, wikiDto, userService.getMyUserWithAuthorities()));
+	}
+
 }

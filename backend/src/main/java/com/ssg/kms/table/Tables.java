@@ -1,14 +1,15 @@
-package com.ssg.kms.post;
+package com.ssg.kms.table;
 
 import java.util.Date;
 
-import com.ssg.kms.table.Tables;
-import com.ssg.kms.user.User;
+import com.ssg.kms.post.Post;
+import com.ssg.kms.wiki.Wiki;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
@@ -22,35 +23,23 @@ import lombok.NoArgsConstructor;
 
 
 @Entity
-@Table(name = "POST")
+@Table(name = "TABLES")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class Post {
+public class Tables {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
     @NotBlank	// jakarta.validation.constraints.NotBlank
-    private String title;
+    private String name;
 
     @NotBlank
-    private String content;
-
-//    @NotBlank
-//    private String category;
-//
-//    @NotBlank
-//    private String tag;
+    private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     
-	@ManyToOne //(cascade = CascadeType.ALL)    
-	private User user;
-	
-	@ManyToOne
-	private Tables table;
-
 }

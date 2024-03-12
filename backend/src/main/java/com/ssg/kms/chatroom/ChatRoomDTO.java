@@ -1,4 +1,4 @@
-package com.ssg.kms.post;
+package com.ssg.kms.chatroom;
 
 import java.time.LocalDateTime;
 
@@ -16,16 +16,8 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PostDTO {
+public class ChatRoomDTO {
 	
-    private String title;
-
-    private String content;
-
-//    @DateTimeFormat(iso = ISO.DATE_TIME)
-//    private LocalDateTime endDate;
-
-//    private String category;
-//    
-    private String tag;
+    private String name;
+    
 }

@@ -1,8 +1,8 @@
-package com.ssg.kms.post;
+package com.ssg.kms.chat;
 
 import java.util.Date;
 
-import com.ssg.kms.table.Tables;
+import com.ssg.kms.chatroom.ChatRoom;
 import com.ssg.kms.user.User;
 
 import jakarta.persistence.Entity;
@@ -19,38 +19,26 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-
 @Entity
-@Table(name = "POST")
+@Table(name = "CHAT")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Builder
-public class Post {
+public class Chat {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
-    @NotBlank	// jakarta.validation.constraints.NotBlank
-    private String title;
-
-    @NotBlank
-    private String content;
-
-//    @NotBlank
-//    private String category;
-//
-//    @NotBlank
-//    private String tag;
-
-    @Temporal(TemporalType.TIMESTAMP)
+	@NotBlank
+	private String content;
+	
+	@Temporal(TemporalType.TIMESTAMP)
     private Date date;
-    
-	@ManyToOne //(cascade = CascadeType.ALL)    
+
+	@ManyToOne 
 	private User user;
 	
-	@ManyToOne
-	private Tables table;
-
+	@ManyToOne 
+	private ChatRoom chatRoom;
 }
