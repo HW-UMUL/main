@@ -2,24 +2,22 @@
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
 
 
-const post = ref({
+const wiki = ref({
   title: '',
   content: '',
-  category: '',
   tag: ''
 })
 
-async function writePost(){
+async function writeWiki(){
 
   const formData = {
-    title: post.value.title,
+    title: wiki.value.title,
     content: post.value.content,
-    category: post.value.category,
-    tag: post.value.tag
+    tag: wiki.value.tag
   }
 
   const response = await fetch(
-      `http://localhost:8080/api/post/create`,
+      `http://localhost:8080/api/wiki/create`,
       {
         method: 'POST',
         headers: {
@@ -49,13 +47,13 @@ async function writePost(){
       <VCard class="position-relative">
         <VCardText>
           <div >
-            <form @submit.prevent="writePost()">
-            <p >Post 작성</p>
+            <form @submit.prevent="writeWiki()">
+                <p >Wiki 작성</p>
                 <VCol
                 >
                   <VTextField
                   id="title"
-                  v-model="post.title"
+                  v-model="wiki.title"
                   placeholder="제목"
                   label="제목"
                   />
@@ -67,7 +65,7 @@ async function writePost(){
                 >
                   <VTextarea
                   id="content"
-                  v-model="post.content"
+                  v-model="wiki.content"
                   placeholder="본문"
                   label="본문"
                   />
@@ -78,20 +76,8 @@ async function writePost(){
                 <VCol
                 >
                   <VTextField
-                  id="category"
-                  v-model="post.category"
-                  placeholder="카테고리"
-                  label="카테고리"
-                  />
-                </VCol>
-
-
-
-                <VCol
-                >
-                  <VTextField
                   id="tag"
-                  v-model="post.tag"
+                  v-model="wiki.tag"
                   placeholder="태그"
                   label="태그"
                   />

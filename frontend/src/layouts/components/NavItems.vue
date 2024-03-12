@@ -6,7 +6,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 
 <template>
   <!-- 👉 Dashboards -->
-  <VerticalNavGroup
+  <!-- <VerticalNavGroup
     :item="{
       title: 'Dashboards',
       badgeContent: '5',
@@ -20,46 +20,26 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
         to: '/dashboard',
       }"
     />
-    <VerticalNavLink
-      :item="{
-        title: 'CRM',
-        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/dashboards/crm',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'ECommerce',
-        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/dashboards/ecommerce',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Academy',
-        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/dashboards/academy',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-    <VerticalNavLink
-      :item="{
-        title: 'Logistics',
-        href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/dashboards/logistics',
-        target: '_blank',
-        badgeContent: 'Pro',
-        badgeClass: 'bg-light-primary text-primary',
-      }"
-    />
-  </VerticalNavGroup>
+  </VerticalNavGroup> -->
 
+  <VerticalNavLink
+    :item=" {
+      title: 'Post',
+      to: '/dashboard',
+      icon: 'ri-home-line'      
+    }">    
+  </VerticalNavLink>
+
+  <VerticalNavLink
+      :item="{
+        title: 'wiki',
+        to: '/wiki',
+        icon:'ri-book-line'
+      }"
+  />
+  
   <!-- 👉 Front Pages -->
-  <VerticalNavGroup
+  <!-- <VerticalNavGroup
     :item="{
       title: 'Front Pages',
       icon: 'ri-file-copy-line',
@@ -102,10 +82,10 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
         target: '_blank',
       }"
     />
-  </VerticalNavGroup>
+  </VerticalNavGroup> -->
 
   <!-- 👉 Apps & Pages -->
-  <VerticalNavSectionTitle
+  <!-- <VerticalNavSectionTitle
     :item="{
       heading: 'Apps & Pages',
     }"
@@ -148,6 +128,11 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       target: '_blank',
       badgeContent: 'Pro',
       badgeClass: 'bg-light-primary text-primary',
+    }"
+  /> -->
+  <VerticalNavSectionTitle
+    :item="{
+      heading: 'user',
     }"
   />
 
@@ -224,26 +209,6 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
   />
   <VerticalNavLink
     :item="{
-      title: 'Form Validation',
-      icon: 'ri-checkbox-multiple-line',
-      href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/forms/form-validation',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Form Wizard',
-      icon: 'ri-git-commit-line',
-      href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/forms/form-wizard-numbered',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
       title: 'Tables',
       icon: 'ri-table-alt-line',
       to: '/tables',
@@ -254,16 +219,6 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
   <VerticalNavSectionTitle
     :item="{
       heading: 'Others',
-    }"
-  />
-  <VerticalNavLink
-    :item="{
-      title: 'Access Control',
-      icon: 'ri-shield-line',
-      href: 'https://demos.themeselection.com/materio-vuetify-vuejs-admin-template/demo-1/access-control',
-      target: '_blank',
-      badgeContent: 'Pro',
-      badgeClass: 'bg-light-primary text-primary',
     }"
   />
   <VerticalNavLink

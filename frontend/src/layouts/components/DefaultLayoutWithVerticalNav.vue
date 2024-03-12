@@ -5,6 +5,8 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
+import writepost from '@/pages/writepost.vue'
+import writewiki from '@/pages/writewiki.vue'
 </script>
 
 <template>
@@ -37,9 +39,25 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
         </div>
 
         <VSpacer />
+        
+        <IconBtn
+        size="height:20px;"
+        type="submit"
+        to="/writepost"
+        >
+        Post+
+        </IconBtn>
 
-        <router-link to="/writepost">Post+</router-link>
-        <router-link to="/login">Wiki+</router-link>
+        <IconBtn
+        size="height:20px;"
+        type="submit"
+        to="/writewiki"
+        >
+        Wiki+
+        </IconBtn>
+
+        <!-- <router-link to="/writepost">Post+</router-link>
+        <router-link to="/login">Wiki+</router-link> -->
 
         <IconBtn
           class="me-2"

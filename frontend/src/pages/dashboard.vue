@@ -67,7 +67,9 @@ getPosts()
       cols="12"
       md="4"
     >
-        <AnalyticsAward />
+        <AnalyticsAward style="margin-bottom: 20px"/>
+        <AnalyticsAward style="margin-bottom: 20px"/>
+        <AnalyticsAward style="margin-bottom: 20px"/>
     </VCol>  
 
   </VRow>

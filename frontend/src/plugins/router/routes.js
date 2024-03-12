@@ -35,6 +35,10 @@ export const routes = [
       {
         path: 'writepost',
         component: () => import('@/pages/writepost.vue')
+      },
+      {
+        path: 'writewiki',
+        component: () => import('@/pages/writewiki.vue')
       }
     ],
   },

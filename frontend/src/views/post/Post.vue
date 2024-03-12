@@ -1,5 +1,7 @@
 <script setup>
+import { VCardItem, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/components/index.mjs';
 
+const isDetails = ref(false)
 //const post = defineProps(['post'])
 const props = defineProps({
     post: Object
@@ -155,36 +157,123 @@ getReply(props.post.id)
 <template>
   <VCard class="position-relative">
     <VCardText>
-      <div class="mb-2">
-        <div class="post-details">
+      <VCol class="mb-2">
+        <VCol class="post-details">
             <div class="post-header">
-                <span class="circle"></span>
-                <span class="post-name">{{ post.user.username }}</span>
-                <span class="post-title">{{ post.title }}</span>
-                <span class="post-date">{{ post.date }}</span>
-            </div>
-            <hr/>
-            <p class="post-content">{{ post.content }}</p>
-            <hr/>
-            <div class="post-interactions">
-                <span @click="checkLike" class="post-interactions-item">좋아요 : {{ like }}</span>
-                <span @click="checkStar" class="post-interactions-item">즐겨찾기 : {{ star }}</span>
-            </div>
-            <hr/>
-            <div class="post-comments">
-                <p>댓글</p>
-                <div v-for="(item, index) in replys" :key="index">
-                  {{ item.content }}
-                </div>
+                <VCol class="post-header" >
+                  <span class="circle"></span>
+                  <span class="post-name" style="margin-left:10px; margin-right: 200px;">{{ post.user.username }}</span>
+                  <span class="post-date">{{ post.date }}</span>
+                </VCol>
+              </div>
+            <VCol class="post-title">
+              <VCardTitle>{{ post.title }}</VCardTitle>
+            </VCol>
+            <VDivider />
+            <VCol>
+              <p class="post-content">{{ post.content }}</p>
+            </VCol>
+            <VCardActions>
+              <VBtn @click="isDetails = !isDetails">
+                Details
+              </VBtn>
+
+              <VSpacer />
+
+              <VBtn
+                icon
+                size="small"
+                @click="isDetails = !isDetails"
+              >
+                <VIcon :icon="isDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
+              </VBtn>
+            </VCardActions>
+
+            <VExpandTransition>
+              <div v-show="isDetails">
+                <VDivider />
+                <VCardText>
+                  {{ post.content }}
+                </VCardText>
+              </div>
+            </VExpandTransition>
+            
+            <VDivider />
+            <VCol class="post-interactions">
+              <IConBtn @click="checkLike"> 
+                <VIcon icon="ri-heart-line"/>
+              </IConBtn>
+              <span class="post-interactions-item" style="margin-left: 10px; margin-right: 10px;">{{ like }}</span>
+
+              <IConBtn @click="checkStar"> 
+                <VIcon icon="ri-star-line"/>
+              </IConBtn>
+              <span class="post-interactions-item" style="margin-left: 10px; margin-right: 10px;">{{ star }}</span>
+            </VCol>
+
+            <VDivider />
+            <VCol class="post-comments">
+                <!-- <span class="text-high-emphasis">댓글</span> -->
+
+                <VCardActions>
+                  <VBtn @click="isDetails = !isDetails">
+                    Reply
+                  </VBtn>
+
+                  <VSpacer />
+
+                  <VBtn
+                    icon
+                    size="small"
+                    @click="isDetails = !isDetails"
+                  >
+                    <VIcon :icon="isDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
+                  </VBtn>
+                </VCardActions>
+
+                <VExpandTransition>
+                  <div v-show="isDetails">
+                    <VCardText v-for="(item, index) in replys" :key="index">
+                      <VDivider />
+                      {{ item.content }}
+                    </VCardText>
+                  </div>
+                </VExpandTransition>
+
+                <!-- <VCol v-for="(item, index) in replys" :key="index">
+                  <VDivider />
+                    {{ item.content }}
+                </VCol> -->
                 <div>
                   <form @submit.prevent="writeReply(post.id)">
-                    <div><label>내용</label><input type="text" v-model="reply.content"></input></div>
-                    <div><input type="submit"></input></div>
+                    <VCol
+                    >
+                      <VTextField
+                      input
+                      id="reply"
+                      v-model="reply.content"
+                      placeholder="댓글"
+                      label="댓글"
+                      />
+                    </VCol>
+                    
+                    <VCol
+                    cols="12"
+                    md="1">
+                      <VBtn
+                        
+                        type="submit"
+                        class="me-2"
+                      >
+                        작성
+                      </VBtn>
+                    </VCol>
+
                   </form>
                 </div>
-            </div>
-        </div>
-    </div>
+            </VCol>
+          </VCol>
+      </VCol>
     </VCardText>
   </VCard>
 </template>
@@ -202,10 +291,10 @@ getReply(props.post.id)
     border-radius: 50%; /* 원형 이미지를 위한 border-radius */
     margin-bottom: 10px;
 }
-.post-title {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
+// .post-title {
+//     font-weight: bold;
+//     margin-bottom: 5px;
+// }
 .post-date {
     color: #666;
     margin-bottom: 10px;
@@ -215,7 +304,6 @@ getReply(props.post.id)
 }
 .post-interactions {
     display: flex;
-    justify-content: space-between;
     width: 100%;
     margin-bottom: 10px;
 }
@@ -236,4 +324,5 @@ getReply(props.post.id)
 
     display: inline-block;
 }
+
 </style>
