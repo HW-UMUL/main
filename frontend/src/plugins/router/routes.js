@@ -39,7 +39,15 @@ export const routes = [
       {
         path: 'writewiki',
         component: () => import('@/pages/writewiki.vue')
-      }
+      },
+      {
+        path: 'room',
+        component: () => import('@/views/chat/room.html')
+      },
+      {
+        path: 'roomdetails',
+        component: () => import('@/views/chat/roomdetails.html')
+      },
     ],
   },
   {
@@ -59,5 +67,5 @@ export const routes = [
         component: () => import('@/pages/[...error].vue'),
       },
     ],
-  },
+  }
 ]
