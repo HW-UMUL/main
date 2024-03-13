@@ -1,6 +1,24 @@
 <script>
 import axios from "axios";
 
+
+// 토큰 브라우저에서 받아오기 
+let authToken = 'Bearer '
+const cookies = document.cookie.split(";");
+let jwtToken = '';
+
+for (let i = 0; i < cookies.length; i++) {
+  const cookie = cookies[i].trim();
+  // 쿠키 이름이 'jwtToken'으로 시작하는 경우
+  if (cookie.startsWith('jwtToken=')) {
+    // 'jwtToken'의 값만 추출
+    jwtToken = cookie.substring('jwtToken='.length);
+    break;
+  }
+}
+authToken = authToken + jwtToken
+console.log("토큰:", authToken)
+
 const route = useRoute()
 
 export default {
@@ -19,7 +37,7 @@ export default {
       // 헤더 정보 설정
       const headers = {
         'Content-Type': 'application/json',
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2NTE3ODU2fQ.blBmH55wZFgFDS9nL43MDtA7Xx_MCAJ7OP7f5ywJzrRxcuc7WlzIYQyl-MtGgCeRj-U1-HiBP8-3o13IibUb3Q'
+        'Authorization': authToken
       };
 
       // 서버로 보낼 데이터

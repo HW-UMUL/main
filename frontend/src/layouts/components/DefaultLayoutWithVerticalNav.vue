@@ -1,4 +1,6 @@
 <script setup>
+import ThumbRegular from '@/assets/images/icons/thumbs-up-regular.svg'
+import ThumbSolid from '@/assets/images/icons/thumbs-up-solid.svg'
 import NavItems from '@/layouts/components/NavItems.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
@@ -48,6 +50,14 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
         </div>
 
         <VSpacer />
+
+      <IConBtn>
+        <ThumbRegular/>
+      </IConBtn>
+
+      <IConBtn>
+        <ThumbSolid />
+      </IConBtn>
 
         <button type="button" onclick="location.href='http://localhost:5173/post'"
          style="background-color: #905DFF; 
@@ -112,6 +122,8 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
       >
         <VIcon icon="ri-close-line" />
       </IconBtn>
+
+      
     </template>
 
     <template #vertical-nav-content>

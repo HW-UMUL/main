@@ -1,38 +1,50 @@
 <script setup>
 import axios from "axios";
-import ReadWiki from "/src/pages/readwiki.vue"
 import { useRouter } from "vue-router";
+
+// 토큰 브라우저에서 받아오기 
+let authToken = 'Bearer '
+const cookies = document.cookie.split(";");
+let jwtToken = '';
+
+for (let i = 0; i < cookies.length; i++) {
+  const cookie = cookies[i].trim();
+  // 쿠키 이름이 'jwtToken'으로 시작하는 경우
+  if (cookie.startsWith('jwtToken=')) {
+    // 'jwtToken'의 값만 추출
+    jwtToken = cookie.substring('jwtToken='.length);
+    break;
+  }
+}
+authToken = authToken + jwtToken
+console.log("토큰:", authToken)
 
 const router = useRouter()
 const route = useRoute()
 const state = reactive({
   items: []
-})
-
+});
 axios.get("http://localhost:8080/api/wiki/readall", {
-  headers: {
-    'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2NTM0MzE2fQ.iAIjL4vyD_s1WXP-Ai4qFGMp1NKHmb6M2BNhYfktN-QyMekNHl0Nvq5E_B-w0leCx5u_q9bztqDh0jywq-NB2g'
-  },
+      headers: {
+        'Authorization': authToken
+      },
 }).then((res) => {
-    state.items = res;
-    console.log(state.items.data)
-    console.log(state.items.data.length)
+  state.items = res;
+  console.log(state.items.data[0])
+  console.log(state.items.data.length)
 })
 
-const sendId = (index) => {
-  router.push({
-    name: 'readwiki',
-    params: { id: state.items.data[index].id }
-  });
-};
+function sendId(id) {
+  router.push({ name: 'readwiki', params: { id } });
+}
 </script>
 
 <template>
     <VCardTitle>Wiki List</VCardTitle>
     <table class="wikititle" border="1" style="border-collapse: collapse">
-        <tr v-for="i in state.items.data?.length" :key="i"><td>
-          <button type="button" @click="sendId(i-1)">
-            {{ state.items.data[i-1]?.title }}</button>
+        <tr v-for="(item, idx) in state.items.data" :key="idx"><td>
+          <button type="button" @click="sendId(item.id)">
+             {{ item.title }}</button>
         </td></tr>
     </table>
 </template>

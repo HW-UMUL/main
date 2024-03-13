@@ -1,3 +1,7 @@
+import ReadWiki from '@/pages/readwiki.vue';
+import UpdateWiki from '@/pages/updatewiki.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+
 export const routes = [
   { path: '/', redirect: '/dashboard' },
   {
@@ -45,8 +49,16 @@ export const routes = [
         component: () => import('@/pages/wikilist.vue'),
       },
       {
-        path: 'readwiki',
-        component: () => import('@/pages/readwiki.vue'),
+        path: '/readwiki/:id',
+        name: 'readwiki',
+        component: ReadWiki,
+        props: true // URL 파라미터를 컴포넌트의 props로 전달합니다.
+      }, 
+      {
+        path: '/updatewiki/:id',
+        name: 'updatewiki',
+        component: UpdateWiki,
+        props: true // URL 파라미터를 컴포넌트의 props로 전달합니다.
       }
     ],
   },
@@ -77,7 +89,15 @@ export const routes = [
       {
         path: 'wikilist',
         component: () => import('@/pages/wikilist.vue'),
-      },
+      }
     ],
   },
 ]
+
+const router = createRouter({
+  history: createWebHistory(),
+  routes
+});
+
+
+export default router;
