@@ -6,6 +6,9 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
+import socket from 'vue3-websocket'
+
+//const app = inject('app');
 
 const form = ref({
   usernmae: '',
@@ -43,6 +46,9 @@ async function login() {
   if(!response.ok) {
     alert("실패!")
   } else{
+
+//    app.use(socket, 'ws://localhost:8080/ws')
+
     window.location.href = 'http://localhost:5173/'
   }
 }

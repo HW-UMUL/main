@@ -86,8 +86,25 @@ async function searchPost(){
 
         <VSpacer />
 
+        <IconBtn
+        size="height:20px;"
+        type="submit"
+        to="/writepost"
+        >
+        Post+
+        </IconBtn>
+
+        <IconBtn
+        size="height:20px;"
+        type="submit"
+        to="/writewiki"
+        >
+        Wiki+
+        </IconBtn>
+        <!--
         <router-link to="/writepost">Post+</router-link>
         <router-link to="/login">Wiki+</router-link>
+        -->
 
         <IconBtn
           class="me-2"

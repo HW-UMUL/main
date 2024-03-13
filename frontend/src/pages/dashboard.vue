@@ -4,6 +4,45 @@ import Post from '@/views/post/Post.vue';
 
 // import post from '@/views/'
 import { watchEffect } from 'vue';
+/////////////////
+import { onMessage, onOpen, onClose, onError } from 'vue3-websocket'
+
+
+const socket = inject('socket')
+
+console.log(socket.value)
+
+const text = ref('')
+
+
+const sendMessage = () => socket.value.send(text.value)
+
+onOpen(() => {
+    console.log('WS connection is stable! ~uWu~')
+})
+
+onMessage(message => {
+    console.log('Got a message from the WS: ', message)
+})
+
+onClose(() => {
+    console.log('No way, connection has been closed 😥')
+})
+
+onError(error => {
+    console.error('Error: ', error)
+})
+/////////////////
+
+
+
+
+
+
+
+
+
+
 
 
 const props = defineProps({

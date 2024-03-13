@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssg.kms.chatroom.ChatRoom;
 import com.ssg.kms.chatroom.ChatRoomRepository;
+import com.ssg.kms.mapping.GetUserMapping;
 import com.ssg.kms.user.User;
 import com.ssg.kms.user.UserRepository;
 
@@ -52,7 +53,7 @@ public class ChatRoomUserService {
     public List<ChatRoomUser> readChatRoomUser(Long chatRoomId, Optional<User> user) {
     	return chatRoomUserRepository.findAllByChatRoomId(chatRoomId);
     }
-
+    
     @Transactional
     public void deleteChatRoomUser(Long chatRoomUserId, Optional<User> user) {
     	
