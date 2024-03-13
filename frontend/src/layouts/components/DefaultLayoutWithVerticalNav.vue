@@ -14,41 +14,24 @@ const router = useRouter();
 
 const posts = ref([])
 const searchKeyword = ref({
-  keyword: ''
+  keyword: '',
+  option: ''
 })
-async function searchPost(){
-  if(searchKeyword.value.keyword.length != 0){
-    router.push({
-      path: `/search/${searchKeyword.value.keyword}`
-    })
-  } else {
-    alert('검색어를 입력해주세요!')
-  }
 
-  /*
-  const response = await fetch(
-      `http://localhost:8080/api/post/search/${searchKeyword.value.keyword}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-      }
-  )
-
-  if(!response.ok) {
-    alert("실패!")
+async function search(){
+  if(searchKeyword.value.option == 'Wiki' | searchKeyword.value.option == 'Post'){
+    if(searchKeyword.value.keyword.length != 0){
+      router.push({
+        path: `/search/${searchKeyword.value.keyword}/${searchKeyword.value.option}`
+      })
+    } else {
+      alert('검색어를 입력해주세요')
+    }
   } else{
-    posts.value = await response.json()
-    router.push({
-      path: 'search',
-      params: { posts: posts} 
-    })
+    alert('option을 선택해주세요')
   }
-  */
-
 }
+
 </script>
 
 <template>
@@ -63,25 +46,30 @@ async function searchPost(){
         >
           <VIcon icon="ri-menu-line" />
         </IconBtn>
-
+        <VSpacer /> <!-- 수정 -->
         <!-- 👉 Search -->
         <div
           class="d-flex align-center cursor-pointer"
           style="user-select: none;"
         >
           <!-- 👉 Search Trigger button -->
-          <form @submit.prevent="searchPost()">
-            <input type="text" v-model="searchKeyword.keyword"></input>
-            <input type="submit"></input>
+          <form @submit.prevent="search()"> 
+            <input type="text" v-model="searchKeyword.keyword" placeholder="Search"
+             style="display:flex; height:20px; width:450px;"></input>
           </form>
-          <IconBtn>
-            <VIcon icon="ri-search-line" />
-          </IconBtn>
 
           <span class="d-none d-md-flex align-center text-disabled">
-            <span class="me-3">Search</span>
-            <span class="meta-key">&#8984;K</span>
+            <select class="meta-key" aria-label="Default select example" v-model="searchKeyword.option">
+              <option style="display: none;" disabled value="">Option</option>
+              <option value="Post">Post</option>
+              <option value="Wiki">Wiki</option>
+            </select>
           </span>
+
+          
+          <IconBtn @click.prevent="search(searchKeyword.keyword)">
+            <VIcon icon="ri-search-line" />
+          </IconBtn>
         </div>
 
         <VSpacer />
@@ -91,7 +79,7 @@ async function searchPost(){
 
         <IconBtn
           class="me-2"
-          href="https://github.com/themeselection/materio-vuetify-vuejs-admin-template-free"
+          href="https://github.com/final-kms/main"
           target="_blank"
           rel="noopener noreferrer"
         >

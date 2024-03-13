@@ -37,7 +37,7 @@ export const routes = [
         component: () => import('@/pages/writepost.vue')
       },
       {
-        path: '/search/:keyword',
+        path: '/search/:keyword/:option',
         name: 'search',
         component: () => import('@/pages/dashboard.vue'),
         props: true

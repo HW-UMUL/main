@@ -1,6 +1,7 @@
 package com.ssg.kms.wiki;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssg.kms.like.wiki.WikiLikeRepository;
 import com.ssg.kms.log.WikiLogRepository;
 import com.ssg.kms.log.WikiLogService;
+import com.ssg.kms.post.Post;
 import com.ssg.kms.star.wiki.WikiStarRepository;
 import com.ssg.kms.user.User;
 
@@ -73,4 +75,9 @@ public class WikiService {
     	wiki.setUser(user.get());
     	return wiki;
     }
+
+    @Transactional
+	public List<Post> searchPost(String searchKeyword, Optional<User> user) {
+		return wikiRepository.findAllByTitleContaining(searchKeyword);
+	}
 }
