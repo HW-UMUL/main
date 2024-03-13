@@ -5,10 +5,10 @@ import Post from '@/views/post/Post.vue';
 // import post from '@/views/'
 import { watchEffect } from 'vue';
 /////////////////
-import { onMessage, onOpen, onClose, onError } from 'vue3-websocket'
+//import { onMessage, onOpen, onClose, onError } from 'vue3-websocket'
 
-
-const socket = inject('socket')
+/*
+const socket = inject('sock')
 
 console.log(socket.value)
 
@@ -32,6 +32,7 @@ onClose(() => {
 onError(error => {
     console.error('Error: ', error)
 })
+*/
 /////////////////
 
 

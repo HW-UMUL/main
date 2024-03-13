@@ -21,6 +21,7 @@
     "pinia": "^2.1.7",
     "prismjs": "^1.29.0",
     "roboto-fontface": "^0.10.0",
+    "socket.io-client": "4.7.4",
     "vue": "^3.3.4",
     "vue-cookies": "^1.8.3",
     "vue-flatpickr-component": "11.0.3",
@@ -28,7 +29,6 @@
     "vue-router": "^4.2.5",
     "vue3-apexcharts": "^1.4.4",
     "vue3-perfect-scrollbar": "^1.6.1",
-    "vue3-websocket": "^1.0.11",
     "vuetify": "3.4.9",
     "webfontloader": "^1.6.28"
   },
