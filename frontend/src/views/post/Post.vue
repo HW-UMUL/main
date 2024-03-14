@@ -1,12 +1,23 @@
 <script setup>
+import { formatDateToMonthShort } from '@/@core/utils/formatters';
 import { VCardItem, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/components/index.mjs';
 
+// 년-월-일
+const formatDate = function(value) {
+    const date = new Date(value);
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1);
+    const day = date.getDate();
+    
+    return `${year}-${month}-${day}`;
+}
+
 const isDetails = ref(false)
+const isReplyDetails = ref(false)
 //const post = defineProps(['post'])
 const props = defineProps({
     post: Object
 })
-
 
 const like = ref([])
 const star = ref([])
@@ -152,6 +163,7 @@ const response = await fetch(
 getLikes()
 getStars()
 getReply(props.post.id)
+
 </script>
 
 <template>
@@ -162,16 +174,18 @@ getReply(props.post.id)
             <div class="post-header">
                 <VCol class="post-header" >
                   <span class="circle"></span>
-                  <span class="post-name" style="margin-left:10px; margin-right: 200px;">{{ post.user.username }}</span>
-                  <span class="post-date">{{ post.date }}</span>
+                  <span style="display: flex; justify-content: space-between;">
+                  <span class="post-name" style="margin-left:10px; margin-right: auto;">{{ post.user.username }}</span>
+                  <span class="post-date" style="margin-left: auto;">{{ formatDate(post.date) }}</span>
+                  </span>
                 </VCol>
               </div>
-            <VCol class="post-title">
+            <div class="post-title">
               <VCardTitle>{{ post.title }}</VCardTitle>
-            </VCol>
+            </div>
             <VDivider />
             <VCol>
-              <p class="post-content">{{ post.content }}</p>
+              <p class="post-content">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}</p>
             </VCol>
             <VCardActions>
               <VBtn @click="isDetails = !isDetails">
@@ -215,8 +229,18 @@ getReply(props.post.id)
             <VCol class="post-comments">
                 <!-- <span class="text-high-emphasis">댓글</span> -->
 
+                <!-- <VCardItem class="reply-con">
+                  <p>댓글</p>
+                  <VCardText v-for="(item, index) in replys" :key="index">
+                      <VDivider />
+                      {{ item.content }}
+                    </VCardText>
+                  <IConBtn @click="$emit('close', false)">close</IConBtn>
+
+                </VCardItem> -->
+
                 <VCardActions>
-                  <VBtn @click="isDetails = !isDetails">
+                  <VBtn @click="isReplyDetails = !isReplyDetails">
                     Reply
                   </VBtn>
 
@@ -225,14 +249,14 @@ getReply(props.post.id)
                   <VBtn
                     icon
                     size="small"
-                    @click="isDetails = !isDetails"
+                    @click="isReplyDetails = !isReplyDetails"
                   >
-                    <VIcon :icon="isDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
+                    <VIcon :icon="isReplyDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
                   </VBtn>
                 </VCardActions>
 
                 <VExpandTransition>
-                  <div v-show="isDetails">
+                  <div v-show="isReplyDetails">
                     <VCardText v-for="(item, index) in replys" :key="index">
                       <VDivider />
                       {{ item.content }}
