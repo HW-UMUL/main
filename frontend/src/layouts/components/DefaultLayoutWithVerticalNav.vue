@@ -53,23 +53,40 @@ async function search(){
           style="user-select: none;"
         >
           <!-- 👉 Search Trigger button -->
-          <form @submit.prevent="search()"> 
-            <input type="text" v-model="searchKeyword.keyword" placeholder="Search"
-             style="display:flex; height:20px; width:450px;"></input>
-          </form>
+          <div class="search-group">
+            <form @submit.prevent="search()"> 
+              
+                <!-- <span class="d-none d-md-flex align-center text-disabled"> -->
+                  <!-- <select class="option-key" aria-label="Default select example" v-model="searchKeyword.option">
+                    <option style="display: none;" disabled value="">Option</option>
+                    <option value="Post">Post</option>
+                    <option value="Wiki">Wiki</option>
+                  </select> -->
+                <!-- </span> -->
+              <div class="input-group">
+                <img src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\search.png"
+                class="icons"/>
 
-          <span class="d-none d-md-flex align-center text-disabled">
-            <select class="meta-key" aria-label="Default select example" v-model="searchKeyword.option">
-              <option style="display: none;" disabled value="">Option</option>
-              <option value="Post">Post</option>
-              <option value="Wiki">Wiki</option>
-            </select>
-          </span>
+                <input type="text" v-model="searchKeyword.keyword" placeholder="Search"
+                style="display:flex; height:20px; width:450px;" class="search-bar">
+                </input>
 
-          
-          <IconBtn @click.prevent="search(searchKeyword.keyword)">
-            <VIcon icon="ri-search-line" />
-          </IconBtn>
+                <select class="option-key" aria-label="Default select example" v-model="searchKeyword.option">
+                    <option style="display: none;" disabled value="">Option</option>
+                    <option value="Post">Post</option>
+                    <option value="Wiki">Wiki</option>
+                  </select>
+
+              </div>
+
+                <!-- <IconBtn @click.prevent="search(searchKeyword.keyword)" class="search-btn">
+                  <VIcon icon="ri-search-line" />
+                </IconBtn> -->
+              
+            </form>
+          </div>
+          <!-- 👉 Search Trigger button end -->
+
         </div>
 
         <VSpacer />
@@ -134,14 +151,6 @@ async function search(){
 </template>
 
 <style lang="scss" scoped>
-.meta-key {
-  border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
-  border-radius: 6px;
-  block-size: 1.5625rem;
-  line-height: 1.3125rem;
-  padding-block: 0.125rem;
-  padding-inline: 0.25rem;
-}
 
 .app-logo {
   display: flex;
@@ -155,4 +164,98 @@ async function search(){
     text-transform: uppercase;
   }
 }
+
+
+.search-group {
+  position: relative;
+  width: 100%;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+
+    .search-bar {
+    width: 100%;
+    padding: 13px;
+    padding-left: 45px;
+    padding-right: 60px;
+    border-radius: 30px;
+    border: 1px solid #a738ed;
+    outline: none;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    }
+
+    .icons {
+      position: absolute;
+      left: -4px;
+      top: 1;
+      width: 12%;
+      display: flex;
+      padding: 12px 20px;
+      pointer-events: none;
+    }
+
+    .option-key {
+      position: absolute;
+      // right: -1px;
+      left: 390px;
+      outline: none;
+      // border: thin solid rgba(var(--v-border-color), var(--v-border-opacity)) ;
+      border-radius: 6px ;
+      block-size: 1.5625rem;
+      line-height: 1.3125rem;
+      padding-block: 0.125rem;
+      padding-inline: 0.25rem;
+      display: inline-block;
+      text-align: right;
+    }
+
+
+  }
+
+
+  // .option-key {
+  //     border: thin solid rgba(var(--v-border-color), var(--v-border-opacity));
+  //     border-radius: 6px;
+  //     block-size: 1.5625rem;
+  //     line-height: 1.3125rem;
+  //     padding-block: 0.125rem;
+  //     padding-inline: 0.25rem;
+  //     display: inline-block;
+  //   }
+
+  // .search-box {
+  //   width: 500px;
+  //   display: flex;
+  //   flex-direction: column;
+  //   align-items: center;
+  //   justify-content: center;
+  // }
+
+  // .search-box {
+  //   position: relative;
+  //   width: 100%;
+  //   margin-top: 20px;
+
+  //   .search {
+  //     width: 100%;
+  //     padding: 13px;
+  //     padding-left: 45px;
+  //     padding-right: 60px;
+  //     border-radius: 30px;
+  //   }
+  // }
+
+
+
+}
+
 </style>
