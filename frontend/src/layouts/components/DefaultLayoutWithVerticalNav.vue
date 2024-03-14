@@ -72,10 +72,10 @@ async function search(){
                 </input>
 
                 <select class="option-key" aria-label="Default select example" v-model="searchKeyword.option">
-                    <option style="display: none;" disabled value="">Option</option>
-                    <option value="Post">Post</option>
-                    <option value="Wiki">Wiki</option>
-                  </select>
+                    <option style="display: none;" disabled value="" class="list">Option</option>
+                    <option value="Post" class="list">Post</option>
+                    <option value="Wiki" class="list">Wiki</option>
+                </select>
 
               </div>
 
@@ -215,8 +215,35 @@ async function search(){
       padding-block: 0.125rem;
       padding-inline: 0.25rem;
       display: inline-block;
-      text-align: right;
+      text-align: center;
+
+
+      // position: absolute;
+      // // right: -1px;
+      // left: 390px;
+      // width: 200px;
+      // list-style: none;
+      // background: #FFFFFF;
+      // border: 1px solid #C4C4C4;
+      // box-sizing: border-box;
+      // box-shadow: 4px 4px 14px rgba(0, 0, 0, 0.15);
+      // border-radius: 10px;
+      // margin-top: 9px;
+
     }
+
+    // .list{
+    //   border: none;
+    //   background-color: #FFFFFF;
+    //   font-family: 'Roboto';
+    //   font-style: normal;
+    //   font-weight: 400;
+    //   font-size: 14px;
+    //   line-height: 16px;
+    //   padding: 7px 10px;
+    //   margin: 5px 7px;
+    //   box-sizing: border-box;
+    // }
 
 
   }
