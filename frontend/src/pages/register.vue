@@ -1,11 +1,11 @@
 <script setup>
-import { useTheme } from 'vuetify'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
 import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
+import { useTheme } from 'vuetify'
 
 const form = ref({
   username: '',
@@ -15,6 +15,32 @@ const form = ref({
 })
 
 const vuetifyTheme = useTheme()
+
+async function signup() {
+
+const formData = {
+  username: form.value.username,
+  password: form.value.password,
+  email: form.value.email
+}
+
+const response = await fetch(
+    `http://localhost:8080/api/signup`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData)
+    }
+)
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    window.location.href = 'http://localhost:5173/'
+  }
+}
 
 const authThemeMask = computed(() => {
   return vuetifyTheme.global.name.value === 'light' ? authV1MaskLight : authV1MaskDark
@@ -102,9 +128,7 @@ const isPasswordVisible = ref(false)
               </div>
 
               <VBtn
-                block
-                type="submit"
-                to="/"
+                @click="signup()"
               >
                 Sign up
               </VBtn>

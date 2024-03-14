@@ -67,6 +67,7 @@ async function login() {
     window.location.href = 'http://localhost:5173/'
   }
 }
+
 </script>
 
 <template>

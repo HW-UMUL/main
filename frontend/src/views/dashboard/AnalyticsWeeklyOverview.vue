@@ -4,6 +4,8 @@ import { hexToRgb } from '@layouts/utils';
 import axios from "axios";
 import { useTheme } from 'vuetify';
 
+const route = useRoute()
+
 //import { useStore } from 'vuex';
 // const store = useStore();
 // console.log("auth: ",store.state.authToken)
@@ -132,27 +134,115 @@ axios.get("http://localhost:8080/api/wiki/readall", {
 }).then((res) => {
     console.log(res.data[0])
     state.items = res;
-    console.log(state.items.data[0])
 })
+
+const props = defineProps({
+    wiki: Object
+})
+
 
 const like = ref([])
 const star = ref([])
 
-const isThumbUp = false;
+async function checkLike(wikiId){
+  const response = await fetch(
+      `http://localhost:8080/api/wikilike/check/${wikiId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : authToken
+        }
+      }
+  )
 
-function checkLike(wikiId) {
-  console.log("authToken:",authToken)
-  axios.post(`http://localhost:8080/api/wikilike/check/${wikiId}`, {
-    headers: {
-      'Authorization': authToken
-    },
-    withCredentials: true 
-  }).then((res) => {
-      console.log("결과: ", res)
-  })
-  this.isThumbUp = !this.isThumbUp
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getLikes(wikiId)
+  }
+
 }
 
+async function checkStar(wikiId){
+
+  const response = await fetch(
+      `http://localhost:8080/api/wikistar/check/${wikiId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : authToken
+        },
+      }
+    )
+
+    if(!response.ok) {
+      alert("실패!")
+    } else{
+      getStars(wikiId)
+    }
+}
+
+let isLiked = 0;
+async function getLikes(wikiId){
+
+  const response = await fetch(
+      `http://localhost:8080/api/wikilike/read/${wikiId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : authToken
+        },
+        withCredentials: true,
+      }
+      
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    like.value = await response.json()
+    isLiked = like.value
+  }
+}
+
+let isStarred = 0;
+async function getStars(wikiId){
+
+const response = await fetch(
+    `http://localhost:8080/api/wikistar/read/${wikiId}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : authToken
+      },
+      withCredentials: true,
+    }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    star.value = await response.json()
+    isStarred = star.value;
+  }
+}
+
+// function checkLike(wikiId) {
+//   console.log("check:", authToken)
+//   axios.post(`http://localhost:8080/api/wiki/check/${wikiId}`, {
+//     headers: {
+//       'Authorization' : authToken
+//     },
+//   }).then(res => {
+//     console.log(res)
+//   }).catch((error) => {
+//     console.log(error)
+//   })
+// }
 
 </script>
 
@@ -163,24 +253,27 @@ function checkLike(wikiId) {
       background-color: lightgray;
     }
 </style>
-
 <template>
   <VCol v-for="i in state.items.data?.length" :key="i">
     <div style="margin-left:20px">{{ state.items.data[i-1]?.user.username }} &nbsp; {{ state.items.data[i-1]?.date.substring(0,10) }}
-        {{ state.items.data[i-1]?.date.substring(12,19) }}</div>
+        {{ state.items.data[i-1]?.date.substring(12,19) }} &nbsp; &nbsp; 
+        <span @click="checkLike" class="post-interactions-item">좋아요 : {{ like }}</span>  &nbsp; &nbsp;
+        <span @click="checkStar" class="post-interactions-item">스크랩 횟수 : {{ star }}</span>  
+    </div>
     <div align="right" margin-right="20px" float="left">
-        <button type="button" v-if="isThumbUp" @click="checkLike(`${ state.items.data[i-1]?.id }`)">
+      
+        <button type="button" v-if="isLiked == 1" @click="checkLike(`${state.items.data[i-1].id}`)">
           <font-awesome-icon :icon="['fas', 'thumbs-up']" />
         </button>  
-        <button type="button" v-else @click="checkLike(`${ state.items.data[i-1]?.id }`)">
+        <button type="button" v-else @click="checkLike(`${state.items.data[i-1].id}`)">
           <font-awesome-icon :icon="['far', 'thumbs-up']" />
         </button>
       
       &nbsp;
-        <button v-if="checkStar" type="button">
+        <button type="button" v-if="isStarred == 1" @click="checkStar(`${state.items.data[i-1].id}`)">
           <font-awesome-icon :icon="['fas', 'star']" />
         </button>
-        <button v-else type="button">
+        <button type="button" v-else @click="checkStar(`${state.items.data[i-1].id}`)">
           <font-awesome-icon :icon="['far', 'star']" />
         </button>
     </div>

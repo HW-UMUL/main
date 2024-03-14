@@ -43,7 +43,7 @@ function deleteAlert() {
   if (confirm("정말로 삭제하시겠습니까?")) {
     axios.delete(`http://localhost:8080/api/wiki/delete/${route.params.id}`, {
       headers: {
-        'Authorization':'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2NTM0MzE2fQ.iAIjL4vyD_s1WXP-Ai4qFGMp1NKHmb6M2BNhYfktN-QyMekNHl0Nvq5E_B-w0leCx5u_q9bztqDh0jywq-NB2g'
+        'Authorization' : authToken
       },
     }).then((res) => {
         // 삭제가 성공하면 어떤 동작을 수행할지 정의
@@ -55,10 +55,105 @@ function deleteAlert() {
   }
 }
 
-function isAuthorized() {
-  if (!authToken) {
-    return true;
+const props = defineProps({
+    wiki: Object
+})
+
+
+const like = ref([])
+const star = ref([])
+
+async function checkLike(wikiId){
+  const response = await fetch(
+      `http://localhost:8080/api/wikilike/check/${wikiId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : authToken
+        }
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getLikes(wikiId)
   }
+
+}
+
+async function checkStar(wikiId){
+
+  const response = await fetch(
+      `http://localhost:8080/api/wikistar/check/${wikiId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : authToken
+        },
+      }
+    )
+
+    if(!response.ok) {
+      alert("실패!")
+    } else{
+      getStars(wikiId)
+    }
+}
+
+let isLiked = 0;
+async function getLikes(wikiId){
+
+  const response = await fetch(
+      `http://localhost:8080/api/wikilike/read/${wikiId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization' : authToken
+        },
+        withCredentials: true,
+      }
+      
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    like.value = await response.json()
+    isLiked = like.value
+    console.log(isLiked)
+  }
+}
+
+let isStarred = 0;
+async function getStars(wikiId){
+
+const response = await fetch(
+    `http://localhost:8080/api/wikistar/read/${wikiId}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization' : authToken
+      },
+      withCredentials: true,
+    }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    star.value = await response.json()
+    isStarred = star.value;
+    console.log(isStarred)
+  }
+}
+
+function isAuthorized() {
+
 }
 
 </script>
@@ -67,20 +162,23 @@ function isAuthorized() {
     <VCardTitle>Wiki List</VCardTitle>
     <table class="wikititle" border="1" style="border-collapse: collapse" width="50%">
         <div style="margin-left:20px">{{ wiki?.user.username }} &nbsp; {{ wiki?.date.substring(0,10) }}
-        {{ wiki?.date.substring(12,19) }}</div>
+        {{ wiki?.date.substring(12,19) }} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+        <span @click="checkLike" class="post-interactions-item">좋아요 : {{ like }}</span>  &nbsp;
+        <span @click="checkStar" class="post-interactions-item">스크랩 횟수 : {{ star }}</span>  
+        </div>
     <div align="right" margin-right="20px" float="left">
-      <button type="button" v-if="isThumbUp" @click="">
+      <button type="button" v-if="isLiked == 1" @click="checkLike(`${wiki?.id}`)">
           <font-awesome-icon :icon="['fas', 'thumbs-up']" />
         </button>  
-        <button type="button" v-else @click="">
+        <button type="button" v-else @click="checkLike(`${wiki?.id}`)">
           <font-awesome-icon :icon="['far', 'thumbs-up']" />
         </button>
          &nbsp; 
 
-         <button v-if="checkStar" type="button">
+         <button v-if="isStarred == 1" type="button" @click="checkStar(`${wiki?.id}`)">
           <font-awesome-icon :icon="['fas', 'star']" />
         </button>
-        <button v-else type="button" style="padding-right: 10px">
+        <button v-else type="button" @click="checkStar(`${wiki?.id}`)" style="padding-right: 10px">
           <font-awesome-icon :icon="['far', 'star']" />
         </button>
     </div>
@@ -96,7 +194,7 @@ function isAuthorized() {
       </table>
     </div>
     </table>'
-    <div align="center"><button v-if="isAuthorized"@click="sendIdToUpdate(`${wiki.id}`)"
+    <div align="center"><button v-if="isAuthorized" @click="sendIdToUpdate(`${wiki.id}`)"
       style="background-color: #905DFF; 
         border: none;
         color: white;
