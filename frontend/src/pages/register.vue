@@ -7,6 +7,9 @@ import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
 
+const serverAddress = inject('serverAddress')
+const router = inject('router')
+
 const form = ref({
   username: '',
   email: '',
@@ -31,7 +34,7 @@ const formData = {
 }
 
 const response = await fetch(
-    `http://localhost:8080/api/signup`,
+    `http://${serverAddress}/api/signup`,
     {
       method: 'POST',
       headers: {
@@ -44,7 +47,9 @@ const response = await fetch(
   if(!response.ok) {
     alert("실패!")
   } else{
-    window.location.href = 'http://localhost:5173/'
+    router.push('/')
+
+//    window.location.href = '/login'
   }
 }
 

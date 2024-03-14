@@ -13,6 +13,8 @@ const router = createRouter({
 
 export default function (app) {
   app.use(VueCookies)
+
+  app.provide('router', router)
   
   router.beforeEach((to, from, next) => {
     const isAuthenticated = $cookies.get('jwtToken')
@@ -23,6 +25,8 @@ export default function (app) {
     } else {
 
 //    app.use(socket, 'ws://localhost:8080/ws')
+
+    
 
       next(); // 그 외의 경우에는 이동을 허용
     }

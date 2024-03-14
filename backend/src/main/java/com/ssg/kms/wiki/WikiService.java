@@ -1,6 +1,7 @@
 package com.ssg.kms.wiki;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -58,6 +59,9 @@ public class WikiService {
     	Tables table = tableRepository.findById(tableId).get();
     	Category category = createCategory(wikiDto.getCategory());
     	
+    	System.out.println("\n\n\n\n\n");
+    	System.out.println(category);
+    	System.out.println("\n\n\n\n\n");
     	Wiki wiki = Wiki.builder()
     			.title(wikiDto.getTitle())
     			.content(wikiDto.getContent())
@@ -77,6 +81,11 @@ public class WikiService {
     @Transactional(readOnly = true)
     public Wiki readWiki(Long wikiId, Optional<User> user) {
 		return wikiRepository.findById(wikiId).get();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Wiki> readAllWiki(Optional<User> user) {
+		return wikiRepository.findAll();
     }
     
     @Transactional

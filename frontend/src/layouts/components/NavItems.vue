@@ -23,7 +23,7 @@ function getJwt() {
 
   <VerticalNavLink
       :item="{
-        title: 'wiki',
+        title: 'Wiki',
         to: '/wiki',
         icon:'ri-book-line'
       }"
@@ -59,4 +59,21 @@ function getJwt() {
       to: '/register',
     }"
   />
+
+  <VerticalNavLink
+    :item="{
+      title: 'Table',
+      icon: 'ri-group-line',
+      to: '/table',
+    }"
+  /> 
+
+  <VerticalNavLink
+    :item="{
+      title: 'Chat',
+      icon: 'ri-chat-1-line',
+      to: '/chat',
+    }"
+  /> 
+
 </template>

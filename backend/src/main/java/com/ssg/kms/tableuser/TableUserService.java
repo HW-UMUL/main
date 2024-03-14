@@ -1,10 +1,13 @@
 package com.ssg.kms.tableuser;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.mapping.GetTableMapping;
 import com.ssg.kms.table.TableRepository;
 import com.ssg.kms.table.Tables;
 import com.ssg.kms.user.User;
@@ -37,6 +40,13 @@ public class TableUserService {
     @Transactional(readOnly = true)
     public TableUser readTableUser(Long tableUserId, Optional<User> user) {
     	return tableUserRepository.findById(tableUserId).get();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<GetTableMapping> readAllTableUser(Optional<User> user) {
+    	
+    	return tableUserRepository.findAllByUserId(user.get().getId());
+    	
     }
     
     // 승인

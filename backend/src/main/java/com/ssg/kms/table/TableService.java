@@ -47,7 +47,7 @@ public class TableService {
     public Tables readTable(Long tableId, Optional<User> user) {
     	return tableRepository.findById(tableId).get();
     }
-    
+
     @Transactional
     public Tables updateTable(Long tableId, TableDTO tableDto, Optional<User> user) {
     	Tables table = tableRepository.findById(tableId).get();

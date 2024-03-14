@@ -4,22 +4,22 @@ import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.
 const serverAddress = inject('serverAddress')
 const router = inject('router')
 
-const post = ref({
+const wiki = ref({
   title: '',
   content: '',
-  tag: ''
+  category: ''
 })
 
-async function writePost(){
+async function writeWiki(){
 
   const formData = {
-    title: post.value.title,
-    content: post.value.content,
-    tag: post.value.tag
+    title: wiki.value.title,
+    content: wiki.value.content,
+    category: wiki.value.category
   }
 
   const response = await fetch(
-      `http://${serverAddress}/api/post/create`,
+      `http://${serverAddress}/api/wiki/create`,
       {
         method: 'POST',
         headers: {
@@ -33,8 +33,8 @@ async function writePost(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    router.push('/')  
-//    window.location.href = '/'
+    router.push('/')
+//    window.location.href = '/wiki'
   }
 }
 
@@ -50,13 +50,13 @@ async function writePost(){
       <VCard class="position-relative">
         <VCardText>
           <div >
-            <form @submit.prevent="writePost()">
-            <p >Post 작성</p>
+            <form @submit.prevent="writeWiki()">
+            <p>Wiki 작성</p>
                 <VCol
                 >
                   <VTextField
                   id="title"
-                  v-model="post.title"
+                  v-model="wiki.title"
                   placeholder="제목"
                   label="제목"
                   />
@@ -68,7 +68,7 @@ async function writePost(){
                 >
                   <VTextarea
                   id="content"
-                  v-model="post.content"
+                  v-model="wiki.content"
                   placeholder="본문"
                   label="본문"
                   />
@@ -78,9 +78,9 @@ async function writePost(){
                 >
                   <VTextField
                   id="tag"
-                  v-model="post.tag"
-                  placeholder="태그"
-                  label="태그"
+                  v-model="wiki.category"
+                  placeholder="카테고리"
+                  label="카테고리"
                   />
                 </VCol>
 

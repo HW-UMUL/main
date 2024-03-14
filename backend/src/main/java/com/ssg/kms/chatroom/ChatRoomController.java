@@ -39,7 +39,7 @@ public class ChatRoomController {
     public ResponseEntity<ChatRoom> readChatRoom(@PathVariable Long chatRoomId) {
         return ResponseEntity.ok(chatRoomService.readChatRoom(chatRoomId, userService.getMyUserWithAuthorities()));
     }
-
+	
 	@PutMapping("/update/{chatRoomId}")
     public ResponseEntity<ChatRoom> updateChatRoom(@PathVariable Long chatRoomId, @RequestBody ChatRoomDTO chatRoomDto) {
         return ResponseEntity.ok(chatRoomService.updateChatRoom(chatRoomId, chatRoomDto, userService.getMyUserWithAuthorities()));

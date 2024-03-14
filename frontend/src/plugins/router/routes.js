@@ -9,32 +9,32 @@ export const routes = [
         component: () => import('@/pages/dashboard.vue'),
       },
       {
+        path: 'wiki',
+        component: () => import('@/pages/wiki.vue'),
+      },
+      {
         path: 'account-settings',
         component: () => import('@/pages/account-settings.vue'),
       },
       {
-        path: 'typography',
-        component: () => import('@/pages/typography.vue'),
-      },
-      {
-        path: 'icons',
-        component: () => import('@/pages/icons.vue'),
-      },
-      {
-        path: 'cards',
-        component: () => import('@/pages/cards.vue'),
-      },
-      {
-        path: 'tables',
-        component: () => import('@/pages/tables.vue'),
-      },
-      {
-        path: 'form-layouts',
-        component: () => import('@/pages/form-layouts.vue'),
-      },
-      {
         path: 'writepost',
         component: () => import('@/pages/writepost.vue')
+      },
+      {
+        path: 'writewiki',
+        component: () => import('@/pages/writewiki.vue')
+      },
+      {
+        path: 'table',
+        component: () => import('@/pages/table.vue')
+      },
+      {
+        path: 'createtable',
+        component: () => import('@/pages/createtable.vue')
+      },
+      {
+        path: 'chat',
+        component: () => import('@/pages/chathome.vue')
       },
       {
         path: '/search/:keyword',

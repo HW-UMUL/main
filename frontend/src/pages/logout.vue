@@ -2,7 +2,9 @@
 
 $cookies.remove('jwtToken');
 
-window.location.href = 'http://localhost:5173/login'
+const router = inject('router')
+router.push('/')
+//window.location.href = '/login'
 
 
 </script>

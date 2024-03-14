@@ -6,7 +6,11 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
+import socket from '/test/index.js'
 
+const serverAddress = inject('serverAddress')
+const router = inject('router')
+const app = inject('app')
 
 const form = ref({
   usernmae: '',
@@ -30,7 +34,7 @@ async function login() {
   }
    
   const response = await fetch(
-      `http://localhost:8080/api/login`,
+      `http://${serverAddress}/api/login`,
       {
         method: 'POST',
         headers: {
@@ -45,11 +49,14 @@ async function login() {
     alert("실패!")
   } else{
 
-//    app.use(socket, 'ws://localhost:8080/ws')
+    app.use(socket, `ws://${serverAddress}/ws`)
+    router.push('/')
+
 
     // const socket = inject('socket')
     // socket.install.reconnect = false
-    window.location.href = 'http://localhost:5173/'
+
+    //    window.location.href = '/'
   }
 }
 

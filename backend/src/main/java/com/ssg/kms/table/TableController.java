@@ -32,7 +32,7 @@ public class TableController {
     public ResponseEntity<Tables> readTable(@PathVariable Long tableId) {
         return ResponseEntity.ok(tableService.readTable(tableId, userService.getMyUserWithAuthorities()));
     }
-		
+
 	@PutMapping("/update/{tableId}")
     public ResponseEntity<Tables> updateTable(@PathVariable Long tableId, @Valid @RequestBody TableDTO tableDto) {
         return ResponseEntity.ok(tableService.updateTable(tableId, tableDto, userService.getMyUserWithAuthorities()));

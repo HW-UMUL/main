@@ -11,10 +11,17 @@ import '@layouts/styles/index.scss'
 // Create vue app
 const app = createApp(App)
 
-app.use(socket, 'ws://localhost:8080/ws')
+
+
+app.provide("app", app)
+//const serverAddress = "localhost:8080"
+const serverAddress = "ec2-52-79-243-169.ap-northeast-2.compute.amazonaws.com:8080"
+
+//app.use(socket, 'ws://localhost:8080/ws')
+//app.use(socket, `ws://${serverAddress}/ws`)
 
 app.provide('socket', socket)
-
+app.provide('serverAddress', serverAddress)
 //const socket = inject('socket')
 //socket.install.reconnect = false
 

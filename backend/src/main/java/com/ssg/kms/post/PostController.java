@@ -38,7 +38,7 @@ public class PostController {
     }
 	
 	@GetMapping("/read")
-    public ResponseEntity<List<Post>> readPost() {
+    public ResponseEntity<List<Post>> readAllPost() {
         return ResponseEntity.ok(postService.readAllPost(userService.getMyUserWithAuthorities()));
     }
 	

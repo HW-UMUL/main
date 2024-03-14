@@ -1,8 +1,7 @@
 <script setup>
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import Post from '@/views/post/Post.vue';
+import wiki from '@/views/wiki/Wiki.vue';
 
-// import post from '@/views/'
 import { watchEffect } from 'vue';
 
 const serverAddress = inject('serverAddress')
@@ -11,23 +10,22 @@ const props = defineProps({
     keyword: String
 })
 
-const posts = ref([])
+const wikis = ref([])
 
 watchEffect(() => {
   // props를 감시하고, 변경될 때마다 실행되는 코드
-//  console.log('Keyword has been updated:', props.keyword);
   if(props.keyword == null){
-    getPosts()
+    getWikis()
   } else{
-    searchPost()
+    searchWiki()
   }
 });
 
 
-async function getPosts(){
+async function getWikis(){
 
   const response = await fetch(
-      `http://${serverAddress}/api/post/read`,
+      `http://${serverAddress}/api/wiki/read`,
       {
         method: 'GET',
         headers: {
@@ -40,13 +38,13 @@ async function getPosts(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    posts.value = await response.json()
+    wikis.value = await response.json()
   }
 }
 
-async function searchPost(){
+async function searchWiki(){
   const response = await fetch(
-      `http://${serverAddress}/api/post/search/${props.keyword}`,
+      `http://${serverAddress}/api/wiki/search/${props.keyword}`,
       {
         method: 'GET',
         headers: {
@@ -59,14 +57,14 @@ async function searchPost(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    posts.value = await response.json()
+    wikis.value = await response.json()
  }
  
 }
 
 
 if(props.keyword == null){
-  getPosts()
+  getWikis()
 } 
 </script>
 
@@ -78,13 +76,13 @@ if(props.keyword == null){
       class="mb-4"
     >
     
-    <div v-for="(item, index) in posts" :key="index">
+    <div v-for="(item, index) in wikis" :key="index">
       <!-- {{ item }}       -->
-      <Post :post="item" style="margin-bottom: 20px;"/>
+      <wiki :wiki="item" style="margin-bottom: 20px;"/>
     </div>
-        <!-- <Post style="margin-bottom: 20px;"/>
-        <Post style="margin-bottom: 20px;"/>
-        <Post style="margin-bottom: 20px;"/> -->
+        <!-- <wiki style="margin-bottom: 20px;"/>
+        <wiki style="margin-bottom: 20px;"/>
+        <wiki style="margin-bottom: 20px;"/> -->
     </VCol>  
     <VCol
       cols="12"

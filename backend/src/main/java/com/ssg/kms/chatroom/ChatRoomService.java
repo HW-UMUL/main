@@ -41,7 +41,7 @@ public class ChatRoomService {
     public ChatRoom readChatRoom(Long chatRoomId, Optional<User> user) {
     	return chatRoomRepository.findById(chatRoomId).get();
     }
-
+    
     @Transactional
     public ChatRoom updateChatRoom(Long chatRoomId, ChatRoomDTO chatRoomDto, Optional<User> user) {
     	
