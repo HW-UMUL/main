@@ -3,6 +3,8 @@ import { VCardItem, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/compon
 
 const serverAddress = inject('serverAddress')
 
+const auth = inject('auth')
+
 const isDetails = ref(false)
 //const post = defineProps(['post'])
 const props = defineProps({
@@ -27,6 +29,7 @@ const response = await fetch(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       credentials: 'include'
     }
@@ -47,6 +50,7 @@ const response = await fetch(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       credentials: 'include'
     }
@@ -69,6 +73,7 @@ async function getLikes(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
         },
         credentials: 'include'
       }
@@ -89,6 +94,7 @@ const response = await fetch(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       credentials: 'include'
     }
@@ -112,6 +118,7 @@ const response = await fetch(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       body: JSON.stringify(formData),
       credentials: 'include'
@@ -138,6 +145,7 @@ const response = await fetch(
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
+      'Authorization': `Bearer ${auth}`,
     },
     credentials: 'include'
   }

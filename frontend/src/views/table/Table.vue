@@ -3,6 +3,8 @@ import { VCardItem, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/compon
 
 const isDetails = ref(false)
 
+const auth = inject('auth')
+
 const props = defineProps({
     table: Object
 })

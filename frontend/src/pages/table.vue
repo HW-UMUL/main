@@ -2,6 +2,7 @@
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
 import Table from '@/views/table/Table.vue';
 
+const auth = inject('auth')
 const tables = ref([])
 
 
@@ -13,6 +14,7 @@ async function getTables(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
         },
         credentials: 'include'
       }

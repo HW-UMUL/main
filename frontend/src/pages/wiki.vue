@@ -4,6 +4,7 @@ import wiki from '@/views/wiki/Wiki.vue';
 
 import { watchEffect } from 'vue';
 
+const auth = inject('auth')
 const serverAddress = inject('serverAddress')
 
 const props = defineProps({
@@ -30,6 +31,7 @@ async function getWikis(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
         },
         credentials: 'include'
       }
@@ -49,6 +51,7 @@ async function searchWiki(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
         },
         credentials: 'include'
       }

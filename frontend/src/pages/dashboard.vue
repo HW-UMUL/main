@@ -6,6 +6,7 @@ import Post from '@/views/post/Post.vue';
 import { watchEffect } from 'vue';
 
 const serverAddress = inject('serverAddress')
+const auth = inject('auth')
 
 const props = defineProps({
     keyword: String
@@ -32,6 +33,7 @@ async function getPosts(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
         },
         credentials: 'include'
       }
@@ -51,6 +53,7 @@ async function searchPost(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
         },
         credentials: 'include'
       }

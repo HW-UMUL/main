@@ -1,8 +1,11 @@
 <script setup>
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
+import { useRouter } from "vue-router"
 
+const router = useRouter()
 const serverAddress = inject('serverAddress')
-const router = inject('router')
+
+const auth = inject('auth')
 
 const wiki = ref({
   title: '',
@@ -24,6 +27,7 @@ async function writeWiki(){
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
         },
         body: JSON.stringify(formData),
         credentials: 'include'

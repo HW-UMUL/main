@@ -1,8 +1,11 @@
 <script setup>
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
+import { useRouter } from "vue-router"
 
 const serverAddress = inject('serverAddress')
-const router = inject('router')
+const router = useRouter()
+
+const auth = inject('auth')
 
 const post = ref({
   title: '',
@@ -24,6 +27,7 @@ async function writePost(){
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
         },
         body: JSON.stringify(formData),
         credentials: 'include'
@@ -34,7 +38,6 @@ async function writePost(){
     alert("실패!")
   } else{
     router.push('/')  
-//    window.location.href = '/'
   }
 }
 

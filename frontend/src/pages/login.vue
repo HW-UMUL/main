@@ -6,11 +6,12 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
-import socket from '/test/index.js'
+import { useRouter } from "vue-router"
+//import VueCookies from 'vue-cookies'
+
 
 const serverAddress = inject('serverAddress')
-const router = inject('router')
-const app = inject('app')
+const router = useRouter()
 
 const form = ref({
   usernmae: '',
@@ -34,7 +35,7 @@ async function login() {
   }
    
   const response = await fetch(
-      `http://${serverAddress}/api/login`,
+      `http://${serverAddress}/api/auth`,
       {
         method: 'POST',
         headers: {
@@ -49,17 +50,11 @@ async function login() {
     alert("실패!")
   } else{
 
-    app.use(socket, `ws://${serverAddress}/ws`)
-    router.push('/')
-
-
-    // const socket = inject('socket')
-    // socket.install.reconnect = false
-
-    //    window.location.href = '/'
+    const jwtToken = await response.headers.get('Authorization').substr(7)
+    $cookies.set("jwtToken", jwtToken)
+    router.push({ path: '/' }); 
   }
 }
-
 
 
 </script>

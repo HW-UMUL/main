@@ -3,6 +3,8 @@ import { VCardItem, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/compon
 
 const serverAddress = inject('serverAddress')
 
+const auth = inject('auth')
+
 const isDetails = ref(false)
 //const wiki = defineProps(['wiki'])
 const props = defineProps({
@@ -21,6 +23,7 @@ const response = await fetch(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       credentials: 'include'
     }
@@ -41,6 +44,7 @@ const response = await fetch(
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       credentials: 'include'
     }
@@ -63,6 +67,7 @@ async function getLikes(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
         },
         credentials: 'include'
       }
@@ -83,6 +88,7 @@ const response = await fetch(
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       credentials: 'include'
     }

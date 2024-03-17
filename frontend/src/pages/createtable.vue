@@ -1,6 +1,10 @@
 <script setup>
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
+import { useRouter } from "vue-router"
 
+const auth = inject('auth')
+
+const router = useRouter()
 
 const table = ref({
   name: '',
@@ -20,6 +24,7 @@ async function createTable(){
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
         },
         body: JSON.stringify(formData),
         credentials: 'include'
@@ -29,7 +34,9 @@ async function createTable(){
   if(!response.ok) {
     alert("실패!")
   } else{
+    
     window.location.href = 'http://localhost:5173/table'
+    router.push({ path: '/table' })
   }
 }
 

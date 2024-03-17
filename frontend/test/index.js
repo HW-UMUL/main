@@ -14,7 +14,7 @@ const webSocket = {
         const closeCallbacks = ref([]);
         const errorCallbacks = ref([]);
         let protocols = [];
-        let reconnect = false;
+        let reconnect = true;
         let reconnectTime = DEFAULT_RECONNECT_TIME;
         app.mixin({
             beforeUnmount() {

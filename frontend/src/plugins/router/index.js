@@ -18,16 +18,14 @@ export default function (app) {
   
   router.beforeEach((to, from, next) => {
     const isAuthenticated = $cookies.get('jwtToken')
-    app.config.globalProperties.isAuthenticated = isAuthenticated; // 앱 전역에서 사용할 수 있도록 설정
-  
+    app.provide("auth", isAuthenticated)
+
+    console.log(!isAuthenticated)
     if (!(to.path === '/login' || to.path === '/register') && !isAuthenticated) { // 로그인 화면이 아니고, 인증되지 않은 경우
+      console.log(1)
       next('/login'); // 로그인 화면으로 이동
     } else {
-
-//    app.use(socket, 'ws://localhost:8080/ws')
-
-    
-
+      console.log(2)
       next(); // 그 외의 경우에는 이동을 허용
     }
   });

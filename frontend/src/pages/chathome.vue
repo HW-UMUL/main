@@ -3,6 +3,7 @@ import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
 import ChatRoom from '@/views/chat/ChatRoom.vue';
 
 const chatRooms = ref([])
+const auth = inject('auth')
 
 async function getChatRooms(){
 
@@ -31,6 +32,7 @@ async function searchWiki(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,                    
         },
         credentials: 'include'
       }
