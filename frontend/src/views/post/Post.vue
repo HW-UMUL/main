@@ -1,77 +1,84 @@
 <script setup>
 import { formatDateToMonthShort } from '@/@core/utils/formatters';
-import { VCardItem, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/components/index.mjs';
+import { useRouter } from 'vue-router';
+import {ref} from 'vue';
+import { VCardItem, VCol, VDivider, VIcon, VRow, VTextField } from 'vuetify/lib/components/index.mjs';
 
-// 년-월-일
+// 날짜
 const formatDate = function(value) {
     const date = new Date(value);
     const year = date.getFullYear();
     const month = (date.getMonth() + 1);
     const day = date.getDate();
+    const hour = date.getHours();
+    const min = date.getMinutes();
+    const sec = date.getSeconds();
     
-    return `${year}-${month}-${day}`;
+    return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
 }
-
-const isDetails = ref(false)
-const isReplyDetails = ref(false)
-//const post = defineProps(['post'])
-const props = defineProps({
-    post: Object
-})
 
 const like = ref([])
 const star = ref([])
+const replys = ref([])
+const isDetails = ref(false)
+const isReplyDetails = ref(false)
+const isUpdateReply = ref(false)
+const checkReplyId = ref(null)
 
+const props = defineProps({
+    post: Object
+})
 const reply = ref({
   content: ''
 })
-
-const replys = ref([])
+const editReply = ref({
+  content: ''
+})
 
 async function checkLike(){
 
-const response = await fetch(
-    `http://localhost:8080/api/postlike/check/${props.post.id}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include'
-    }
-)
+  const response = await fetch(
+      `http://localhost:8080/api/postlike/check/${props.post.id}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
 
-if(!response.ok) {
-  alert("실패!")
-} else{
-  getLikes()
-}
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getLikes()
+  }
 }
 
 async function checkStar(){
 
-const response = await fetch(
-    `http://localhost:8080/api/poststar/check/${props.post.id}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include'
-    }
-)
+  const response = await fetch(
+      `http://localhost:8080/api/poststar/check/${props.post.id}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
 
-if(!response.ok) {
-  alert("실패!")
-} else{
-  getStars()
-}
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getStars()
+  }
 }
 
 
 
 async function getLikes(){
-
+  
   const response = await fetch(
       `http://localhost:8080/api/postlike/read/${props.post.id}`,
       {
@@ -92,22 +99,22 @@ async function getLikes(){
 
 async function getStars(){
 
-const response = await fetch(
-    `http://localhost:8080/api/poststar/read/${props.post.id}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include'
-    }
-)
+  const response = await fetch(
+      `http://localhost:8080/api/poststar/read/${props.post.id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
 
-if(!response.ok) {
-  alert("실패!")
-} else{
-  star.value = await response.json()
-}
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    star.value = await response.json()
+  }
 }
 
 async function writeReply(postId){
@@ -115,23 +122,23 @@ async function writeReply(postId){
     content: reply.value.content
   }
 
-const response = await fetch(
-    `http://localhost:8080/api/reply/create/${postId}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-      credentials: 'include'
-    }
-)
+  const response = await fetch(
+      `http://localhost:8080/api/reply/create/${postId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include'
+      }
+  )
 
-if(!response.ok) {
-  alert("실패!")
-} else{
-  getReply(postId)
-}
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getReply(postId)
+  }
 }
 
 
@@ -160,6 +167,89 @@ const response = await fetch(
   }
 }
 
+async function toggleReply(replyId) {
+  if(checkReplyId.value != replyId) {
+    isUpdateReply.value = true
+    checkReplyId.value = replyId;
+  }
+  else {
+    isUpdateReply.value = !isUpdateReply.value;
+    checkReplyId.value = replyId;
+  }
+}
+
+async function updateReply(replyId){
+  const formData = {
+    content: editReply.value.content
+  }
+
+  const response = await fetch(
+      `http://localhost:8080/api/reply/update/${replyId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getReply(props.post.id);
+  }
+}
+
+async function delPost(postId) {
+  if(confirm("삭제하시겠습니까?")) {
+    const response = await fetch(
+      `http://localhost:8080/api/post/delete/${postId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      }
+    )
+    if(response.ok) {
+      alert("삭제되었습니다")
+      window.location.reload();
+    } else {
+      alert("삭제 실패")
+    }
+  }
+}
+
+async function delReply(replyId) {
+  if(confirm("삭제하시겠습니까?")) {
+    const response = await fetch(
+      `http://localhost:8080/api/reply/delete/${replyId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include'
+      }
+    )
+    if(response.ok) {
+      alert("삭제되었습니다")
+    } else {
+      alert("삭제 실패")
+    }
+    getReply();
+  }
+}
+
+const router = useRouter();
+
+async function gotoupdatepost(postId) {
+  await router.push({ path: `/updatepost`, query: {postId: postId}})
+}
+
 getLikes()
 getStars()
 getReply(props.post.id)
@@ -175,17 +265,19 @@ getReply(props.post.id)
                 <VCol class="post-header" >
                   <span class="circle"></span>
                   <span style="display: flex; justify-content: space-between;">
-                  <span class="post-name" style="margin-left:10px; margin-right: auto;">{{ post.user.username }}</span>
+                  <span class="post-name" style="margin-left:10px; margin-right: auto; font-weight: 600;">{{ post.user.username }}
+                  </span>
                   <span class="post-date" style="margin-left: auto;">{{ formatDate(post.date) }}</span>
                   </span>
                 </VCol>
               </div>
-            <div class="post-title">
-              <VCardTitle>{{ post.title }}</VCardTitle>
-            </div>
+            <VCol class="post-title">
+              <VCardTitle style="font-weight: 700;">{{ post.title }}</VCardTitle>
+            </VCol>
             <VDivider />
             <VCol>
-              <p class="post-content">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}</p>
+              <VCol class="post-content">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}
+              </VCol>
             </VCol>
             <VCardActions>
               <VBtn @click="isDetails = !isDetails">
@@ -226,26 +318,11 @@ getReply(props.post.id)
             </VCol>
 
             <VDivider />
-            <VCol class="post-comments">
-                <!-- <span class="text-high-emphasis">댓글</span> -->
-
-                <!-- <VCardItem class="reply-con">
-                  <p>댓글</p>
-                  <VCardText v-for="(item, index) in replys" :key="index">
-                      <VDivider />
-                      {{ item.content }}
-                    </VCardText>
-                  <IConBtn @click="$emit('close', false)">close</IConBtn>
-
-                </VCardItem> -->
-
                 <VCardActions>
                   <VBtn @click="isReplyDetails = !isReplyDetails">
                     Reply
                   </VBtn>
-
                   <VSpacer />
-
                   <VBtn
                     icon
                     size="small"
@@ -258,44 +335,101 @@ getReply(props.post.id)
                 <VExpandTransition>
                   <div v-show="isReplyDetails">
                     <VCardText v-for="(item, index) in replys" :key="index">
-                      <VDivider />
-                      {{ item.content }}
+                      <VDivider class="mb-2"/>
+                      <div class="mb-4" style="display: flex; justify-content: space-between;">
+                        <span style="font-weight: 600;"> {{ item.user.username }} </span>
+                        <span> {{ formatDate(item.date) }}</span>
+                      </div>
+                      <div class="mb-2"> {{ item.content }}</div>
+
+                      <VRow class="justify-end">
+                        <VCol cols="auto">
+                          <VIconBtn @click="toggleReply(item.id)" style="font-size: 10pt; cursor: pointer;">
+                            수정
+                          </VIconBtn>
+                        </VCol>
+                        <VCol cols="auto">
+                          <VIconBtn @click="delReply(item.id)" style="font-size: 10pt; cursor: pointer;">
+                            삭제
+                          </VIconBtn>
+                        </VCol>
+                      </VRow>
+                      
+                      <VExpandTransition>
+                        <div v-show="isUpdateReply">
+                          <div v-if="checkReplyId === item.id">
+                            <VRow>
+                              <VCol>
+                                <VTextField
+                                input
+                                id="updatereply"
+                                v-model="editReply.content"
+                                placeholder="수정"
+                                label="수정"
+                                >
+                                </VTextField>
+                              </VCol>
+                              <div>
+                                <VCol class="mt-1">
+                                  <VBtn @click="updateReply(item.id)"
+                                      type="button"
+                                      class="me-2"
+                                    >
+                                      수정
+                                  </VBtn>
+                                </VCol>
+                              </div>
+                            </VRow>
+                          </div>
+                        </div>
+                      </VExpandTransition>
                     </VCardText>
                   </div>
                 </VExpandTransition>
 
-                <!-- <VCol v-for="(item, index) in replys" :key="index">
-                  <VDivider />
-                    {{ item.content }}
-                </VCol> -->
                 <div>
-                  <form @submit.prevent="writeReply(post.id)">
-                    <VCol
-                    >
+                  <VRow>
+                    <VCol>
                       <VTextField
                       input
                       id="reply"
                       v-model="reply.content"
                       placeholder="댓글"
                       label="댓글"
-                      />
-                    </VCol>
-                    
-                    <VCol
-                    cols="12"
-                    md="1">
-                      <VBtn
-                        
-                        type="submit"
-                        class="me-2"
                       >
-                        작성
+                      </VTextField>
+                    </VCol>
+                    <div>
+                      <VCol class="mt-1">
+                        <VBtn @click="writeReply(post.id)"
+                            type="button"
+                            class="me-2"
+                          >
+                            작성
+                        </VBtn>
+                      </VCol>
+                    </div>
+                  </VRow>
+                  
+                  <VRow>
+                    <VCol style="display: flex; justify-content: space-between;">
+                      <VBtn @click="gotoupdatepost(post.id)"
+                        type="button"
+                        style="margin-left: auto;"
+                        >
+                        수정
+                      </VBtn>
+                      
+                      <VBtn @click="delPost(post.id)"
+                        type="button"
+                        style="margin-left: 10px;"
+                        >
+                        삭제
                       </VBtn>
                     </VCol>
+                  </VRow>
 
-                  </form>
                 </div>
-            </VCol>
           </VCol>
       </VCol>
     </VCardText>

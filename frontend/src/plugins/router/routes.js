@@ -40,6 +40,10 @@ export const routes = [
         path: 'writewiki',
         component: () => import('@/pages/writewiki.vue')
       },
+      {
+        path: 'updatepost',
+        component: () => import('@/pages/updatepost.vue')
+      },
       // {
       //   path: 'room',
       //   component: () => import('@/views/chat/room.html')

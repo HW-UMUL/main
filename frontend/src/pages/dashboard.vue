@@ -1,6 +1,8 @@
 <script setup>
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
 import Post from '@/views/post/Post.vue';
+import Postlikesort from '@/views/list/Postlikesort.vue';
+import Postdatesort from '@/views/list/Postdatesort.vue';
 
 // import post from '@/views/'
 
@@ -67,10 +69,11 @@ getPosts()
       cols="12"
       md="4"
     >
+        <Postlikesort style="margin-bottom: 20px" />
+        <Postdatesort style="margin-bottom: 20px" />
         <AnalyticsAward style="margin-bottom: 20px"/>
         <AnalyticsAward style="margin-bottom: 20px"/>
-        <AnalyticsAward style="margin-bottom: 20px"/>
-    </VCol>  
+    </VCol>
 
   </VRow>
 </template>
