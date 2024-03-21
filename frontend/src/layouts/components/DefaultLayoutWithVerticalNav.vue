@@ -7,9 +7,9 @@ import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 
 import { useRouter } from 'vue-router';
-
-//
-import { ref } from 'vue'
+import axios from 'axios'
+// input 박스 클릭시 block 노출
+import { ref, computed } from 'vue'
 
 // const isFocus = ref(false);
 const setFocus = ref(false);
@@ -25,12 +25,50 @@ function handleBlur(){
 }
 //
 
-// title 데이터 가져오기
-// async function searchData(){
-//   router.push({
-//         path: `/search/all`
+// 키보드 입력에 따른 목록 변환
+const filterKeyword = ref()
+function keyHandle(){
+
+  console.log(searchKeyword.value.keyword)
+  for (let data of responseData) {
+    console.log(data)
+    if(data === searchKeyword.value.keyword){
+      filterKeyword.value = responseData.value
+      console.log(filterKeyword.value)
+    }
+  }
+}
+
+// axios
+
+const responseData = ref(null); // responseData를 ref()로 래핑
+
+onMounted(() => {
+  getData(); // 페이지가 실행될 때 getData() 메소드 실행
+});
+
+async function getData() {
+  try {
+    const response = await axios.get(`http://localhost:8080/api/post/search/all`, {
+      headers: {
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+      }
+    });
+    responseData.value = response.data;
+    // console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+// const filteredData = computed(() => {
+//   // searchKeyword.value와 일치하는 데이터를 필터링하여 반환
+//   return responseData.value.filter(data => {
+//     return data.name.includes(searchKeyword.value.keyword)
 //   })
-// }
+// });
+
+
 
 const router = useRouter();
 
@@ -55,40 +93,6 @@ async function search(){
 
 </script>
 
-<script>
-import axios from 'axios'
-
-export default {
-  name: 'DefaultLayout',
-
-  data() {
-  return {
-    responseData: null // API 응답 데이터를 저장할 변수
-    };
-  },
-
-  methods: {
-    getData() {
-      axios.get(`http://localhost:8080/api/post/search/all`, {
-        headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
-        }
-      })
-      .then((response) => {
-        this.responseData = response.data;
-        console.log(response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
-    },
-
-  props: ['responseData']
-
-  }
-
-}
-</script>
 
 <template>
   <VerticalNavLayout>
@@ -116,18 +120,20 @@ export default {
                 <img src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\search.png"
                 class="icons"/>
 
-
                 <section>
                   <input  type="text" v-model="searchKeyword.keyword" placeholder="Search"
                   style="display:flex; height:20px; width:450px;" class="search-bar"
-                  @focus="handleFocus()" @blur="handleBlur()"
+                  @focus="handleFocus()" @blur="handleBlur()" 
+                  @keyup="keyHandle()"
                   >
                   </input>
                   <!--  @focus="setFocus(true)" @click="e.stopPropagation()" @blur="handleBlur()"-->
                 
                   <div class="wrapper" >
-                    <div class="block" v-if="setFocus">symbol</div>
-                    <li v-for="rd in responseData"> {{ rd }}</li>
+                    <div class="block" v-if="setFocus">
+                    <!-- <ul v-for="rd in responseData"> {{ rd }}</ul> -->
+                    <ul v-for="fk in filterKeyword"> {{ fk }}</ul>
+                    </div>
                   </div>
                 </section>
 
@@ -136,7 +142,6 @@ export default {
                     <option value="Post" class="list">Post</option>
                     <option value="Wiki" class="list">Wiki</option>
                 </select>
-
 
               </div>
             </form>
@@ -267,8 +272,11 @@ export default {
     
       .block {
       position: absolute;
-      width: 100%;
-      height: 30px;
+      // width: 100%;
+      // height: 30px;
+      width: 100%; /* 변경된 부분 */
+      height: auto; /* 변경된 부분 */
+      max-width: 100%; /* 변경된 부분 */
       background: white;
       box-shadow: 0px 0.25rem 0.5rem;
       border-radius: 0.5rem;
