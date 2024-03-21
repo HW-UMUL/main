@@ -33,9 +33,9 @@ const props = defineProps({
 const reply = ref({
   content: ''
 })
-// const editReply = ref({
-//   content: ''
-// })
+const editReply = ref({
+  content: ''
+})
 
 async function checkLike(){
 
@@ -238,6 +238,7 @@ async function updateReply(replyId){
     alert("실패!")
   } else{
     getReply(props.post.id);
+    editReply.value.content=''
   }
 }
 
@@ -371,10 +372,50 @@ getReply(props.post.id)
                 <VExpandTransition>
                   <div v-show="isReplyDetails">
                     <VCardText v-for="(item, index) in replys" :key="index">
-                      <ReplyVue :replyvue="item" :postoj="props.post"></ReplyVue>
-                      <VIconBtn @click="delReply(item.id)" style="font-size: 10pt; cursor: pointer;">
-      삭제
-    </VIconBtn>
+                      <ReplyVue :replyvue="item" :postob="props.post"></ReplyVue>
+                      <VRow >
+                        <VCol cols="auto">
+                          <VIconBtn @click="toggleReply(item.id)" style="font-size: 10pt; cursor: pointer;">
+                            수정
+                          </VIconBtn>
+                        </VCol>
+                        <VCol cols="auto" >
+                          <VIconBtn @click="delReply(item.id)" style="font-size: 10pt; cursor: pointer;">
+                          삭제
+                          </VIconBtn>
+                        </VCol>
+                      </VROW>
+
+                      <VExpandTransition>
+                        <div v-show="isUpdateReply">
+                          <div v-if="checkReplyId === item.id">
+                            <VRow>
+                              <VCol>
+                                <VTextField
+                                input
+                                id="updatereply"
+                                v-model="editReply.content"
+                                placeholder="수정"
+                                label="수정"
+                                >
+                                </VTextField>
+                              </VCol>
+                              <div>
+                                <VCol class="mt-1">
+                                  <VBtn @click="updateReply(item.id)"
+                                      type="button"
+                                      class="me-2"
+                                    >
+                                      수정
+                                  </VBtn>
+                                </VCol>
+                              </div>
+                            </VRow>
+                          </div>
+
+                        </div>
+                      </VExpandTransition>
+
                     </VCardText>
                   </div>
                 </VExpandTransition>

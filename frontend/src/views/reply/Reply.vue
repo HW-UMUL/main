@@ -3,7 +3,7 @@ import {ref} from 'vue'
 
 const props = defineProps({
     replyvue: Object,
-    postoj: Object
+    postob: Object
 })
 
 const editReply = ref({
@@ -19,15 +19,15 @@ const checkReplyId = ref(null)
 
 // 날짜
 const formatDate = function(value) {
-    const date = new Date(value);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1);
-    const day = date.getDate();
-    const hour = date.getHours();
-    const min = date.getMinutes();
-    const sec = date.getSeconds();
-    
-    return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
+  const date = new Date(value);
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1);
+  const day = date.getDate();
+  const hour = date.getHours();
+  const min = date.getMinutes();
+  const sec = date.getSeconds();
+  
+  return `${year}-${month}-${day} ${hour}:${min}:${sec}`;
 }
 
 async function getReply(postId){
@@ -36,16 +36,16 @@ async function getReply(postId){
     content: reply.value.content
   }
 
-const response = await fetch(
-  `http://localhost:8080/api/reply/readpost/${postId}`,
-  {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include'
-  }
-)
+  const response = await fetch(
+    `http://localhost:8080/api/reply/readpost/${postId}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
+    }
+  )
 
   if(!response.ok) {
     alert("실패!")
@@ -174,7 +174,7 @@ getReplyLikes()
       {{ replylike }}
     </VIconBtn>
   </VCol>
-  <VCol cols="auto">
+  <!-- <VCol cols="auto">
     <VIconBtn @click="toggleReply(props.replyvue.id)" style="font-size: 10pt; cursor: pointer;">
       수정
     </VIconBtn>
@@ -183,10 +183,10 @@ getReplyLikes()
     <VIconBtn @click="delReply(props.replyvue.id)" style="font-size: 10pt; cursor: pointer;">
       삭제
     </VIconBtn>
-  </VCol>
+  </VCol> -->
 </VRow>
 
-<VExpandTransition>
+<!-- <VExpandTransition>
   <div v-show="isUpdateReply">
     <div v-if="checkReplyId === props.replyvue.id">
       <VRow>
@@ -214,5 +214,6 @@ getReplyLikes()
     </div>
 
   </div>
-</VExpandTransition>
+</VExpandTransition> -->
+
 </template>
