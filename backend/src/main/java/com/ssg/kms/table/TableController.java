@@ -34,7 +34,7 @@ public class TableController {
     }
 
 	@PutMapping("/update/{tableId}")
-    public ResponseEntity<Tables> updateTable(@PathVariable Long tableId, @Valid @RequestBody TableDTO tableDto) {
+    public ResponseEntity<Boolean> updateTable(@PathVariable Long tableId, @Valid @RequestBody TableDTO tableDto) {
         return ResponseEntity.ok(tableService.updateTable(tableId, tableDto, userService.getMyUserWithAuthorities()));
     }
 	

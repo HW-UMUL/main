@@ -42,4 +42,6 @@ public class Tables {
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     
+    private Boolean isPublic;
+    
 }

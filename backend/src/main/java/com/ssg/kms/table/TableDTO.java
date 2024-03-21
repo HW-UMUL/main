@@ -14,6 +14,7 @@ import lombok.Setter;
 public class TableDTO {
 
     private String name;
-    private String desc;
+    private String description;
+    private Boolean isPublic;
 
 }

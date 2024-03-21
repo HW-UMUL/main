@@ -78,10 +78,6 @@ async function searchPost(){
         >
         Wiki+
         </IconBtn>
-        <!--
-        <router-link to="/writepost">Post+</router-link>
-        <router-link to="/login">Wiki+</router-link>
-        -->
 
         <IconBtn
           class="me-2"

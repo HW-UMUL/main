@@ -1,7 +1,5 @@
 <script setup>
-console.log('i111')
 import DefaultLayoutWithVerticalNav from './components/DefaultLayoutWithVerticalNav.vue'
-console.log('i2w2')
 </script>
 
 <template>

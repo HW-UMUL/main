@@ -12,19 +12,15 @@ const props = defineProps({
 
 <template>
   <VCard class="position-relative">
-    <VCardText>
       <VCol class="mb-2">
-        <VCol class="table-details">
             <VCol class="table-name">
-              <VCardTitle>{{ table.table.name }}</VCardTitle>
+              {{ table.table.name }}
             </VCol>
             <VDivider />
             <VCol>
               <p class="table-desc">{{ table.table.description }}</p>
             </VCol>
-          </VCol>
       </VCol>
-    </VCardText>
   </VCard>
 </template>
 
@@ -44,7 +40,7 @@ const props = defineProps({
 
 .table-name {
      font-weight: bold;
-     margin-bottom: 5px;
+//     margin-bottom: 5px;
 }
 
 .table-date {

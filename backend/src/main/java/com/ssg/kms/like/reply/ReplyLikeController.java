@@ -36,7 +36,7 @@ public class ReplyLikeController {
 		return ResponseEntity.ok(replyLikeService.readLike(replyId, userService.getMyUserWithAuthorities()));
     }
 	
-	// 되려나 모르겠당 안되넹
+	// 되려나 모르겠당 안되넹 
 //	@GetMapping("/read/my")
 //    public ResponseEntity<List<GetPostMapping>> readMyPostLike() {
 //		return ResponseEntity.ok(replyLikeService.readMyLike(userService.getMyUserWithAuthorities()));

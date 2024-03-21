@@ -19,4 +19,6 @@ public interface ChatRoomUserRepository extends JpaRepository<ChatRoomUser, Long
 
 	void deleteAllByUserId(Long id);
 
+	List<ChatRoomUser> findByChatRoomIdAndUserId(Long chatRoomId, Long userId);
+
 }

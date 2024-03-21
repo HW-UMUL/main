@@ -101,6 +101,25 @@ export const routes = [
         component: () => import('@/pages/mytables.vue'),
       },
       {
+        path: 'mytables/:tableId',
+        component: () => import('@/pages/tabledetail.vue'),
+        props: true
+      },
+      {
+        path: 'writepost/:tableId',
+        component: () => import('@/pages/writetablepost.vue'),
+        props: true
+      },
+      {
+        path: 'writewiki/:tableId',
+        component: () => import('@/pages/writetablewiki.vue'),
+        props: true
+      },
+
+
+
+
+      {
         path: 'myposts',
         component: () => import('@/pages/myposts.vue'),
       },

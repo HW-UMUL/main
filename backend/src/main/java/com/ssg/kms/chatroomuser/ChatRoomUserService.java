@@ -33,7 +33,7 @@ public class ChatRoomUserService {
     		
     		User foundUser = userRepository.findByEmail(email);
 
-    		if(foundUser != null && chatRoomUserRepository.findByUserId(foundUser.getId()).isEmpty()) {
+    		if(foundUser != null && chatRoomUserRepository.findByChatRoomIdAndUserId(chatRoomId, foundUser.getId()).isEmpty()) {
 	    		ChatRoomUser chatRoomUser = ChatRoomUser.builder()
 	        			.user(foundUser)
 	        			.chatRoom(chatRoom)

@@ -21,7 +21,6 @@ export default function (app) {
 
     app.provide("auth", isAuthenticated)
 
-    console.log(!isAuthenticated)
     if (!(to.path === '/login' || to.path === '/register') && !isAuthenticated) { // 로그인 화면이 아니고, 인증되지 않은 경우
       next('/login'); // 로그인 화면으로 이동
     } else {

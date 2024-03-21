@@ -32,6 +32,8 @@ public class TableUser {
     
     private Boolean accept;
 
+    private Boolean isAdmin;
+    
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

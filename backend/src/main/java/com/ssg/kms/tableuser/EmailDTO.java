@@ -1,7 +1,5 @@
 package com.ssg.kms.tableuser;
 
-import java.util.List;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +11,7 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TableUserDTO {
+public class EmailDTO {
 
-    private List<String> email;
+    private String email;
 }

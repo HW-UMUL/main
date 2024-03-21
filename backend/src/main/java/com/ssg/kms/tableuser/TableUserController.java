@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssg.kms.mapping.GetTableMapping;
+import com.ssg.kms.mapping.GetUserMapping;
 import com.ssg.kms.user.UserService;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +28,7 @@ public class TableUserController {
 	
 	//초대 - invite
 	@PostMapping("/create/{tableId}")
-	public ResponseEntity<TableUser> createTableUser(@PathVariable Long tableId, @RequestBody TableUserDTO tableUserDto) {
+	public ResponseEntity<Boolean> createTableUser(@PathVariable Long tableId, @RequestBody TableUserDTO tableUserDto) {
 		return ResponseEntity.ok(tableUserService.createTableUser(tableId, tableUserDto, userService.getMyUserWithAuthorities()));
 	}	
 	
@@ -37,10 +38,22 @@ public class TableUserController {
         return ResponseEntity.ok(tableUserService.readTableUser(tableUserId, userService.getMyUserWithAuthorities()));
     }
 	
-	//포함된 모든 내역 확인
+	//유저가 포함된 모든 테이블 출력
 	@GetMapping("/read")
     public ResponseEntity<List<GetTableMapping>> readAllTableUser() {
         return ResponseEntity.ok(tableUserService.readAllTableUser(userService.getMyUserWithAuthorities()));
+    }
+	
+	//참여한 모든 인원 확인
+	@GetMapping("/readuser/{tableId}")
+    public ResponseEntity<List<GetUserMapping>> readTableUsersByTable(@PathVariable Long tableId) {
+        return ResponseEntity.ok(tableUserService.readTableUsersByTable(tableId, userService.getMyUserWithAuthorities()));
+    }
+	
+	//초대 내역 확인
+	@GetMapping("/invite")
+    public ResponseEntity<List<TableUser>> readAllInvite() {
+        return ResponseEntity.ok(tableUserService.readAllInvite(userService.getMyUserWithAuthorities()));
     }
 	
 	//승인 - accept 
@@ -51,8 +64,20 @@ public class TableUserController {
 	
 	//거절 - reject
 	@DeleteMapping("/delete/{tableUserId}")
-    public BodyBuilder deleteTableUser(@PathVariable Long tableUserId) {
-		tableUserService.deleteTableUser(tableUserId, userService.getMyUserWithAuthorities());
-        return ResponseEntity.ok();
+    public ResponseEntity<Boolean> deleteTableUser(@PathVariable Long tableUserId) {
+        return ResponseEntity.ok(tableUserService.deleteTableUser(tableUserId, userService.getMyUserWithAuthorities()));
     }
+	
+	//추가 - admin
+	@PutMapping("/admin/add/{tableId}")
+    public ResponseEntity<Boolean> addAdmin(@PathVariable Long tableId, @RequestBody EmailDTO emailDto) {
+        return ResponseEntity.ok(tableUserService.addAdmin(tableId, emailDto, userService.getMyUserWithAuthorities()));
+    }
+
+	//제거 - admin
+	@PutMapping("/admin/remove/{tableId}")
+    public ResponseEntity<Boolean> removeAdmin(@PathVariable Long tableId, @RequestBody EmailDTO emailDto) {
+        return ResponseEntity.ok(tableUserService.removeAdmin(tableId, emailDto, userService.getMyUserWithAuthorities()));
+    }
+
 }

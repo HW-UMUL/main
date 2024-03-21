@@ -27,14 +27,16 @@ public class TableService {
  
     	Tables table = Tables.builder()
     			.name(tableDto.getName())
-    			.description(tableDto.getDesc())
+    			.description(tableDto.getDescription())
     			.date(new Date())
+    			.isPublic(true)
     			.build();
     	
     	TableUser tableUser = TableUser.builder()
     			.accept(true)
     			.user(user.get())
     			.table(table)
+    			.isAdmin(true)
     			.build();
     	
     	tableRepository.save(table);    	
@@ -49,13 +51,20 @@ public class TableService {
     }
 
     @Transactional
-    public Tables updateTable(Long tableId, TableDTO tableDto, Optional<User> user) {
+    public Boolean updateTable(Long tableId, TableDTO tableDto, Optional<User> user) {
+    	
+    	if(!tableUserRepository.findByUserIdAndTableId(user.get().getId(), tableId).getIsAdmin()) {
+    		return false;
+    	}
+    	
     	Tables table = tableRepository.findById(tableId).get();
-    	
+
     	table.setName(tableDto.getName());
-    	table.setDescription(tableDto.getDesc());
+    	table.setDescription(tableDto.getDescription());
+    	table.setIsPublic(tableDto.getIsPublic());
+    	tableRepository.save(table);
     	
-		return tableRepository.save(table);
+		return true;
     }
 
     @Transactional

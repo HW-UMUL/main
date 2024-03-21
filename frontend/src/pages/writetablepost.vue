@@ -2,27 +2,37 @@
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
 import { useRouter } from "vue-router"
 
-const auth = inject('auth')
 const serverAddress = inject('serverAddress')
-
 const router = useRouter()
+const auth = inject('auth')
 
-const table = ref({
-  name: '',
-  description: ''
+const props = defineProps({
+    tableId: String
 })
 
-async function createTable(){
+const post = ref({
+  title: '',
+  content: '',
+  tag: ''
+})
+
+async function writePost(){
+
+  const formData = {
+    title: post.value.title,
+    content: post.value.content,
+    tag: post.value.tag
+  }
 
   const response = await fetch(
-      `http://${serverAddress}/api/table/create`,
+      `http://${serverAddress}/api/post/create/${props.tableId}`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${auth}`,          
         },
-        body: JSON.stringify(table.value),
+        body: JSON.stringify(formData),
         credentials: 'include'
       }
   )
@@ -30,7 +40,7 @@ async function createTable(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    router.push({ path: '/mytables' })
+    router.push('/')  
   }
 }
 
@@ -46,27 +56,40 @@ async function createTable(){
       <VCard class="position-relative">
         <VCardText>
           <div >
-            <form @submit.prevent="createTable()">
-            <p>Table 생성</p>
+            <form @submit.prevent="writePost()">
+            <p >Post 작성</p>
                 <VCol
                 >
                   <VTextField
-                  id="name"
-                  v-model="table.name"
-                  placeholder="조직 이름"
-                  label="조직 이름"
+                  id="title"
+                  v-model="post.title"
+                  placeholder="제목"
+                  label="제목"
                   />
                 </VCol>
-                
+
+              
+
                 <VCol
                 >
                   <VTextarea
-                  id="desc"
-                  v-model="table.description"
-                  placeholder="설명"
-                  label="설명"
+                  id="content"
+                  v-model="post.content"
+                  placeholder="본문"
+                  label="본문"
                   />
                 </VCol>
+
+                <VCol
+                >
+                  <VTextField
+                  id="tag"
+                  v-model="post.tag"
+                  placeholder="태그"
+                  label="태그"
+                  />
+                </VCol>
+
 
               <VCol cols="12">
                 <VBtn

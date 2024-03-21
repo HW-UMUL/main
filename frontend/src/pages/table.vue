@@ -1,6 +1,6 @@
 <script setup>
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import Table from '@/views/table/Table.vue';
+import Table from '@/views/table/TableSummary.vue';
 
 const auth = inject('auth')
 const tables = ref([])
