@@ -57,7 +57,7 @@ getPosts()
       md="8"
       class="mb-4"
     >
-      <div v-for="(item, index) in posts" :key="index">
+      <div v-for="(item, index) in posts.slice().reverse()" :key="index">
         <Post :post="item" style="margin-bottom: 20px;"/>
       </div>
     </VCol>
