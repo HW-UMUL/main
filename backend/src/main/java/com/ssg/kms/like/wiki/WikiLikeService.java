@@ -1,10 +1,12 @@
 package com.ssg.kms.like.wiki;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.mapping.GetWikiMapping;
 import com.ssg.kms.user.User;
 import com.ssg.kms.wiki.Wiki;
 import com.ssg.kms.wiki.WikiRepository;
@@ -44,6 +46,11 @@ public class WikiLikeService {
     @Transactional(readOnly = true)
     public int readLike(Long wikiId, Optional<User> user) {
     	return wikiLikeRepository.findAllByWikiId(wikiId).size();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<GetWikiMapping> readMyLike(Optional<User> user) {
+    	return wikiLikeRepository.findWikiAllByUserId(user.get().getId());
     }
     
 }

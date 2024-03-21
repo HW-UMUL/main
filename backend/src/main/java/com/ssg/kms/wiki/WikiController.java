@@ -39,6 +39,11 @@ public class WikiController {
         return ResponseEntity.ok(wikiService.readAllWiki(userService.getMyUserWithAuthorities()));
     }
 	
+	@GetMapping("/read/my")
+    public ResponseEntity<List<Wiki>> readMyWiki() {
+        return ResponseEntity.ok(wikiService.readMyWiki(userService.getMyUserWithAuthorities()));
+    }
+	
 	@PutMapping("/update/{wikiId}")
     public ResponseEntity<Wiki> updateWiki(@PathVariable Long wikiId, @Valid @RequestBody WikiDTO wikiDto) {
         return ResponseEntity.ok(wikiService.updateWiki(wikiId, wikiDto, userService.getMyUserWithAuthorities()));

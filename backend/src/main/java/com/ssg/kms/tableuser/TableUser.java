@@ -32,11 +32,11 @@ public class TableUser {
     
     private Boolean accept;
 
-    @ManyToOne //(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
     
-    @ManyToOne //(fetch = FetchType.LAZY)
+    @ManyToOne
     @JoinColumn(name = "table_id")
     private Tables table;
 }

@@ -1,20 +1,21 @@
 package com.ssg.kms.user;
 
+import java.util.List;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssg.kms.auth.AuthService;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +31,29 @@ public class UserController {
 	public ResponseEntity<User> signup(@Valid @RequestBody UserDto userDto) {
 		return ResponseEntity.ok(userService.signup(userDto));
 	}
+	
+	/// update info
+	@PutMapping("/update/username")
+	public ResponseEntity<String> updateUsername(@Valid @RequestBody UsernameDTO usernameDto) {
+		return ResponseEntity.ok(userService.updateUsername(usernameDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	@PutMapping("/update/email")
+	public ResponseEntity<String> updateEmail(@Valid @RequestBody EmailDTO emailDto) {
+		return ResponseEntity.ok(userService.updateEmail(emailDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	@PutMapping("/update/password")
+	public ResponseEntity<Boolean> updatePassword(@Valid @RequestBody PasswordDTO passwordDto) {
+		return ResponseEntity.ok(userService.updatePassword(passwordDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	///////////////////////////////
+	
+	@GetMapping("/getinfo")
+	public ResponseEntity<List<String>> getInfo() {
+		return ResponseEntity.ok(userService.getInfo(userService.getMyUserWithAuthorities()));
+	}	
 	
 	@PostMapping("/login")
 	public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto) {
@@ -48,10 +72,9 @@ public class UserController {
 	}
 
 
-	@PostMapping("/testtest")
-	public ResponseEntity<User> test(@Valid @RequestBody UserDto userDto) {
-		System.out.println("test");
-		return ResponseEntity.ok(userService.test(userDto));
+	@DeleteMapping("/delete")
+	public ResponseEntity<Boolean> test() {
+		return ResponseEntity.ok(userService.delete(userService.getMyUserWithAuthorities()));
 	}
 	
 	@GetMapping("/user")

@@ -42,7 +42,7 @@ async function login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-        credentials: 'include'
+//        credentials: 'include'
       }
   )
 

@@ -24,6 +24,7 @@ public class ChatRoomUserController {
 	private final ChatRoomUserService chatRoomUserService;
 	private final UserService userService;
 
+	// 초대하기
 	@PostMapping("/create/{chatRoomId}")
 	public ResponseEntity<List<ChatRoomUser>> createChatRoomUser(@PathVariable Long chatRoomId, @RequestBody ChatRoomUserDTO chatRoomUserDto) {
 		return ResponseEntity.ok(chatRoomUserService.createChatRoomUser(chatRoomId, chatRoomUserDto, userService.getMyUserWithAuthorities()));
@@ -35,6 +36,13 @@ public class ChatRoomUserController {
         return ResponseEntity.ok(chatRoomUserService.readChatRoomUser(chatRoomId, userService.getMyUserWithAuthorities()));
     }
 	
+	// 유저가 가지고 있는 채팅룸 가져오기
+	@GetMapping("/read")
+    public ResponseEntity<List<ChatRoomUser>> readAllChatRoom() {
+        return ResponseEntity.ok(chatRoomUserService.readAllChatRoom(userService.getMyUserWithAuthorities()));
+    }
+		
+	// 강퇴
 	@DeleteMapping("/delete/{chatRoomUserId}")
     public BodyBuilder deleteChatRoom(@PathVariable Long chatRoomUserId) {
 		chatRoomUserService.deleteChatRoomUser(chatRoomUserId, userService.getMyUserWithAuthorities());

@@ -1,39 +1,66 @@
 <script setup>
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import ChatRoom from '@/views/chat/ChatRoom.vue';
+import ChatRoomSummary from '@/views/chat/ChatRoomSummary.vue';
+import socketModule from '/test/index.js'
+import { useRouter } from 'vue-router';
+
+const serverAddress = inject('serverAddress')
+
+const auth = inject('auth')
+
+const router = useRouter()
+
+//socketModule.connectionString = `ws://${serverAddress}/ws`
+
+// socketModule.setConnectionString(`ws://${serverAddress}/ws`)
+// socketModule.connect()
+
+//socketModule.socket.value.push
+//socketModule.socket.value.close();
 
 const chatRooms = ref([])
-const auth = inject('auth')
 
 async function getChatRooms(){
 
   const response = await fetch(
-      `http://localhost:8080/api/wiki/read`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-      }
+    `http://${serverAddress}/api/chatroomuser/read`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include'
+    }
   )
 
   if(!response.ok) {
     alert("실패!")
   } else{
-    wikis.value = await response.json()
+    chatRooms.value = await response.json()
   }
 }
 
-async function searchWiki(){
+
+const chatRoom = ref({
+  name: ''
+})
+
+async function createChatRoom(){
+
+  const formData = {
+    name: chatRoom.value.name
+  }
+
   const response = await fetch(
-      `http://localhost:8080/api/wiki/search/${props.keyword}`,
+      `http://${serverAddress}/api/chatroom/create`,
       {
-        method: 'GET',
+        method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth}`,                    
+          'Authorization': `Bearer ${auth}`,          
         },
+        body: JSON.stringify(formData),
         credentials: 'include'
       }
   )
@@ -41,15 +68,21 @@ async function searchWiki(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    wikis.value = await response.json()
- }
- 
+    getChatRooms()
+    //router.push('/')  
+  }
 }
 
 
-if(props.keyword == null){
-  getWikis()
-} 
+async function moveChatRoom(chatRoomId){
+  
+  router.push({
+      path: `/chatroom/${chatRoomId}`
+  })
+  
+}
+
+getChatRooms()
 </script>
 
 <template>
@@ -59,20 +92,25 @@ if(props.keyword == null){
       md="8"
       class="mb-4"
     >
-    
-    <div v-for="(item, index) in wikis" :key="index">
-      <!-- {{ item }}       -->
-      <wiki :wiki="item" style="margin-bottom: 20px;"/>
+    <div>
+      <form @submit.prevent="createChatRoom()">        
+        {{ chatRoom.name }}
+        <input type="text" v-model="chatRoom.name"></input>
+        <input type="submit">정보 제출</input>
+      </form>
     </div>
-        <!-- <wiki style="margin-bottom: 20px;"/>
-        <wiki style="margin-bottom: 20px;"/>
-        <wiki style="margin-bottom: 20px;"/> -->
+    <hr/>
+    <div v-for="(item, index) in chatRooms" :key="index">
+      <div>    
+        <ChatRoomSummary :chatRoom="item.chatRoom" style="margin-bottom: 20px;" @click="moveChatRoom(item.chatRoom.id)" />
+      </div>
+    </div>
     </VCol>  
     <VCol
       cols="12"
       md="4"
     >
-        <AnalyticsAward />
+      <AnalyticsAward />
     </VCol>  
 
   </VRow>

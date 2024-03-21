@@ -88,6 +88,11 @@ public class WikiService {
 		return wikiRepository.findAll();
     }
     
+    @Transactional(readOnly = true)
+    public List<Wiki> readMyWiki(Optional<User> user) {
+		return wikiRepository.findAllByUserId(user.get().getId());
+    }
+    
     @Transactional
     public Wiki updateWiki(Long wikiId, WikiDTO wikiDto, Optional<User> user) {
     	Wiki wiki = wikiRepository.findById(wikiId).get();

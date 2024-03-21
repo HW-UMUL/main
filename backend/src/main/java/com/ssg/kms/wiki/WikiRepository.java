@@ -12,4 +12,6 @@ public interface WikiRepository extends JpaRepository<Wiki, Long> {
 
 	List<Wiki> findAllByCategoryName(String categoryName);
 
+	List<Wiki> findAllByUserId(Long id);
+
 }

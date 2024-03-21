@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ssg.kms.chatroom.ChatRoom;
 import com.ssg.kms.chatroom.ChatRoomRepository;
-import com.ssg.kms.mapping.GetUserMapping;
 import com.ssg.kms.user.User;
 import com.ssg.kms.user.UserRepository;
 
@@ -33,13 +32,15 @@ public class ChatRoomUserService {
     	for(String email : chatRoomUserDto.getEmail()) {
     		
     		User foundUser = userRepository.findByEmail(email);
-    		
-    		ChatRoomUser chatRoomUser = ChatRoomUser.builder()
-        			.user(foundUser)
-        			.chatRoom(chatRoom)
-        			.build();
-    		
-    		chatRoomUsers.add(chatRoomUser);
+
+    		if(foundUser != null && chatRoomUserRepository.findByUserId(foundUser.getId()).isEmpty()) {
+	    		ChatRoomUser chatRoomUser = ChatRoomUser.builder()
+	        			.user(foundUser)
+	        			.chatRoom(chatRoom)
+	        			.build();
+	    		
+	    		chatRoomUsers.add(chatRoomUser);
+    		}
     	}
     	
     	chatRoomUserRepository.saveAll(chatRoomUsers);
@@ -52,6 +53,12 @@ public class ChatRoomUserService {
     @Transactional(readOnly = true)
     public List<ChatRoomUser> readChatRoomUser(Long chatRoomId, Optional<User> user) {
     	return chatRoomUserRepository.findAllByChatRoomId(chatRoomId);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<ChatRoomUser> readAllChatRoom(Optional<User> user) {
+    	
+    	return chatRoomUserRepository.findAllByUserId(user.get().getId());
     }
     
     @Transactional

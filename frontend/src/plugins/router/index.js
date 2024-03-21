@@ -18,14 +18,13 @@ export default function (app) {
   
   router.beforeEach((to, from, next) => {
     const isAuthenticated = $cookies.get('jwtToken')
+
     app.provide("auth", isAuthenticated)
 
     console.log(!isAuthenticated)
     if (!(to.path === '/login' || to.path === '/register') && !isAuthenticated) { // 로그인 화면이 아니고, 인증되지 않은 경우
-      console.log(1)
       next('/login'); // 로그인 화면으로 이동
     } else {
-      console.log(2)
       next(); // 그 외의 경우에는 이동을 허용
     }
   });

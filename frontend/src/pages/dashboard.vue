@@ -82,7 +82,7 @@ if(props.keyword == null){
     >
     
     <div v-for="(item, index) in posts" :key="index">
-      <!-- {{ item }}       -->
+
       <Post :post="item" style="margin-bottom: 20px;"/>
     </div>
         <!-- <Post style="margin-bottom: 20px;"/>

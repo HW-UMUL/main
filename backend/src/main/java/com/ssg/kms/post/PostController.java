@@ -42,6 +42,12 @@ public class PostController {
         return ResponseEntity.ok(postService.readAllPost(userService.getMyUserWithAuthorities()));
     }
 	
+	@GetMapping("/read/my")
+    public ResponseEntity<List<Post>> readMyPost() {
+        return ResponseEntity.ok(postService.readMyPost(userService.getMyUserWithAuthorities()));
+    }
+
+	
 	@PutMapping("/update/{postId}")
     public ResponseEntity<Post> updatePost(@PathVariable Long postId, @Valid @RequestBody PostDTO postDto) {
         return ResponseEntity.ok(postService.updatePost(postId, postDto, userService.getMyUserWithAuthorities()));

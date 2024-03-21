@@ -3,16 +3,17 @@ import VerticalNavSectionTitle from '@/@layouts/components/VerticalNavSectionTit
 import VerticalNavGroup from '@layouts/components/VerticalNavGroup.vue';
 import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 
-const isLogin = ref(true)
-
-function getJwt() {
-  if($cookies.get('jwtToken')) {
-
-  }
-}
 </script>
 
 <template>
+    <VerticalNavLink
+    :item=" {
+      title: 'My Page',
+      to: '/mypage',
+      icon: 'ri-home-line'      
+    }">    
+  </VerticalNavLink>
+
   <VerticalNavLink
     :item=" {
       title: 'Post',

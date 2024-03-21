@@ -1,10 +1,12 @@
 package com.ssg.kms.like.reply;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.mapping.GetPostMapping;
 import com.ssg.kms.reply.Reply;
 import com.ssg.kms.reply.ReplyRepository;
 import com.ssg.kms.user.User;
@@ -45,5 +47,10 @@ public class ReplyLikeService {
     public int readLike(Long replyId, Optional<User> user) {
     	return replyLikeRepository.findAllByReplyId(replyId).size();
     }
-    
+
+//    @Transactional(readOnly = true)
+//    public List<GetPostMapping> readMyLike(Optional<User> user) {
+//    	return replyLikeRepository.findPostAllByUserId(user.get().getId());
+//    }
+
 }

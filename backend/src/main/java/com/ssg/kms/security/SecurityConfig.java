@@ -61,6 +61,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth").permitAll() // 인증정보 api
                 .requestMatchers("/api/signup").permitAll() // 회원가입 api
                 .requestMatchers("/api/login").permitAll() // 로그인 api
+                .requestMatchers("/ws").permitAll() // 로그인 api
                 
                 
 //                .requestMatchers("/favicon.ico").permitAll()

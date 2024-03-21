@@ -3,10 +3,12 @@ package com.ssg.kms.reply;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.mapping.GetPostMapping;
 import com.ssg.kms.post.Post;
 import com.ssg.kms.post.PostRepository;
 import com.ssg.kms.user.User;
@@ -62,4 +64,10 @@ public class ReplyService {
     public List<Reply> readAllReply(Long postId, Optional<User> user) {
 		return replyRepository.findAllByPostId(postId);
     }
+    
+    @Transactional(readOnly = true)
+    public Set<GetPostMapping> readMyReply(Optional<User> user) {
+		return replyRepository.findPostAllByUserId(user.get().getId());
+    }
+
 }

@@ -82,6 +82,12 @@ public class PostService {
     public List<Post> readAllPost(Optional<User> user) {
 		return postRepository.findAll();
     }
+    
+    @Transactional(readOnly = true)
+    public List<Post> readMyPost(Optional<User> user) {
+		return postRepository.findAllByUserId(user.get().getId());
+    }
+
 
     @Transactional
     public Post updatePost(Long postId, PostDTO postDto, Optional<User> user) {

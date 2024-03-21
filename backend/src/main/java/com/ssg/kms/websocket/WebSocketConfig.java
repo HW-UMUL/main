@@ -16,13 +16,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class WebSocketConfig implements WebSocketConfigurer {
 
-	private final WebSocketHandler webSocketHandler;
+	private final CustomWebSocketHandler webSocketHandler;
 	
 	@Override
 	public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
 		
 		registry.addHandler(webSocketHandler, "/ws").setAllowedOrigins("*");
-
 	}
 
 }

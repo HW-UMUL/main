@@ -8,4 +8,6 @@ public interface ChatRepository extends JpaRepository<Chat, Long>{
 
 	List<Chat> findAllByChatRoomId(Long chatRoomId);
 
+	List<Chat> findAllByUserId(Long id);
+
 }

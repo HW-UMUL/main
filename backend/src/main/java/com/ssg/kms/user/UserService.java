@@ -1,18 +1,32 @@
 package com.ssg.kms.user;
 
-import java.util.Collections;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.chat.Chat;
+import com.ssg.kms.chat.ChatRepository;
+import com.ssg.kms.chatroomuser.ChatRoomUserRepository;
+import com.ssg.kms.follow.FollowRepository;
+import com.ssg.kms.like.post.PostLikeRepository;
+import com.ssg.kms.like.wiki.WikiLikeRepository;
+import com.ssg.kms.post.Post;
+import com.ssg.kms.post.PostRepository;
+import com.ssg.kms.reply.Reply;
+import com.ssg.kms.reply.ReplyRepository;
 import com.ssg.kms.role.ERole;
 import com.ssg.kms.role.Role;
 import com.ssg.kms.role.RoleRepository;
 import com.ssg.kms.security.SecurityUtil;
+import com.ssg.kms.star.post.PostStarRepository;
+import com.ssg.kms.star.wiki.WikiStarRepository;
+import com.ssg.kms.tableuser.TableUserRepository;
+import com.ssg.kms.wiki.Wiki;
+import com.ssg.kms.wiki.WikiRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,23 +35,91 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserRoleRepository userRoleRepository;
+    private final UserRoleRepository userRoleRepository;    
+    private final TableUserRepository tableUserRepository;
+    private final FollowRepository followRepository;
+    private final PostLikeRepository postLikeRepository;
+    private final PostStarRepository postStarRepository;
+    private final WikiLikeRepository wikiLikeRepository;
+    private final WikiStarRepository wikiStarRepository;
+    private final ChatRoomUserRepository chatRoomUserRepository;
+    private final PostRepository postRepository;
+    private final WikiRepository wikiRepository;
+    private final ReplyRepository replyRepository;
+    private final ChatRepository chatRepository;
+    
     private final PasswordEncoder passwordEncoder;
     
     @Transactional
-    public User test(UserDto userDto) {
-    	User user = userRepository.findByUsername(userDto.getUsername()).orElse(null);
+    public Boolean delete(Optional<User> user) {
+
+    	List<Post> posts = postRepository.findAllByUserId(user.get().getId());
+    	for(Post post : posts) {
+    		post.setUser(null);
+    	}
+
+    	List<Wiki> wikis = wikiRepository.findAllByUserId(user.get().getId());
+    	for(Wiki wiki : wikis) {
+    		wiki.setUser(null);
+    	}
     	
-        userRepository.delete(user);
+    	List<Reply> replys = replyRepository.findAllByUserId(user.get().getId());
+    	for(Reply reply : replys) {
+    		reply.setUser(null);
+    	}
+
+    	List<Chat> chats = chatRepository.findAllByUserId(user.get().getId());
+    	for(Chat chat : chats) {
+    		chat.setUser(null);
+    	}
+
+    	userRoleRepository.deleteAllByUserId(user.get().getId());
+    	tableUserRepository.deleteAllByUserId(user.get().getId());
+    	followRepository.deleteAllByFollowerId(user.get().getId());
+    	followRepository.deleteAllByFolloweeId(user.get().getId());
+    	postLikeRepository.deleteAllByUserId(user.get().getId());
+    	postStarRepository.deleteAllByUserId(user.get().getId());
+    	wikiLikeRepository.deleteAllByUserId(user.get().getId());
+    	wikiStarRepository.deleteAllByUserId(user.get().getId());
+    	chatRoomUserRepository.deleteAllByUserId(user.get().getId());
+    	
+        userRepository.delete(user.get());
         
-//    	Set<UserRole> userRoles = user.getUserRoles();
-//        for (UserRole userRole : userRoles) {
-//            Role role = userRole.getRole();
-//            ERole roleName = role.getRole();
-//            System.out.println("사용자 " + user.getUsername() + "의 역할: " + roleName);
-//        }
-		return user;
+		return true;
     }
+    
+    @Transactional(readOnly = true)
+    public List<String> getInfo(Optional<User> user) {
+    	List<String> info = new ArrayList<>();
+    	info.add(user.get().getUsername());
+    	info.add(user.get().getEmail());
+
+    	return info;
+    }
+    // USER INFO
+    //////////////////////////////////////////////////////////////////////    
+    @Transactional
+    public String updateUsername(UsernameDTO usernameDto, Optional<User> user) {
+    	user.get().setUsername(usernameDto.getUsername());
+    	userRepository.save(user.get());
+    	return usernameDto.getUsername();
+    }
+    
+    @Transactional
+    public String updateEmail(EmailDTO emailDto, Optional<User> user) {
+    	user.get().setEmail(emailDto.getEmail());
+    	userRepository.save(user.get());
+    	return emailDto.getEmail();
+    }
+    
+    @Transactional
+    public Boolean updatePassword(PasswordDTO passwordDto, Optional<User> user) {
+    	// passwordEncoder.encode(userDto.getPassword())
+    	user.get().setPassword(passwordEncoder.encode(passwordDto.getPassword()));
+    	userRepository.save(user.get());
+    	return true;
+    }
+    //////////////////////////////////////////////////////////////////////
     @Transactional
     public User signup(UserDto userDto) {
         if (userRepository.findOneWithAuthoritiesByUsername(userDto.getUsername()).orElse(null) != null) {

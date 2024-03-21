@@ -1,5 +1,6 @@
 <script setup>
 import { VCardItem, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/components/index.mjs';
+import Reply from '@/views/reply/Reply.vue';
 
 const serverAddress = inject('serverAddress')
 
@@ -13,6 +14,7 @@ const props = defineProps({
 
 
 const like = ref([])
+const replyLike = ref(new Map())
 const star = ref([])
 
 const reply = ref({
@@ -41,6 +43,7 @@ if(!response.ok) {
   getLikes()
 }
 }
+
 
 async function checkStar(){
 
@@ -85,6 +88,7 @@ async function getLikes(){
     like.value = await response.json()
   }
 }
+
 
 async function getStars(){
 
@@ -239,19 +243,11 @@ getReply(props.post.id)
                   </VBtn>
                 </VCardActions>
 
-                <VExpandTransition>
                   <div v-show="isDetails">
                     <VCardText v-for="(item, index) in replys" :key="index">
-                      <VDivider />
-                      {{ item.content }}
+                      <Reply :reply="item" />
                     </VCardText>
                   </div>
-                </VExpandTransition>
-
-                <!-- <VCol v-for="(item, index) in replys" :key="index">
-                  <VDivider />
-                    {{ item.content }}
-                </VCol> -->
                 <div>
                   <form @submit.prevent="writeReply(post.id)">
                     <VCol

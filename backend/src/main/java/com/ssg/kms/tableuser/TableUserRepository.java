@@ -10,5 +10,7 @@ public interface TableUserRepository extends JpaRepository<TableUser, Long> {
 
 	
 	List<GetTableMapping> findAllByUserId(Long userId);
+
+	void deleteAllByUserId(Long id);
 	
 }
