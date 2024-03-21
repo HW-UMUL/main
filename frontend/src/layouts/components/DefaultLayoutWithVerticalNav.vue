@@ -8,11 +8,32 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 
 import { useRouter } from 'vue-router';
 
-//import router from '@/plugins/router/routes.js'
+//
+import { ref } from 'vue'
+
+// const isFocus = ref(false);
+const setFocus = ref(false);
+
+function handleFocus(){
+  setFocus.value = true
+  console.log(setFocus.value)
+}
+
+function handleBlur(){
+  setFocus.value = false
+  console.log(setFocus.value)
+}
+//
+
+// title 데이터 가져오기
+// async function searchData(){
+//   router.push({
+//         path: `/search/all`
+//   })
+// }
 
 const router = useRouter();
 
-const posts = ref([])
 const searchKeyword = ref({
   keyword: '',
   option: ''
@@ -32,6 +53,41 @@ async function search(){
   }
 }
 
+</script>
+
+<script>
+import axios from 'axios'
+
+export default {
+  name: 'DefaultLayout',
+
+  data() {
+  return {
+    responseData: null // API 응답 데이터를 저장할 변수
+    };
+  },
+
+  methods: {
+    getData() {
+      axios.get(`http://localhost:8080/api/post/search/all`, {
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+        }
+      })
+      .then((response) => {
+        this.responseData = response.data;
+        console.log(response.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
+
+  props: ['responseData']
+
+  }
+
+}
 </script>
 
 <template>
@@ -54,22 +110,26 @@ async function search(){
         >
           <!-- 👉 Search Trigger button -->
           <div class="search-group">
-            <form @submit.prevent="search()"> 
+            <form @submit.prevent="search()" @keydown.tab="KeydownTab"> 
               
-                <!-- <span class="d-none d-md-flex align-center text-disabled"> -->
-                  <!-- <select class="option-key" aria-label="Default select example" v-model="searchKeyword.option">
-                    <option style="display: none;" disabled value="">Option</option>
-                    <option value="Post">Post</option>
-                    <option value="Wiki">Wiki</option>
-                  </select> -->
-                <!-- </span> -->
               <div class="input-group">
                 <img src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\search.png"
                 class="icons"/>
 
-                <input type="text" v-model="searchKeyword.keyword" placeholder="Search"
-                style="display:flex; height:20px; width:450px;" class="search-bar">
-                </input>
+
+                <section>
+                  <input  type="text" v-model="searchKeyword.keyword" placeholder="Search"
+                  style="display:flex; height:20px; width:450px;" class="search-bar"
+                  @focus="handleFocus()" @blur="handleBlur()"
+                  >
+                  </input>
+                  <!--  @focus="setFocus(true)" @click="e.stopPropagation()" @blur="handleBlur()"-->
+                
+                  <div class="wrapper" >
+                    <div class="block" v-if="setFocus">symbol</div>
+                    <li v-for="rd in responseData"> {{ rd }}</li>
+                  </div>
+                </section>
 
                 <select class="option-key" aria-label="Default select example" v-model="searchKeyword.option">
                     <option style="display: none;" disabled value="" class="list">Option</option>
@@ -77,16 +137,12 @@ async function search(){
                     <option value="Wiki" class="list">Wiki</option>
                 </select>
 
-              </div>
 
-                <!-- <IconBtn @click.prevent="search(searchKeyword.keyword)" class="search-btn">
-                  <VIcon icon="ri-search-line" />
-                </IconBtn> -->
-              
+              </div>
             </form>
           </div>
           <!-- 👉 Search Trigger button end -->
-
+        
         </div>
 
         <VSpacer />
@@ -192,6 +248,35 @@ async function search(){
     display: flex;
     justify-content: center;
     }
+
+    .search-bar {
+    width: 100%;
+    padding: 13px;
+    padding-left: 45px;
+    padding-right: 60px;
+    border-radius: 30px;
+    border: 1px solid #a738ed;
+    outline: none;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    }
+
+    .wrapper {
+      position: relative;
+    
+      .block {
+      position: absolute;
+      width: 100%;
+      height: 30px;
+      background: white;
+      box-shadow: 0px 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      }
+      
+    }
+
+
 
     .icons {
       position: absolute;

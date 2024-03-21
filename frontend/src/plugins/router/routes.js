@@ -46,7 +46,13 @@ export const routes = [
         path: '/search',
         component: () => import('@/pages/dashboard.vue'),
         props: true
-      }
+      },
+      // {
+//         path: '/search/all',
+//         component: () => import('@/components/DefaultLayoutWithVerticalNav.vue'),
+//         component: () => import('@/pages/dashboard.vue'),
+//         props: true
+//       }
     ],
   },
   {

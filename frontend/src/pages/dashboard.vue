@@ -15,7 +15,8 @@ const props = defineProps({
 })
 
 const posts = ref([])
-// const wikies = ref([])
+const wikies = ref([])
+const searchList = ref([])
 
 watchEffect(() => {
   // props를 감시하고, 변경될 때마다 실행되는 코드
@@ -30,6 +31,27 @@ watchEffect(() => {
   }
 });
 
+
+// 데이터 받아오기
+// async function getSearchList(){
+//   const response = await fetch(
+//       `http://localhost:8080/api/post/search/all`,
+//       {
+//         method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         credentials: 'include'
+//       }
+//   )
+
+//   if(!response.ok) {
+//     alert("실패!")
+//   } else{
+//     searchList.value = await response.json()
+//     console.log(searchList.value)
+//   }
+// }
 
 async function getPosts(){
 
@@ -67,7 +89,7 @@ const response = await fetch(
 if(!response.ok) {
   alert("실패!")
 } else{
-  posts.value = await response.json()
+  wikies.value = await response.json()
 }
 }
 
@@ -107,7 +129,7 @@ async function searchWiki(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    posts.value = await response.json()
+    wikies.value = await response.json()
  }
  
 }
