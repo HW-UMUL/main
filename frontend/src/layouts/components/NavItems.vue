@@ -158,13 +158,13 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       to: '/register',
     }"
   />
-  <VerticalNavLink
+  <!-- <VerticalNavLink
     :item="{
       title: 'Error',
       icon: 'ri-information-line',
       to: '/no-existence',
     }"
-  />
+  /> -->
 
   <!-- 👉 User Interface -->
   <VerticalNavSectionTitle
@@ -216,7 +216,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
   />
 
   <!-- 👉 Others -->
-  <VerticalNavSectionTitle
+  <!-- <VerticalNavSectionTitle
     :item="{
       heading: 'Others',
     }"
@@ -236,5 +236,5 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       icon: 'ri-lifebuoy-line',
       target: '_blank',
     }"
-  />
+  /> -->
 </template>

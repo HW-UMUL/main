@@ -1,6 +1,8 @@
 <script setup>
+import { useRoute } from 'vue-router';
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
-
+import PostLikeSort from '@/views/list/PostLikeSort.vue';
+import PostDateSort from '@/views/list/PostDateSort.vue';
 
 const post = ref({
   title: '',
@@ -8,6 +10,29 @@ const post = ref({
   category: '',
   tag: ''
 })
+
+async function getPost(postId){
+
+  const response = await fetch(
+      `http://localhost:8080/api/post/read/${postId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    post.value = await response.json()
+  }
+}
+
+const postId = useRoute().query.postId
+getPost(postId)
 
 async function updatePost(postId){
 
@@ -111,6 +136,21 @@ async function updatePost(postId){
           </div>
         </VCardText>
       </VCard>
-    </VCol>  
+    </VCol>
+    
+    <VCol
+      cols="12"
+      md="4"
+    >
+      <VCard title="추천순" style="margin-bottom: 20px">
+      <PostLikeSort style="margin-bottom: 20px" />
+      </VCard>    
+      <VCard title="최신순" style="margin-bottom: 20px">
+        <PostDateSort />
+      </VCard>
+      <AnalyticsAward style="margin-bottom: 20px"/>
+      <AnalyticsAward style="margin-bottom: 20px"/>
+    </VCol>
+
   </VRow>
 </template>

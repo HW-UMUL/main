@@ -4,6 +4,7 @@ import { useRouter } from 'vue-router';
 import {ref, onMounted} from 'vue';
 import { VCardItem, VCardText, VCol, VDivider, VIcon, VRow, VTextField } from 'vuetify/lib/components/index.mjs';
 import ReplyVue from '@/views/reply/Reply.vue';
+import avatar1 from '@images/avatars/avatar-1.png';
 
 // 날짜
 const formatDate = function(value) {
@@ -254,11 +255,11 @@ async function delPost(postId) {
         credentials: 'include'
       }
     )
-    if(response.ok) {
-      alert("삭제되었습니다")
-      window.location.reload();
-    } else {
+    if(!response.ok) {
       alert("삭제 실패")
+    } else {
+      alert("삭제되었습니다")
+      window.location.reload()
     }
   }
 }
@@ -275,12 +276,12 @@ async function delReply(replyId) {
         credentials: 'include'
       }
     )
-    if(response.ok) {
-      alert("삭제되었습니다")
-    } else {
+    if(!response.ok) {
       alert("삭제 실패")
+    } else {
+      alert("삭제되었습니다")
+      getReply(props.post.id);
     }
-    getReply(props.post.id);
   }
 }
 
@@ -301,169 +302,179 @@ getReply(props.post.id)
     <VCardText>
       <VCol class="mb-2">
         <VCol class="post-details">
-            <div class="post-header">
-                <VCol class="post-header" >
-                  <span class="circle"></span>
-                  <span style="display: flex; justify-content: space-between;">
-                  <span class="post-name" style="font-weight: 600; margin-right: auto;">{{ post.user.username }}</span>
-                  <span class="post-date" style="margin-left: auto;">{{ formatDate(post.date) }}</span>
-                  </span>
-                </VCol>
-              </div>
-            <div class="post-title">
-              <VCardTitle style="font-weight: 700;">{{ post.title }}</VCardTitle>
-            </div>
-            <VDivider />
-              <VCol class="post-content, mt-2" style="margin-left: 5px;">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}
+          <div class="post-header">
+              <VCol class="post-header" >
+                <span>
+                  <img class="propile-img" :src="avatar1">
+                </span>
+                <span style="display: flex; justify-content: space-between;">
+                <span class="post-name" style="font-weight: 600; margin-right: auto;">
+                  {{ post.user.username }}
+                </span>
+                <span class="post-date" style="margin-left: auto;">
+                  {{ formatDate(post.date) }}
+                </span>
+                </span>
               </VCol>
-            <VCardActions>
-              <VBtn @click="isDetails = !isDetails">
-                Details
-              </VBtn>
+          </div>
 
-              <VSpacer />
+          <div class="post-title">
+            <VCardTitle style="font-weight: 700;">{{ post.title }}</VCardTitle>
+          </div>
 
-              <VBtn
-                icon
-                size="small"
-                @click="isDetails = !isDetails"
-              >
-                <VIcon :icon="isDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
-              </VBtn>
-            </VCardActions>
-
-            <VExpandTransition>
-              <div v-show="isDetails">
-                <VDivider />
-                <VCardText>
-                  {{ post.content }}
-                </VCardText>
-              </div>
-            </VExpandTransition>
-            
-            <VDivider />
-            <VCol class="post-interactions">
-              <IConBtn @click="checkLike"> 
-                <VIcon icon="ri-heart-line"/>
-              </IConBtn>
-              <span class="post-interactions-item" style="margin-left: 10px; margin-right: 10px;">{{ like }}</span>
-
-              <IConBtn @click="checkStar"> 
-                <VIcon icon="ri-star-line"/>
-              </IConBtn>
-              <span class="post-interactions-item" style="margin-left: 10px; margin-right: 10px;">{{ star }}</span>
+          <VDivider />
+            <VCol class="post-content, mt-2" style="margin-left: 5px;">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}
             </VCol>
+          <VCardActions>
+            <VBtn @click="isDetails = !isDetails">
+              Details
+            </VBtn>
 
-            <VDivider />
-                <VCardActions>
-                  <VBtn @click="isReplyDetails = !isReplyDetails">
-                    Reply
-                  </VBtn>
-                  <VSpacer />
-                  <VBtn
-                    icon
-                    size="small"
-                    @click="isReplyDetails = !isReplyDetails"
-                  >
-                    <VIcon :icon="isReplyDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
-                  </VBtn>
-                </VCardActions>
+            <VSpacer />
+
+            <VBtn
+              icon
+              size="small"
+              @click="isDetails = !isDetails"
+            >
+              <VIcon :icon="isDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
+            </VBtn>
+          </VCardActions>
+
+          <VExpandTransition>
+            <div v-show="isDetails">
+              <VDivider />
+              <VCardText>
+                {{ post.content }}
+              </VCardText>
+            </div>
+          </VExpandTransition>
+          
+          <VDivider />
+          <VCol class="post-interactions">
+            <IConBtn @click="checkLike"> 
+              <VIcon icon="ri-heart-line"/>
+            </IConBtn>
+            <span class="post-interactions-item" style="margin-left: 10px; margin-right: 10px;">{{ like }}</span>
+
+            <IConBtn @click="checkStar"> 
+              <VIcon icon="ri-star-line"/>
+            </IConBtn>
+            <span class="post-interactions-item" style="margin-left: 10px; margin-right: 10px;">{{ star }}</span>
+          </VCol>
+
+          <VDivider />
+          <VCardActions>
+            <VBtn @click="isReplyDetails = !isReplyDetails">
+              Reply
+            </VBtn>
+            <VSpacer />
+            <VBtn
+              icon
+              size="small"
+              @click="isReplyDetails = !isReplyDetails"
+            >
+              <VIcon :icon="isReplyDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
+            </VBtn>
+          </VCardActions>
                 
+          <VExpandTransition>
+            <div v-show="isReplyDetails">
+              <VCardText v-for="(item, index) in replys" :key="index">
+                <ReplyVue :replyvue="item" :postob="props.post"></ReplyVue>
+                <VRow >
+                  <VCol cols="auto">
+                    <VIconBtn @click="toggleReply(item.id)" style="font-size: 10pt; cursor: pointer;">
+                      수정
+                    </VIconBtn>
+                  </VCol>
+                  <VCol cols="auto" >
+                    <VIconBtn @click="delReply(item.id)" style="font-size: 10pt; cursor: pointer;">
+                    삭제
+                    </VIconBtn>
+                  </VCol>
+                </VROW>
+
                 <VExpandTransition>
-                  <div v-show="isReplyDetails">
-                    <VCardText v-for="(item, index) in replys" :key="index">
-                      <ReplyVue :replyvue="item" :postob="props.post"></ReplyVue>
-                      <VRow >
-                        <VCol cols="auto">
-                          <VIconBtn @click="toggleReply(item.id)" style="font-size: 10pt; cursor: pointer;">
-                            수정
-                          </VIconBtn>
+                  <div v-show="isUpdateReply">
+                    <div v-if="checkReplyId === item.id">
+                      <VRow>
+                        <VCol>
+                          <VTextField
+                          input
+                          id="updatereply"
+                          v-model="editReply.content"
+                          placeholder="수정"
+                          label="수정"
+                          >
+                          </VTextField>
                         </VCol>
-                        <VCol cols="auto" >
-                          <VIconBtn @click="delReply(item.id)" style="font-size: 10pt; cursor: pointer;">
-                          삭제
-                          </VIconBtn>
-                        </VCol>
-                      </VROW>
 
-                      <VExpandTransition>
-                        <div v-show="isUpdateReply">
-                          <div v-if="checkReplyId === item.id">
-                            <VRow>
-                              <VCol>
-                                <VTextField
-                                input
-                                id="updatereply"
-                                v-model="editReply.content"
-                                placeholder="수정"
-                                label="수정"
-                                >
-                                </VTextField>
-                              </VCol>
-                              <div>
-                                <VCol class="mt-1">
-                                  <VBtn @click="updateReply(item.id)"
-                                      type="button"
-                                      class="me-2"
-                                    >
-                                      수정
-                                  </VBtn>
-                                </VCol>
-                              </div>
-                            </VRow>
-                          </div>
-
+                        <div>
+                          <VCol class="mt-1">
+                            <VBtn @click="updateReply(item.id)"
+                                type="button"
+                                class="me-2"
+                              >
+                                수정
+                            </VBtn>
+                          </VCol>
                         </div>
-                      </VExpandTransition>
 
-                    </VCardText>
+                      </VRow>
+                    </div>
                   </div>
                 </VExpandTransition>
 
-                <div>
-                  <VRow>
-                    <VCol>
-                      <VTextField
-                      input
-                      id="reply"
-                      v-model="reply.content"
-                      placeholder="댓글"
-                      label="댓글"
-                      >
-                      </VTextField>
-                    </VCol>
-                    <div>
-                      <VCol class="mt-1">
-                        <VBtn @click="writeReply(post.id)"
-                            type="button"
-                            class="me-2"
-                          >
-                            작성
-                        </VBtn>
-                      </VCol>
-                    </div>
-                  </VRow>
-                  
-                  <VRow>
-                    <VCol style="display: flex; justify-content: space-between;">
-                      <VBtn @click="gotoupdatepost(post.id)"
-                        type="button"
-                        style="margin-left: auto;"
-                        >
-                        수정
-                      </VBtn>
-                      
-                      <VBtn @click="delPost(post.id)"
-                        type="button"
-                        style="margin-left: 10px;"
-                        >
-                        삭제
-                      </VBtn>
-                    </VCol>
-                  </VRow>
+              </VCardText>
+            </div>
+          </VExpandTransition>
 
-                </div>
-          </VCol>
+          <div>
+            <VRow>
+              <VCol>
+                <VTextField
+                input
+                id="reply"
+                v-model="reply.content"
+                placeholder="댓글"
+                label="댓글"
+                >
+                </VTextField>
+              </VCol>
+
+              <div>
+                <VCol class="mt-1">
+                  <VBtn @click="writeReply(post.id)"
+                      type="button"
+                      class="me-2"
+                    >
+                      작성
+                  </VBtn>
+                </VCol>
+              </div>
+            </VRow>
+            
+            <VRow>
+              <VCol style="display: flex; justify-content: space-between;">
+                <VBtn @click="gotoupdatepost(post.id)"
+                  type="button"
+                  style="margin-left: auto;"
+                  >
+                  수정
+                </VBtn>
+                
+                <VBtn @click="delPost(post.id)"
+                  type="button"
+                  style="margin-left: 10px;"
+                  >
+                  삭제
+                </VBtn>
+              </VCol>
+            </VRow>
+
+          </div>
+        </VCol>
       </VCol>
     </VCardText>
   </VCard>
@@ -514,6 +525,12 @@ getReply(props.post.id)
     margin-bottom: 5px;
 
     display: inline-block;
+}
+
+.propile-img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
 </style>

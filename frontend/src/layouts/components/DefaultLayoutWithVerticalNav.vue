@@ -56,9 +56,6 @@ import writewiki from '@/pages/writewiki.vue'
         Wiki+
         </IconBtn>
 
-        <!-- <router-link to="/writepost">Post+</router-link>
-        <router-link to="/login">Wiki+</router-link> -->
-
         <IconBtn
           class="me-2"
           href="https://github.com/themeselection/materio-vuetify-vuejs-admin-template-free"
