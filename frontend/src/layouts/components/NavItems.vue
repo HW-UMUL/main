@@ -173,6 +173,22 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
     }"
   />
 
+  <VerticalNavLink
+    :item="{
+      title: 'Wiki write test',
+      icon: 'ri-user-settings-line',
+      to: '/wikieditorwrite',
+    }"
+  />
+
+  <VerticalNavLink
+    :item="{
+      title: 'Wiki write test2',
+      icon: 'ri-user-settings-line',
+      to: '/wikieditor',
+    }"
+  />
+
   <!-- <VerticalNavLink
     :item="{
       title: 'write 에디터. 보류',

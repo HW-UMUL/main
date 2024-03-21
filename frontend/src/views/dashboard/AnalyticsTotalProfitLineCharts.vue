@@ -1,8 +1,24 @@
 <!-- eslint-disable no-restricted-imports -->
 <script setup>
-import VueApexCharts from 'vue3-apexcharts'
-import { useTheme } from 'vuetify'
-import { hexToRgb } from '@layouts/utils'
+import { hexToRgb } from '@layouts/utils';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
+
+// 토큰 브라우저에서 받아오기 
+let authToken = 'Bearer '
+const cookies = document.cookie.split(";");
+let jwtToken = '';
+
+for (let i = 0; i < cookies.length; i++) {
+  const cookie = cookies[i].trim();
+  // 쿠키 이름이 'jwtToken'으로 시작하는 경우
+  if (cookie.startsWith('jwtToken=')) {
+    // 'jwtToken'의 값만 추출
+    jwtToken = cookie.substring('jwtToken='.length);
+    break;
+  }
+}
+authToken = authToken + jwtToken
 
 const vuetifyTheme = useTheme()
 
@@ -69,6 +85,11 @@ const chartOptions = computed(() => {
     yaxis: { labels: { show: false } },
   }
 })
+
+const state = reactive({
+  items: []
+})
+
 </script>
 
 <template>

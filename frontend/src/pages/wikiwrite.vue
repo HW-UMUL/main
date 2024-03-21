@@ -70,15 +70,16 @@ export default {
     border-collapse: collapse;
     border-radius: 10px;
     border-style: hidden;
-    box-shadow: 0 0 0 1px #000;
+    box-shadow: 0 0 0 1px #905DFF;
 }
 
   td, th {
-    border: 3px solid #ccc; /* 테두리 스타일 및 색상을 설정합니다. */
+    border: 1px solid #905DFF; /* 테두리 스타일 및 색상을 설정합니다. */
   }
 
 </style>
 <template>
+    <h2>Write Wiki</h2><br/>
     <form @submit.prevent="submitForm">
       <table border="1" width="90%" height="700">
         <tr><td><input type="text" v-model="formData.title" placeholder="title" style="padding-left: 20px;

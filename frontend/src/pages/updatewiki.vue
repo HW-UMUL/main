@@ -32,6 +32,8 @@ const formData = {
   tag: ''
 };
 
+const loading = ref(false);
+
 axios.get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
     headers: {
         'Authorization':authToken
@@ -46,9 +48,12 @@ axios.get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
     formData.tag = res.data.tag;
 
     console.log("내부:", formData)
-})
+}).finally(() => {
+  loading.value = false; // 데이터 로딩 완료
+});
 
 const submitForm = async () => {
+  loading.value = true; // 폼 제출 전 로딩 상태 설정
   const headers = {
   'Content-Type': 'application/json',
   'Authorization': authToken
@@ -64,6 +69,7 @@ const submitForm = async () => {
     })
   } catch (error) {
     console.error('에러 발생: ', error)
+    loading.value = false; // 에러 발생 시 로딩 상태 해제
   }
 }
 

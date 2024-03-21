@@ -141,8 +141,12 @@ const props = defineProps({
 })
 
 
-const like = ref([])
-const star = ref([])
+const likestar = reactive({
+  like: [],
+  star: [],
+})
+const userLikes = reactive({});
+const userStars = reactive({});
 
 async function checkLike(wikiId){
   const response = await fetch(
@@ -160,6 +164,11 @@ async function checkLike(wikiId){
     alert("실패!")
   } else{
     getLikes(wikiId)
+    if (userLikes[wikiId]) {
+      delete userLikes[wikiId];
+    } else {
+      userLikes[wikiId] = true;
+    }
   }
 
 }
@@ -181,10 +190,14 @@ async function checkStar(wikiId){
       alert("실패!")
     } else{
       getStars(wikiId)
+      if (userStars[wikiId]) {
+        delete userStars[wikiId];
+      } else {
+        userStars[wikiId] = true;
+      }
     }
 }
 
-let isLiked = 0;
 async function getLikes(wikiId){
 
   const response = await fetch(
@@ -203,12 +216,11 @@ async function getLikes(wikiId){
   if(!response.ok) {
     alert("실패!")
   } else{
-    like.value = await response.json()
-    isLiked = like.value
+    const likes = await response.json()
+    likestar.like[wikiId] = likes;
   }
 }
 
-let isStarred = 0;
 async function getStars(wikiId){
 
 const response = await fetch(
@@ -226,8 +238,8 @@ const response = await fetch(
   if(!response.ok) {
     alert("실패!")
   } else{
-    star.value = await response.json()
-    isStarred = star.value;
+    const stars = await response.json()
+    likestar.star[wikiId] = stars;
   }
 }
 
@@ -244,6 +256,7 @@ const response = await fetch(
 //   })
 // }
 
+
 </script>
 
 <style>
@@ -255,41 +268,38 @@ const response = await fetch(
 </style>
 <template>
   <VCol v-for="i in state.items.data?.length" :key="i">
-    <div style="margin-left:20px">{{ state.items.data[i-1]?.user.username }} &nbsp; {{ state.items.data[i-1]?.date.substring(0,10) }}
-        {{ state.items.data[i-1]?.date.substring(12,19) }} &nbsp; &nbsp; 
-        <span @click="checkLike" class="post-interactions-item">좋아요 : {{ like }}</span>  &nbsp; &nbsp;
-        <span @click="checkStar" class="post-interactions-item">스크랩 횟수 : {{ star }}</span>  
-    </div>
-    <div align="right" margin-right="20px" float="left">
-      
-        <button type="button" v-if="isLiked == 1" @click="checkLike(`${state.items.data[i-1].id}`)">
-          <font-awesome-icon :icon="['fas', 'thumbs-up']" />
-        </button>  
-        <button type="button" v-else @click="checkLike(`${state.items.data[i-1].id}`)">
-          <font-awesome-icon :icon="['far', 'thumbs-up']" />
-        </button>
-      
-      &nbsp;
-        <button type="button" v-if="isStarred == 1" @click="checkStar(`${state.items.data[i-1].id}`)">
-          <font-awesome-icon :icon="['fas', 'star']" />
-        </button>
-        <button type="button" v-else @click="checkStar(`${state.items.data[i-1].id}`)">
-          <font-awesome-icon :icon="['far', 'star']" />
-        </button>
+    <hr/>
+    <div style="display: flex; justify-content: space-between">
+          <div style="text-align: left; color: #905DFF; margin: 10px">{{ state.items.data[i-1]?.tag }}</div>
+          <div style="margin: 10px; margin-left: auto">
+            <button type="button" v-if="userLikes[state.items.data[i-1].id] !== undefined" @click="checkLike(`${state.items.data[i-1].id}`)">
+              <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+            </button>  
+            <button type="button" v-else @click="checkLike(`${state.items.data[i-1].id}`)">
+              <font-awesome-icon :icon="['far', 'thumbs-up']" />
+            </button>
+            {{ likestar.like[state.items.data[i-1].id] }}
+          </div>
+        <div style="margin: 10px; float: right;">
+          <button type="button" v-if="userStars[state.items.data[i-1].id] !== undefined" @click="checkStar(`${state.items.data[i-1].id}`)">
+            <font-awesome-icon :icon="['fas', 'star']" />
+          </button>
+          <button type="button" v-else @click="checkStar(`${state.items.data[i-1].id}`)">
+            <font-awesome-icon :icon="['far', 'star']" />
+          </button>
+          {{ likestar.star[state.items.data[i-1].id] }}
+        </div>
+      </div>
+    <div width="100%" style="color: gray">
+      <h1>{{ state.items.data[i-1]?.title }}</h1>
+      <p>&nbsp;&nbsp;{{ state.items.data[i-1]?.user.username }} &nbsp;
+         {{ state.items.data[i-1]?.date.substring(0,10) }}
+        {{ state.items.data[i-1]?.date.substring(12,19) }}에 최종 변경
+      </p>
     </div>
     <br/>
-    <div>
-      <table border="1" width="100%">
-        <tr align="center">
-          <td>{{ state.items.data[i-1]?.title }}</td>
-        </tr>
-        <tr align="center" height="500">
-          <td>{{ state.items.data[i-1]?.content }}</td>
-        </tr>
-        <tr align="center">
-          <td>{{ state.items.data[i-1]?.tag }}</td>
-        </tr>
-      </table>
-    </div>
-  </VCol>
+    <div v-html="`${ state.items.data[i-1]?.content }`"/>
+
+    <br/><br/><br/><br/>
+</VCol>
 </template>

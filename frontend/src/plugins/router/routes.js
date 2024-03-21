@@ -59,6 +59,13 @@ export const routes = [
         name: 'updatewiki',
         component: UpdateWiki,
         props: true // URL 파라미터를 컴포넌트의 props로 전달합니다.
+      },
+      {
+        path: 'wikieditorwrite',
+        component: () => import('@/pages/wikieditorwrite.vue'),
+      },{
+        path: 'wikieditor',
+        component: () => import('@/pages/wikieditor.vue'),
       }
     ],
   },
@@ -75,10 +82,6 @@ export const routes = [
         component: () => import('@/pages/register.vue'),
       },
       {
-        path: 'wikieditorwrite',
-        component: () => import('@/pages/wikieditorwrite.vue'),
-      },
-      {
         path: 'wikiwrite',
         component: () => import('@/pages/wikiwrite.vue'),
       },
@@ -89,6 +92,14 @@ export const routes = [
       {
         path: 'wikilist',
         component: () => import('@/pages/wikilist.vue'),
+      },
+      {
+        path: 'wikieditorwrite',
+        component: () => import('@/pages/wikieditorwrite.vue'),
+      },
+      {
+        path: 'wikieditor',
+        component: () => import('@/pages/wikieditor.vue'),
       }
     ],
   },

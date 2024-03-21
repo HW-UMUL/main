@@ -1,7 +1,6 @@
 <script setup>
 import AnalyticsTotalProfitLineCharts from '@/views/dashboard/AnalyticsTotalProfitLineCharts.vue';
 import AnalyticsWeeklyOverview from '@/views/dashboard/AnalyticsWeeklyOverview.vue';
-import CardStatisticsVertical from '@core/components/cards/CardStatisticsVertical.vue';
 
 const totalProfit = {
   title: 'Total Profit',
@@ -64,14 +63,14 @@ export default {
           cols="5"
           sm="12"
         >
-          <CardStatisticsVertical v-bind="totalProfit" />
+        <AnalyticsTotalProfitLineCharts />
         </VCol>
 
         <VCol
           cols="5"
           sm="12"
         >
-          <CardStatisticsVertical v-bind="newProject" />
+        <AnalyticsTotalProfitLineCharts />
         </VCol>
       </VRow>
     </VCol>
