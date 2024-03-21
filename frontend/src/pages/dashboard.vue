@@ -68,12 +68,10 @@ getPosts()
     >
       <VCard title="추천순" style="margin-bottom: 20px">
       <PostLikeSort style="margin-bottom: 20px" />
-      </VCard>
-          
+      </VCard>    
       <VCard title="최신순" style="margin-bottom: 20px">
         <PostDateSort />
       </VCard>
-      
       <AnalyticsAward style="margin-bottom: 20px"/>
       <AnalyticsAward style="margin-bottom: 20px"/>
     </VCol>
