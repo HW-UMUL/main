@@ -29,6 +29,16 @@ library.add(farThumsUp, fasThumsUp)
 
 app.component('font-awesome-icon', FontAwesomeIcon)
 
+
+# tiptap3 설치 (글 에디터)
+npm install @tiptap/vue-3
+npm install @tiptap/starter-kit
+npm install @tiptap/extension-underline
+npm install @tiptap/extension-placeholder
+
+
+# button 관련
+npm install vue-material-design-icons
 ```
 
 
