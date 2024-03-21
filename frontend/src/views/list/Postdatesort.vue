@@ -56,10 +56,33 @@ function sortedDate(value) {
 </script>
 
 <template>
-  <VCard class="position-relative">
-    <VCardText class>
-      <h5 class="text-h5"> 최신순 </h5>
-    </VCardText>
+<VTable>  
+    <thead>
+      <tr>
+        <th class="text-center">
+          Title
+        </th>
+        <th class="text-uppercase text-center">
+          Date
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
+        v-for="(item, index) in sortedDate(posts).slice(0,5)" 
+        :key="index"
+      >
+        <td class="text-center">
+          {{ item.title }}
+        </td>
+        <td class="text-center">
+          {{ formatDate(item.date) }}
+        </td>
+      </tr>
+    </tbody>
+  </VTable>
+  <!-- <VCard class="position-relative">
 
     <VCardText>
       <VCol>
@@ -74,6 +97,7 @@ function sortedDate(value) {
         </div>
       </VCol>
     </VCardText>
-  </VCard>
+  </VCard> -->
+
   </template>
   

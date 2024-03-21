@@ -32,7 +32,7 @@ onMounted(getLikes)
 
 <template>
     <span>
-        like:{{ like }}
+        {{ like }}
     </span>
 </template>
   

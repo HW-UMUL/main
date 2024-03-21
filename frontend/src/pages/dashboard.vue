@@ -3,6 +3,7 @@ import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
 import Post from '@/views/post/Post.vue';
 import PostLikeSort from '@/views/list/PostLikeSort.vue';
 import PostDateSort from '@/views/list/PostDateSort.vue';
+import { VCard } from 'vuetify/lib/components/index.mjs';
 
 // import post from '@/views/'
 
@@ -65,10 +66,16 @@ getPosts()
       cols="12"
       md="4"
     >
-        <PostLikeSort style="margin-bottom: 20px" />
-        <PostDateSort style="margin-bottom: 20px" />
-        <AnalyticsAward style="margin-bottom: 20px"/>
-        <AnalyticsAward style="margin-bottom: 20px"/>
+      <VCard title="추천순" style="margin-bottom: 20px">
+      <PostLikeSort style="margin-bottom: 20px" />
+      </VCard>
+          
+      <VCard title="최신순" style="margin-bottom: 20px">
+        <PostDateSort />
+      </VCard>
+      
+      <AnalyticsAward style="margin-bottom: 20px"/>
+      <AnalyticsAward style="margin-bottom: 20px"/>
     </VCol>
 
   </VRow>

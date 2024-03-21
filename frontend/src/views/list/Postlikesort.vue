@@ -61,7 +61,31 @@ async function getLikes(postId) {
 </script>
 
 <template>
-  <VCard class="position-relative">
+  <VTable>  
+    <thead>
+      <tr>
+        <th class="text-center">
+          Title
+        </th>
+        <th class="text-uppercase text-center">
+          Like
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr v-for="(item, index) in posts.slice(0,5)" :key="index">
+        <td class="text-center">
+          {{ item.title }}
+        </td>
+        <td class="text-center">
+          <PostLikeVue :postlikevue="item" />
+        </td>
+      </tr>
+    </tbody>
+  </VTable>
+
+  <!-- <VCard class="position-relative">
     <VCardText class>
       <h5 class="text-h5"> 추천순 </h5>
     </VCardText>
@@ -80,5 +104,5 @@ async function getLikes(postId) {
         </div>
       </VCol>
     </VCardText>
-  </VCard>
+  </VCard> -->
 </template>
