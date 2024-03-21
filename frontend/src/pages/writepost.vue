@@ -1,5 +1,7 @@
 <script setup>
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
+import PostLikeSort from '@/views/list/PostLikeSort.vue';
+import PostDateSort from '@/views/list/PostDateSort.vue';
 
 
 const post = ref({
@@ -115,17 +117,22 @@ async function writePost(){
                 </VBtn>
               </VCol>
 
-              <!-- <div><label>제목</label><input type="text" v-model="post.title"></input></div>
-              <div><label>본문</label><input type="text" v-model="post.content"></input></div>
-              <div><label>카테고리</label><input type="text" v-model="post.category"></input></div>
-              <div><label>태그</label><input type="text" v-model="post.tag"></input></div>
-              <div><input type="submit"></input></div> -->
             </form>
           </div>
         </VCardText>
       </VCard>
     
-    </VCol>  
+    </VCol>
+    
+    <VCol
+      cols="12"
+      md="4"
+    >
+        <PostLikeSort style="margin-bottom: 20px" />
+        <PostDateSort style="margin-bottom: 20px" />
+        <AnalyticsAward style="margin-bottom: 20px"/>
+        <AnalyticsAward style="margin-bottom: 20px"/>
+    </VCol>
 
   </VRow>
 </template>

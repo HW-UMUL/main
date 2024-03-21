@@ -1,8 +1,9 @@
 <script setup>
 import { formatDateToMonthShort } from '@/@core/utils/formatters';
 import { useRouter } from 'vue-router';
-import {ref} from 'vue';
-import { VCardItem, VCol, VDivider, VIcon, VRow, VTextField } from 'vuetify/lib/components/index.mjs';
+import {ref, onMounted} from 'vue';
+import { VCardItem, VCardText, VCol, VDivider, VIcon, VRow, VTextField } from 'vuetify/lib/components/index.mjs';
+import ReplyVue from '@/views/reply/Reply.vue';
 
 // 날짜
 const formatDate = function(value) {
@@ -18,6 +19,7 @@ const formatDate = function(value) {
 }
 
 const like = ref([])
+const replylike = ref([])
 const star = ref([])
 const replys = ref([])
 const isDetails = ref(false)
@@ -31,9 +33,9 @@ const props = defineProps({
 const reply = ref({
   content: ''
 })
-const editReply = ref({
-  content: ''
-})
+// const editReply = ref({
+//   content: ''
+// })
 
 async function checkLike(){
 
@@ -52,6 +54,46 @@ async function checkLike(){
     alert("실패!")
   } else{
     getLikes()
+  }
+}
+
+async function checkReplyLike(replyId){
+
+  const response = await fetch(
+      `http://localhost:8080/api/replylike/check/${replyId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getReplyLikes(replyId)
+  }
+}
+
+async function getReplyLikes(replyId){
+  
+  const response = await fetch(
+      `http://localhost:8080/api/replylike/read/${replyId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    replylike.value[replyId]= await response.json()
   }
 }
 
@@ -74,8 +116,6 @@ async function checkStar(){
     getStars()
   }
 }
-
-
 
 async function getLikes(){
   
@@ -141,30 +181,29 @@ async function writeReply(postId){
   }
 }
 
-
 async function getReply(postId){
 
-const formData = {
-  content: reply.value.content
-}
-
-const response = await fetch(
-  `http://localhost:8080/api/reply/readpost/${postId}`,
-  {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include'
+  const formData = {
+    content: reply.value.content
   }
-)
 
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    replys.value = await response.json()
-    reply.value.content = ''
-  }
+  const response = await fetch(
+    `http://localhost:8080/api/reply/readpost/${postId}`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
+    }
+  )
+
+    if(!response.ok) {
+      alert("실패!")
+    } else{
+      replys.value = await response.json()
+      reply.value.content = ''
+    }
 }
 
 async function toggleReply(replyId) {
@@ -240,7 +279,7 @@ async function delReply(replyId) {
     } else {
       alert("삭제 실패")
     }
-    getReply();
+    getReply(props.post.id);
   }
 }
 
@@ -265,20 +304,17 @@ getReply(props.post.id)
                 <VCol class="post-header" >
                   <span class="circle"></span>
                   <span style="display: flex; justify-content: space-between;">
-                  <span class="post-name" style="margin-left:10px; margin-right: auto; font-weight: 600;">{{ post.user.username }}
-                  </span>
+                  <span class="post-name" style="font-weight: 600; margin-right: auto;">{{ post.user.username }}</span>
                   <span class="post-date" style="margin-left: auto;">{{ formatDate(post.date) }}</span>
                   </span>
                 </VCol>
               </div>
-            <VCol class="post-title">
+            <div class="post-title">
               <VCardTitle style="font-weight: 700;">{{ post.title }}</VCardTitle>
-            </VCol>
+            </div>
             <VDivider />
-            <VCol>
-              <VCol class="post-content">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}
+              <VCol class="post-content, mt-2" style="margin-left: 5px;">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}
               </VCol>
-            </VCol>
             <VCardActions>
               <VBtn @click="isDetails = !isDetails">
                 Details
@@ -331,58 +367,14 @@ getReply(props.post.id)
                     <VIcon :icon="isReplyDetails ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" />
                   </VBtn>
                 </VCardActions>
-
+                
                 <VExpandTransition>
                   <div v-show="isReplyDetails">
                     <VCardText v-for="(item, index) in replys" :key="index">
-                      <VDivider class="mb-2"/>
-                      <div class="mb-4" style="display: flex; justify-content: space-between;">
-                        <span style="font-weight: 600;"> {{ item.user.username }} </span>
-                        <span> {{ formatDate(item.date) }}</span>
-                      </div>
-                      <div class="mb-2"> {{ item.content }}</div>
-
-                      <VRow class="justify-end">
-                        <VCol cols="auto">
-                          <VIconBtn @click="toggleReply(item.id)" style="font-size: 10pt; cursor: pointer;">
-                            수정
-                          </VIconBtn>
-                        </VCol>
-                        <VCol cols="auto">
-                          <VIconBtn @click="delReply(item.id)" style="font-size: 10pt; cursor: pointer;">
-                            삭제
-                          </VIconBtn>
-                        </VCol>
-                      </VRow>
-                      
-                      <VExpandTransition>
-                        <div v-show="isUpdateReply">
-                          <div v-if="checkReplyId === item.id">
-                            <VRow>
-                              <VCol>
-                                <VTextField
-                                input
-                                id="updatereply"
-                                v-model="editReply.content"
-                                placeholder="수정"
-                                label="수정"
-                                >
-                                </VTextField>
-                              </VCol>
-                              <div>
-                                <VCol class="mt-1">
-                                  <VBtn @click="updateReply(item.id)"
-                                      type="button"
-                                      class="me-2"
-                                    >
-                                      수정
-                                  </VBtn>
-                                </VCol>
-                              </div>
-                            </VRow>
-                          </div>
-                        </div>
-                      </VExpandTransition>
+                      <ReplyVue :replyvue="item" :postoj="props.post"></ReplyVue>
+                      <VIconBtn @click="delReply(item.id)" style="font-size: 10pt; cursor: pointer;">
+      삭제
+    </VIconBtn>
                     </VCardText>
                   </div>
                 </VExpandTransition>

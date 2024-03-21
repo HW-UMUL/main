@@ -1,32 +1,13 @@
 <script setup>
-import { formatDateToMonthShort } from '@/@core/utils/formatters';
-import index from 'vue-prism-component';
-import { VCard, VCardItem, VCardText, VCardTitle, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/components/index.mjs';
+import { onMounted, ref } from 'vue';
+import { VCard, VCardText, VCol, VDivider } from 'vuetify/lib/components/index.mjs';
+import PostLikeVue from '@/views/like/PostLike.vue';
 
-// 년-월-일
-const formatDate = function(value) {
-    const date = new Date(value);
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1);
-    const day = date.getDate();
-    const hour = date.getHours();
-    const min = date.getMinutes();
-    const sec = date.getSeconds();
-    
-    return `${year}-${month}-${day}`;
-}
-
-const props = defineProps({
-    post: Object
-})
-
-const like = ref([])
-const star = ref([])
 const posts = ref([])
 
-async function getPosts(){
-
-  const response = await fetch(
+async function getPosts() {
+  try {
+    const response = await fetch(
       `http://localhost:8080/api/post/read`,
       {
         method: 'GET',
@@ -35,66 +16,47 @@ async function getPosts(){
         },
         credentials: 'include'
       }
-  )
+    );
+    if (!response.ok) {
+      alert("실패!")
+    }
+    const beforePosts = await response.json()
+    
+    posts.value = await Promise.all(beforePosts.map(async (post) => {
+      const likes = await getLikes(post.id)
+      return { ...post, likes: likes }
+    }))
 
-  if(!response.ok) {
+    posts.value.sort((a, b) => b.likes - a.likes)
+
+  } catch (error) {
+    console.error(error)
     alert("실패!")
-  } else{
-    posts.value = await response.json()
   }
 }
 
+onMounted(getPosts)
 
-async function getLikes(){
-
-  const response = await fetch(
-      `http://localhost:8080/api/postlike/read/${props.post.id}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-      }
-  )
-
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    like.value = await response.json()
-  }
-}
-
-async function getStars(){
-
-const response = await fetch(
-    `http://localhost:8080/api/poststar/read/${props.post.id}`,
-    {
+async function getLikes(postId) {
+  try {
+    const response = await fetch(`http://localhost:8080/api/postlike/read/${postId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include'
+    })
+
+    if (!response.ok) {
+      alert("실패!")
     }
-)
-
-if(!response.ok) {
-  alert("실패!")
-} else{
-  star.value = await response.json()
+    const likes = await response.json()
+    return likes
+  } catch (error) {
+    console.error(error)
+    alert("실패!")
+  }
 }
-}
-
-getPosts()
-getLikes()
-getStars()
-
-// function sortedLike(value) {
-//   const sortedValue = value.slice().sort(function(a,b) {
-//     return b - a
-//   })
-//   return sortedValue
-// }
 
 </script>
 
@@ -103,15 +65,20 @@ getStars()
     <VCardText class>
       <h5 class="text-h5"> 추천순 </h5>
     </VCardText>
-
     <VCardText>
       <VCol>
-        <div v-for="(item, index) in posts" :key="index" style="display: flex; justify-content: space-between;">
+        <div class="mb-2" style="display: flex; justify-content: space-between;">
+          <span>제목</span>
+          <span class="mr-5">추천</span>
+        </div>
+
+        <VDivider class="mb-2"/>
+
+        <div v-for="(item, index) in posts.slice(0,5)" :key="index" style="display: flex; justify-content: space-between;">
           <span> {{ item.title }}</span>
-          <span> {{ like }}</span>
+          <span> <PostLikeVue :postlikevue="item" /> </span>
         </div>
       </VCol>
     </VCardText>
   </VCard>
-  </template>
-  
+</template>

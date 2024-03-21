@@ -63,6 +63,11 @@ function sortedDate(value) {
 
     <VCardText>
       <VCol>
+        <div class="mb-2" style="display: flex; justify-content: space-between;">
+          <span>제목</span>
+          <span class="mr-5">날짜</span>
+        </div>
+        <VDivider class="mb-2"/>
         <div v-for="(item, index) in sortedDate(posts).slice(0,5)" :key="index" style="display: flex; justify-content: space-between;">
           <span style="margin-right: auto;"> {{ item.title }} </span>
           <span style="margin-left: auto;"> {{ formatDate(item.date) }}</span>
