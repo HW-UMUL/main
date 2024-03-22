@@ -22,12 +22,12 @@ public class FollowService {
     	
     	User foundUser = userRepository.findByEmail(email);
     	
-    	Follow follow = followRepository.findByFollowerAndFollowee(user.get(), foundUser).orElse(null);
+    	Follow follow = followRepository.findByFollowerAndFollowee(foundUser, user.get()).orElse(null);
     	    	
     	if(follow == null) {
     		Follow newFollow = Follow.builder()
-    				.follower(user.get())
-    				.followee(foundUser)
+    				.follower(foundUser)
+    				.followee(user.get())
         			.build();
     		
     		followRepository.save(newFollow);
@@ -50,5 +50,15 @@ public class FollowService {
     @Transactional(readOnly = true)
     public List<Follow> readFollowee(String email, Optional<User> user) {
     	return followRepository.findAllByFolloweeEmail(email);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Follow> readMyFollower(Optional<User> user) {
+    	return followRepository.findAllByFolloweeId(user.get().getId());
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Follow> readMyFollowee(Optional<User> user) {
+    	return followRepository.findAllByFollowerId(user.get().getId());
     }
 }

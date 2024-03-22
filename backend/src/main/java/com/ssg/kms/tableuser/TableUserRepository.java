@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import com.ssg.kms.mapping.GetTableMapping;
 import com.ssg.kms.mapping.GetUserMapping;
@@ -31,5 +32,14 @@ public interface TableUserRepository extends JpaRepository<TableUser, Long> {
 	TableUser findTop1ByTableIdOrderByIdAsc(Long tableId);
 
 	TableUser findByUserIdAndTableId(Long id, Long tableId);
+	
+	@Query(value = "SELECT tu.table_id FROM table_user tu WHERE tu.user_id = :userId", nativeQuery = true)
+	List<Long> findTableIdAllByUserId(Long userId);
+	
+	// 알람
+	@Query(value = "SELECT tu.user_id FROM table_user tu WHERE tu.table_id = :tableId", nativeQuery = true)
+	List<Long> findAllUserAllByTableId(Long tableId);
+
+
 	
 }

@@ -32,6 +32,15 @@ public class UserController {
 		return ResponseEntity.ok(userService.signup(userDto));
 	}
 	
+	/// find email
+	///////////////////////////
+	
+	@GetMapping("/search/email/{searchKeyword}")
+	public ResponseEntity<List<String>> searchEmails(@PathVariable String searchKeyword) {
+		return ResponseEntity.ok(userService.searchEmails(searchKeyword, userService.getMyUserWithAuthorities()));
+	}	
+	
+	///////////////////////////
 	/// update info
 	@PutMapping("/update/username")
 	public ResponseEntity<String> updateUsername(@Valid @RequestBody UsernameDTO usernameDto) {

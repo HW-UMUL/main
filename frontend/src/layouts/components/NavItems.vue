@@ -77,4 +77,13 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
     }"
   /> 
 
+  <VerticalNavLink
+    :item="{
+      title: 'Follow',
+      icon: 'ri-chat-1-line',
+      to: '/follow',
+    }"
+  /> 
+
+
 </template>

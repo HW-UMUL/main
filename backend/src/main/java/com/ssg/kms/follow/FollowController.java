@@ -46,5 +46,16 @@ public class FollowController {
     public ResponseEntity readFollowee(@PathVariable String email) {
 		return ResponseEntity.ok(followService.readFollowee(email, userService.getMyUserWithAuthorities()));
     }
+	
+	@GetMapping("/read/follower")
+    public ResponseEntity readMyFollower() {
+		return ResponseEntity.ok(followService.readMyFollower(userService.getMyUserWithAuthorities()));
+    }
+	
+	@GetMapping("/read/followee")
+    public ResponseEntity readMyFollowee() {
+		return ResponseEntity.ok(followService.readMyFollowee(userService.getMyUserWithAuthorities()));
+    }
+
 
 }

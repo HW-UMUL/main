@@ -96,7 +96,15 @@ public class UserService {
 
     	return info;
     }
-    // USER INFO
+    
+    @Transactional(readOnly = true)
+    public List<String> searchEmails(String searchKeyword, Optional<User> user) {
+    	List<String> userEmails = userRepository.findAllByEmailContaining(searchKeyword, user.get().getId());
+
+    	return userEmails;
+    }
+
+	// USER INFO
     //////////////////////////////////////////////////////////////////////    
     @Transactional
     public String updateUsername(UsernameDTO usernameDto, Optional<User> user) {

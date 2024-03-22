@@ -47,6 +47,10 @@ public class PostController {
         return ResponseEntity.ok(postService.readMyPost(userService.getMyUserWithAuthorities()));
     }
 
+	@GetMapping("/read/public")
+    public ResponseEntity<List<Post>> readPublicPost() {
+        return ResponseEntity.ok(postService.readPublicPost(userService.getMyUserWithAuthorities()));
+    }
 	
 	@PutMapping("/update/{postId}")
     public ResponseEntity<Post> updatePost(@PathVariable Long postId, @Valid @RequestBody PostDTO postDto) {
@@ -68,6 +72,16 @@ public class PostController {
 	@PostMapping("/create/{tableId}")
 	public ResponseEntity<Post> createTablePost(@PathVariable Long tableId, @Valid @RequestBody PostDTO PostDto) {
 		return ResponseEntity.ok(postService.createPost(tableId, PostDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	@GetMapping("/read/table/{tableId}")
+    public ResponseEntity<List<Post>> readTablePost(@PathVariable Long tableId) {
+        return ResponseEntity.ok(postService.readTablePost(tableId, userService.getMyUserWithAuthorities()));
+    }
+
+	@GetMapping("/read/table")
+	public ResponseEntity<List<Post>> readAllTablePost(){
+		return ResponseEntity.ok(postService.readAllTablePost(userService.getMyUserWithAuthorities()));
 	}
 
 }

@@ -15,8 +15,6 @@ const props = defineProps({
 const posts = ref([])
 
 watchEffect(() => {
-  // props를 감시하고, 변경될 때마다 실행되는 코드
-//  console.log('Keyword has been updated:', props.keyword);
   if(props.keyword == null){
     getPosts()
   } else{
@@ -28,7 +26,7 @@ watchEffect(() => {
 async function getPosts(){
 
   const response = await fetch(
-      `http://${serverAddress}/api/post/read`,
+      `http://${serverAddress}/api/post/read/public`,
       {
         method: 'GET',
         headers: {

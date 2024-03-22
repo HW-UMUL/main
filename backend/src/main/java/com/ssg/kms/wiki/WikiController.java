@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssg.kms.post.Post;
 import com.ssg.kms.user.UserService;
 
 import jakarta.validation.Valid;
@@ -44,6 +45,11 @@ public class WikiController {
         return ResponseEntity.ok(wikiService.readMyWiki(userService.getMyUserWithAuthorities()));
     }
 	
+	@GetMapping("/read/public")
+    public ResponseEntity<List<Wiki>> readPublicWiki() {
+        return ResponseEntity.ok(wikiService.readPublicWiki(userService.getMyUserWithAuthorities()));
+    }
+	
 	@PutMapping("/update/{wikiId}")
     public ResponseEntity<Wiki> updateWiki(@PathVariable Long wikiId, @Valid @RequestBody WikiDTO wikiDto) {
         return ResponseEntity.ok(wikiService.updateWiki(wikiId, wikiDto, userService.getMyUserWithAuthorities()));
@@ -59,6 +65,16 @@ public class WikiController {
 	@PostMapping("/create/{tableId}")
 	public ResponseEntity<Wiki> createTableWiki(@PathVariable Long tableId, @Valid @RequestBody WikiDTO wikiDto) {
 		return ResponseEntity.ok(wikiService.createTableWiki(tableId, wikiDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	@GetMapping("/read/table/{tableId}")
+    public ResponseEntity<List<Wiki>> readTableWiki(@PathVariable Long tableId) {
+        return ResponseEntity.ok(wikiService.readTableWiki(tableId, userService.getMyUserWithAuthorities()));
+    }
+	
+	@GetMapping("/read/table")
+	public ResponseEntity<List<Wiki>> readAllTableWiki(){
+		return ResponseEntity.ok(wikiService.readAllTableWiki(userService.getMyUserWithAuthorities()));
 	}
 
 }

@@ -195,8 +195,8 @@ const posts = ref([])
 async function getPosts(){
 
 const response = await fetch(
-    `http://${serverAddress}/api/post/read`,
-    {
+    `http://${serverAddress}/api/post/read/table/${props.tableId}`,
+   {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -218,7 +218,7 @@ const wikis = ref([])
 async function getWikis(){
 
 const response = await fetch(
-    `http://${serverAddress}/api/wiki/read`,
+    `http://${serverAddress}/api/wiki/read/table/${props.tableId}`,
     {
       method: 'GET',
       headers: {
@@ -295,6 +295,9 @@ getWikis()
           Wiki+
         </VBtn>
       </VRow>
+
+
+
 
 
       <!-- 조직 위키 / 포스트 싹 다 출력 -->

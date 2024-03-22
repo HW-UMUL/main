@@ -8,15 +8,19 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.alarm.post.PostAlarmService;
+import com.ssg.kms.alarm.reply.ReplyAlarmService;
 import com.ssg.kms.like.post.PostLikeRepository;
 import com.ssg.kms.star.post.PostStarRepository;
 import com.ssg.kms.table.TableRepository;
 import com.ssg.kms.table.Tables;
+import com.ssg.kms.tableuser.TableUserRepository;
 import com.ssg.kms.tag.Tag;
 import com.ssg.kms.tag.TagPost;
 import com.ssg.kms.tag.TagPostRepository;
 import com.ssg.kms.tag.TagRepository;
 import com.ssg.kms.user.User;
+import com.ssg.kms.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -24,12 +28,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class PostService {
 	
+	private final UserRepository userRepository;
     private final PostRepository postRepository;
     private final TableRepository tableRepository;
+    private final TableUserRepository tableUserRepository;    
     private final PostLikeRepository postLikeRepository;
     private final PostStarRepository postStarRepository;
     private final TagRepository tagRepository;
     private final TagPostRepository tagPostRepository;
+    
+    private final PostAlarmService postAlarmService;
+    private final ReplyAlarmService replyAlarmService;
     
     // 메인
     @Transactional
@@ -69,7 +78,11 @@ public class PostService {
     			.build();
     	    	
     	createTags(postDto, post);
-
+/// 알람 /////////////   	
+    	List<Long> tableUserIds = tableUserRepository.findAllUserAllByTableId(tableId);
+    	List<User> users = userRepository.findAllByIdIn(tableUserIds);
+    	postAlarmService.createAlarm(post, users, user.get());
+/////////////////////    	
 		return post;
     }
     
@@ -84,9 +97,39 @@ public class PostService {
     }
     
     @Transactional(readOnly = true)
-    public List<Post> readMyPost(Optional<User> user) {
-		return postRepository.findAllByUserId(user.get().getId());
+    public List<Post> readPublicPost(Optional<User> user) {
+    	
+		return postRepository.findAllByTableIsPublicTrue();
     }
+    
+    @Transactional(readOnly = true)
+    public List<Post> readTablePost(Long tableId, Optional<User> user) {    	
+    	
+    	List<Post> posts = postRepository.findAllByTableId(tableId);
+    	List<Long> postIds = postRepository.findPostIdAllByTableId(tableId);
+    	
+    	postAlarmService.deleteAlarm(postIds, user.get().getId());
+   
+		return posts;
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Post> readMyPost(Optional<User> user) {
+    	
+    	List<Post> posts = postRepository.findAllByUserId(user.get().getId());
+    	List<Long> postIds = postRepository.findIdAllByUserId(user.get().getId());
+    	
+    	replyAlarmService.deleteAlarm(postIds, user.get().getId());
+
+		return posts;
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Post> readAllTablePost(Optional<User> user) {
+    	List<Long> tableIds = tableUserRepository.findTableIdAllByUserId(user.get().getId());
+    	return postRepository.findAllByTableIdIn(tableIds);
+    }
+   
 
 
     @Transactional
@@ -168,4 +211,5 @@ public class PostService {
     	tagPostRepository.saveAll(tagPosts);
     	    	
     }
+    
 }

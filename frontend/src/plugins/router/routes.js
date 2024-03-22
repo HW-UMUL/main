@@ -46,6 +46,12 @@ export const routes = [
 
 
 
+      {
+        path: 'follow',
+        component: () => import('@/pages/follow.vue')
+      },
+
+
 
 
       {

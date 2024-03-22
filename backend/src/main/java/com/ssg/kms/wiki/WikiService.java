@@ -7,30 +7,37 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.alarm.wiki.WikiAlarmService;
 import com.ssg.kms.category.Category;
 import com.ssg.kms.category.CategoryRepository;
 import com.ssg.kms.like.wiki.WikiLikeRepository;
 import com.ssg.kms.log.WikiLogRepository;
 import com.ssg.kms.log.WikiLogService;
+import com.ssg.kms.post.Post;
 import com.ssg.kms.star.wiki.WikiStarRepository;
 import com.ssg.kms.table.TableRepository;
 import com.ssg.kms.table.Tables;
+import com.ssg.kms.tableuser.TableUserRepository;
 import com.ssg.kms.user.User;
+import com.ssg.kms.user.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
 public class WikiService {
+	
+	private final UserRepository userRepository;
     private final WikiRepository wikiRepository;
     private final TableRepository tableRepository;
+    private final TableUserRepository tableUserRepository;
     private final WikiLikeRepository wikiLikeRepository;
     private final WikiStarRepository wikiStarRepository;
     private final WikiLogRepository wikiLogRepository;
     private final CategoryRepository categoryRepository;
     
     private final WikiLogService wikiLogService;
-    
+    private final WikiAlarmService wikiAlarmService;
     
     @Transactional
     public Wiki createWiki(WikiDTO wikiDto, Optional<User> user) {
@@ -73,7 +80,12 @@ public class WikiService {
     	
     	wikiRepository.save(wiki);
     	wikiLogService.createWikiLog(wiki, user);
-    	    	
+    	   
+/// 알람 /////////////   	
+    	List<Long> tableUserIds = tableUserRepository.findAllUserAllByTableId(tableId);
+    	List<User> users = userRepository.findAllByIdIn(tableUserIds);
+    	wikiAlarmService.createAlarm(wiki, users, user.get());
+/////////////////////    	
 		return wiki;
     }
 
@@ -92,6 +104,29 @@ public class WikiService {
     public List<Wiki> readMyWiki(Optional<User> user) {
 		return wikiRepository.findAllByUserId(user.get().getId());
     }
+    
+    @Transactional(readOnly = true)
+    public List<Wiki> readPublicWiki(Optional<User> user) {
+		return wikiRepository.findAllByTableIsPublicTrue();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Wiki> readTableWiki(Long tableId, Optional<User> user) {
+    	
+    	List<Wiki> wikis = wikiRepository.findAllByTableId(tableId);
+    	List<Long> wikiIds = wikiRepository.findWikiIdAllByTableId(tableId);
+    	
+    	wikiAlarmService.deleteAlarm(wikiIds, user.get().getId());
+   
+		return wikiRepository.findAllByTableId(tableId);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Wiki> readAllTableWiki(Optional<User> user) {
+    	List<Long> tableIds = tableUserRepository.findTableIdAllByUserId(user.get().getId());
+    	return wikiRepository.findAllByTableIdIn(tableIds);
+    }
+
     
     @Transactional
     public Wiki updateWiki(Long wikiId, WikiDTO wikiDto, Optional<User> user) {

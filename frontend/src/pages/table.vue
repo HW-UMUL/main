@@ -1,34 +1,60 @@
 <script setup>
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import Table from '@/views/table/TableSummary.vue';
-
+import Post from '@/views/post/Post.vue';
+import Wiki from '@/views/wiki/Wiki.vue';
 const auth = inject('auth')
-const tables = ref([])
+const serverAddress = inject('serverAddress')
 
+const switchContent = ref(true)
 
-async function getTables(){
+const posts = ref([])
 
-  const response = await fetch(
-      `http://localhost:8080/api/tableuser/read`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth}`,          
-        },
-        credentials: 'include'
-      }
-  )
+async function getPosts(){
 
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    tables.value = await response.json()
-  }
+const response = await fetch(
+    `http://${serverAddress}/api/post/read/table`,
+   {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  posts.value = await response.json()
 }
- 
+}
 
-getTables()
+const wikis = ref([])
+
+async function getWikis(){
+
+const response = await fetch(
+    `http://${serverAddress}/api/wiki/read/table`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  wikis.value = await response.json()
+}
+}
+
+getPosts()
+getWikis()
 
 
 </script>
@@ -40,15 +66,22 @@ getTables()
       md="8"
       class="mb-4"
     >
-    <VBtn 
-      to="/createtable"
-      >
-      Create Table
+    <VBtn
+    @click="switchContent=true"
+    >
+      Post
+    </VBtn>
+    <VBtn
+    @click="switchContent=false"
+    >
+      Wiki
     </VBtn>
 
-    <div v-for="(item, index) in tables" :key="index">
-      <!-- {{ item }}       -->
-      <Table :table="item" style="margin-bottom: 20px;"/>
+    <div v-if="switchContent" v-for="(item, index) in posts" :key="index">
+      <Post :post="item" style="margin-bottom: 20px;"/>
+    </div>
+    <div v-if="!switchContent" v-for="(item, index) in wikis" :key="index">
+      <Wiki :wiki="item" style="margin-bottom: 20px;"/>
     </div>
         <!-- <wiki style="margin-bottom: 20px;"/>
         <wiki style="margin-bottom: 20px;"/>

@@ -40,7 +40,7 @@ async function writePost(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    router.push('/')  
+    router.push(`/mytables/${props.tableId}`)  
   }
 }
 
