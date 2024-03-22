@@ -9,5 +9,6 @@ import com.ssg.kms.post.Post;
 public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
 	List<Reply> findAllByPostId(Long postId);
-	
+
+	void deleteAllByPostId(Long id);
 }

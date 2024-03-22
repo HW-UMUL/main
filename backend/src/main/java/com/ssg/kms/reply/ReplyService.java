@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.like.reply.ReplyLikeRepository;
 import com.ssg.kms.post.Post;
 import com.ssg.kms.post.PostRepository;
 import com.ssg.kms.user.User;
@@ -18,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final PostRepository postRepository;
+    private final ReplyLikeRepository replyLikeRepository;
     
     @Transactional
     public Reply createReply(ReplyDTO replyDto, Optional<User> user, Long postId) {
@@ -51,6 +53,7 @@ public class ReplyService {
     @Transactional
     public Reply deleteReply(Long replyId, Optional<User> user) {
     	Reply reply = replyRepository.findById(replyId).get();
+    	replyLikeRepository.deleteAllByReplyId(reply.getId());
     	reply.setUser(null);
     	reply.setPost(null);
     	replyRepository.deleteById(replyId);

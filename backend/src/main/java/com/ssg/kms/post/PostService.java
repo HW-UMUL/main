@@ -8,18 +8,21 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssg.kms.like.post.PostLikeRepository;
+import com.ssg.kms.reply.Reply;
+import com.ssg.kms.reply.ReplyRepository;
 import com.ssg.kms.star.post.PostStarRepository;
 import com.ssg.kms.user.User;
 
 import lombok.RequiredArgsConstructor;
 
+
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final ReplyRepository replyRepository;
     private final PostLikeRepository postLikeRepository;
-    private final PostStarRepository postStarRepository;
-    
+    private final PostStarRepository postStarRepository;    
     
     @Transactional
     public Post createPost(PostDTO postDto, Optional<User> user) {
@@ -62,6 +65,7 @@ public class PostService {
     public Post deletePost(Long postId, Optional<User> user) {
     	Post post = postRepository.findById(postId).get();
     	
+    	replyRepository.deleteAllByPostId(post.getId());
     	postLikeRepository.deleteAllByPostId(post.getId());
     	postStarRepository.deleteAllByPostId(post.getId());
     	
@@ -70,4 +74,5 @@ public class PostService {
     	post.setUser(user.get());
     	return post;
     }
+    
 }

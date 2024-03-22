@@ -31,7 +31,7 @@ public class PostLike {
 	@ManyToOne //(cascade = CascadeType.ALL)    
 	private User user;
 
-	@ManyToOne //(cascade = CascadeType.ALL)    
+	@ManyToOne //(cascade = CascadeType.ALL)
 	private Post post;
 
 }

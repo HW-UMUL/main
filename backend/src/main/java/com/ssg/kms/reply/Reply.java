@@ -2,6 +2,7 @@ package com.ssg.kms.reply;
 
 import java.util.Date;
 
+import com.ssg.kms.like.reply.ReplyLikeRepository;
 import com.ssg.kms.post.Post;
 import com.ssg.kms.user.User;
 

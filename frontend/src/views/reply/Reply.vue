@@ -170,8 +170,7 @@ getReplyLikes()
 <VRow class="justify-end">
   <VCol>
     <VIconBtn @click="checkReplyLike(props.replyvue.id)" style="font-size: 10pt; cursor: pointer">
-      추천
-      {{ replylike }}
+      추천 {{ replylike }}
     </VIconBtn>
   </VCol>
   <!-- <VCol cols="auto">
