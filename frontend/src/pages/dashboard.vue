@@ -16,7 +16,6 @@ const props = defineProps({
 
 const posts = ref([])
 const wikies = ref([])
-const searchList = ref([])
 
 watchEffect(() => {
   // props를 감시하고, 변경될 때마다 실행되는 코드
@@ -54,7 +53,6 @@ watchEffect(() => {
 // }
 
 async function getPosts(){
-
   const response = await fetch(
       `http://localhost:8080/api/post/read`,
       {
@@ -74,9 +72,8 @@ async function getPosts(){
 }
 
 async function getWiki(){
-
 const response = await fetch(
-    `http://localhost:8080/api/wiki/read/${props.keyword}`,
+    `http://localhost:8080/api/wiki/read`,
     {
       method: 'GET',
       headers: {
@@ -135,9 +132,9 @@ async function searchWiki(){
 }
 
 
-if(props.keyword == null){
-  getPosts()
-} 
+// if(props.keyword == null){
+//   getPosts()
+// } 
 </script>
 
 <template>

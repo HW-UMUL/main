@@ -7,9 +7,12 @@ import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 
 import { useRouter } from 'vue-router';
+
+////////////////////////////////////////////////////////////////
+// axios 패키지
 import axios from 'axios'
 // input 박스 클릭시 block 노출
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 
 // const isFocus = ref(false);
 const setFocus = ref(false);
@@ -17,29 +20,7 @@ const setFocus = ref(false);
 function handleFocus(){
   setFocus.value = true
   console.log(setFocus.value)
-  // 이전 검색 데이터 넣기
-  filterKeywords.value = ['검색 데이터가 없습니다']
-}
 
-function handleBlur(){
-  setFocus.value = false
-  console.log(setFocus.value)
-}
-//
-
-// 키보드 입력에 따른 목록 변환
-// const filterKeywords = ref()
-// function keyHandle(){
-//   console.log(searchKeyword.value)
-//   if (responseData.value.some(item => item.includes(searchKeyword.value.keyword.toLowerCase()))) {
-//     filterKeywords.value = responseData.value.some(item => item.includes(searchKeyword.value.keyword.toLowerCase()));
-//     console.log(filterKeywords.value);
-//   } else {filterKeywords.value = null}
-
-// }
-
-const filterKeywords = ref();
-function keyHandle() {
   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
   let filteredData = null;
 
@@ -56,10 +37,89 @@ function keyHandle() {
   } else {
     filterKeywords.value = ['검색 데이터가 없습니다' ]
   }
+
 }
 
+function handleBlur(){
+  setFocus.value = false
+  console.log(setFocus.value)
+}
+//
+
+// 키보드 입력에 따른 목록 변환
+const filterKeywords = ref();
+function keyHandle() {
+  const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
+  const searchTermRegex = makeRegexByCho(searchTerm);
+  let filteredData = null;
+
+  if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
+    filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
+  } else {
+    // filteredData = '데이터가 없습니다'
+    // 추후 이 자리에 이전 검색 기록 넣기
+    filteredData = ['검색 데이터가 없습니다']
+  }
+
+  if (filteredData.length > 0) { // 걸러진 데이터가 있는 경우
+    filterKeywords.value = filteredData; // filterKeyword에 걸러진 데이터 저장
+  } else {
+    filterKeywords.value = ['검색 데이터가 없습니다' ]
+  }
+}
+
+// 한글 즉시 인식
+function changeKeyword(event) {
+  searchKeyword.value.keyword = event.target.value
+}
+
+// 초성 검색 기능
+//////////////////////////////
+// 초성배열
+const CHO_HANGUL = [
+  'ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ',
+  'ㄹ', 'ㅁ', 'ㅂ','ㅃ', 'ㅅ',
+  'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ',
+  'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ',
+];
+
+// 한글 시작 유니코드
+const HANGUL_START_CHARCODE = "가".charCodeAt();
+
+// 초성, 종성 주기
+const CHO_PERIOD = Math.floor("까".charCodeAt() - "가".charCodeAt());
+const JUNG_PERIOD = Math.floor("개".charCodeAt() - "가".charCodeAt());
+
+// 한글 결합 함수
+function combine(cho, jung, jong) {
+  return String.fromCharCode(
+    HANGUL_START_CHARCODE + cho * CHO_PERIOD + jung * JUNG_PERIOD + jong
+  );
+}
+
+// 초성검색
+function makeRegexByCho(search = "") {
+  const regex = CHO_HANGUL.reduce(
+    (acc, cho, index) =>
+      acc.replace(
+        new RegExp(cho, "g"),
+        `[${combine(index, 0, 0)}-${combine(index + 1, 0, -1)}]` // [시작-끝] -> [가-깋]
+      ),
+    search
+  );
+
+  return new RegExp(`(${regex})`, "g");
+}
+
+// 변수와 일치하는 단어 강조하기
 
 
+//////////////////
+
+
+
+
+//////////////////////////////////////////////////////////////
 
 // axios
 const responseData = ref(null); // responseData를 ref()로 래핑
@@ -82,14 +142,6 @@ async function getData() {
   }
 }
 
-// const filteredData = computed(() => {
-//   // searchKeyword.value와 일치하는 데이터를 필터링하여 반환
-//   return responseData.value.filter(data => {
-//     return data.name.includes(searchKeyword.value.keyword)
-//   })
-// });
-
-
 
 const router = useRouter();
 
@@ -105,7 +157,10 @@ async function search(){
         path: `/search/${searchKeyword.value.keyword}/${searchKeyword.value.option}`
       })
     } else {
-      alert('검색어를 입력해주세요')
+      // 검색어 없을시 option에 맞는 리스트 전체 출력
+      router.push({
+        path: `/read`
+      })
     }
   } else{
     alert('option을 선택해주세요')
@@ -142,13 +197,12 @@ async function search(){
                 class="icons"/>
 
                 <section>
-                  <input  type="text" v-model="searchKeyword.keyword" placeholder="Search"
+                  <input type="text" @input="changeKeyword" placeholder="Search"
                   style="display:flex; height:20px; width:450px;" class="search-bar"
                   @focus="handleFocus()" @blur="handleBlur()" 
                   @keyup="keyHandle()"
                   >
                   </input>
-                  <!--  @focus="setFocus(true)" @click="e.stopPropagation()" @blur="handleBlur()"-->
 
                   <div class="wrapper" >
                     <div class="block" v-if="setFocus">
