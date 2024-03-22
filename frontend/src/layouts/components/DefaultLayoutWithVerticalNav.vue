@@ -17,6 +17,8 @@ const setFocus = ref(false);
 function handleFocus(){
   setFocus.value = true
   console.log(setFocus.value)
+  // 이전 검색 데이터 넣기
+  filterKeywords.value = ['검색 데이터가 없습니다']
 }
 
 function handleBlur(){
@@ -26,21 +28,40 @@ function handleBlur(){
 //
 
 // 키보드 입력에 따른 목록 변환
-const filterKeyword = ref()
-function keyHandle(){
+// const filterKeywords = ref()
+// function keyHandle(){
+//   console.log(searchKeyword.value)
+//   if (responseData.value.some(item => item.includes(searchKeyword.value.keyword.toLowerCase()))) {
+//     filterKeywords.value = responseData.value.some(item => item.includes(searchKeyword.value.keyword.toLowerCase()));
+//     console.log(filterKeywords.value);
+//   } else {filterKeywords.value = null}
 
-  console.log(searchKeyword.value.keyword)
-  for (let data of responseData) {
-    console.log(data)
-    if(data === searchKeyword.value.keyword){
-      filterKeyword.value = responseData.value
-      console.log(filterKeyword.value)
-    }
+// }
+
+const filterKeywords = ref();
+function keyHandle() {
+  const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
+  let filteredData = null;
+
+  if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
+    filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().includes(searchTerm)); // 걸러진 데이터 필터링
+  } else {
+    // filteredData = '데이터가 없습니다'
+    // 추후 이 자리에 이전 검색 기록 넣기
+    filteredData = ['검색 데이터가 없습니다']
+  }
+
+  if (filteredData.length > 0) { // 걸러진 데이터가 있는 경우
+    filterKeywords.value = filteredData; // filterKeyword에 걸러진 데이터 저장
+  } else {
+    filterKeywords.value = ['검색 데이터가 없습니다' ]
   }
 }
 
-// axios
 
+
+
+// axios
 const responseData = ref(null); // responseData를 ref()로 래핑
 
 onMounted(() => {
@@ -128,11 +149,10 @@ async function search(){
                   >
                   </input>
                   <!--  @focus="setFocus(true)" @click="e.stopPropagation()" @blur="handleBlur()"-->
-                
+
                   <div class="wrapper" >
                     <div class="block" v-if="setFocus">
-                    <!-- <ul v-for="rd in responseData"> {{ rd }}</ul> -->
-                    <ul v-for="fk in filterKeyword"> {{ fk }}</ul>
+                    <ul v-for="filterKeyword in filterKeywords"> {{ filterKeyword }}</ul>
                     </div>
                   </div>
                 </section>
