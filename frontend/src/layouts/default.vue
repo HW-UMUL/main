@@ -20,8 +20,6 @@ socketModule.onOpen(() => {
 
 socketModule.onMessage(message => {
     const jsonData = JSON.parse(message.data)
-    console.log(jsonData)
-
     var alarms = JSON.parse(localStorage.getItem("alarms"));
     if(alarms == null) alarms = [];
     alarms.push(jsonData);
@@ -33,10 +31,6 @@ socketModule.onClose(() => {
 })
 
 
-
-
-
-
 function openModal() {
   document.getElementById('myModal').style.display = 'block';
 }
@@ -46,12 +40,16 @@ function closeModal() {
   document.getElementById('myModal').style.display = 'none';
 }
 
-// 닫기 버튼에 클릭 이벤트 추가
-if (document.querySelector('.close')) {
-    document.querySelector('.close').addEventListener('click', closeModal);
-}
 
-openModal()
+onMounted(() => {
+
+  // 닫기 버튼에 클릭 이벤트 추가
+  if (document.querySelector('.close')) {
+      document.querySelector('.close').addEventListener('click', closeModal);
+  }
+
+})
+
 </script>
 
 <template>
@@ -70,7 +68,6 @@ openModal()
 </template>
 
 <style>
-
 
 .modal {
   display: none;

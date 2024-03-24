@@ -20,20 +20,10 @@ socketModule.onOpen(() => {
 
 socketModule.onMessage(message => {
     const jsonData = JSON.parse(message.data)
-    console.log(jsonData)
-
-
-        // Parse any JSON previously stored in allEntries
-    var existingEntries = JSON.parse(localStorage.getItem("allEntries"));
-    if(existingEntries == null) existingEntries = [];
-    var entry = {
-        "title": jsonData.tableName,
-        "text": jsonData.postTitle
-    };
-    localStorage.setItem("entry", JSON.stringify(entry));
-    // Save allEntries back to local storage
-    existingEntries.push(entry);
-    localStorage.setItem("allEntries", JSON.stringify(existingEntries));
+    var alarms = JSON.parse(localStorage.getItem("alarms"));
+    if(alarms == null) alarms = [];
+    alarms.push(jsonData);
+    localStorage.setItem("alarms", JSON.stringify(alarms));
 })
 
 socketModule.onClose(() => {
@@ -41,14 +31,77 @@ socketModule.onClose(() => {
 })
 
 
+function openModal() {
+  document.getElementById('myModal').style.display = 'block';
+}
+
+// 모달 닫기
+function closeModal() {
+  document.getElementById('myModal').style.display = 'none';
+}
+
+
+onMounted(() => {
+
+  // 닫기 버튼에 클릭 이벤트 추가
+  if (document.querySelector('.close')) {
+      document.querySelector('.close').addEventListener('click', closeModal);
+  }
+
+})
+
 </script>
 
 <template>
+
+  <div id="myModal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <p>알람 메시지를 여기에 작성합니다.</p>
+    </div>
+  </div>
+
   <DefaultLayoutWithVerticalNav>
     <RouterView />
   </DefaultLayoutWithVerticalNav>
 </template>
 
+<style>
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+}
+
+.close {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+</style>
 <style lang="scss">
 // As we are using `layouts` plugin we need its styles to be imported
 @use "@layouts/styles/default-layout";
