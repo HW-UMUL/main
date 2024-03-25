@@ -82,7 +82,7 @@ const renderedContent = ref(exampleContent)
         cols="30"
         rows="10"
         class="w-full"
-        v-model="form.content"
+        v-model="formData.content"
       ></textarea> -->
       <div>
         <input

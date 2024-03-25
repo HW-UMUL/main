@@ -1,7 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 // 토큰 브라우저에서 받아오기
 let authToken = 'Bearer '
@@ -23,7 +22,15 @@ console.log('토큰:', authToken)
 const route = useRoute()
 const router = useRouter()
 
-const wiki = ref(null)
+let date = ''
+const state = reactive({
+  items: [],
+  like: [],
+  star: [],
+})
+
+const likedItems = reactive([]) // 사용자가 좋아하는 항목의 ID를 저장하는 배열
+const starredItems = reactive([])
 
 axios
   .get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
@@ -32,13 +39,62 @@ axios
     },
   })
   .then(res => {
-    wiki.value = res.data
-    console.log(wiki.value)
-    console.log(wiki.value.user.username)
+    state.items = res.data
+    date = new Date(state.items?.date)
+
+    date =
+      date.getFullYear() +
+      '-' +
+      (date.getMonth() + 1).toString().padStart(2, '0') +
+      '-' +
+      date.getDate().toString().padStart(2, '0') +
+      ' ' +
+      date.getHours().toString().padStart(2, '0') +
+      ':' +
+      date.getMinutes().toString().padStart(2, '0') +
+      ':' +
+      date.getSeconds().toString().padStart(2, '0')
+
+    console.log(state.items)
+    console.log(state.items.user.username)
+
+    getLikes(state.items?.id)
+    getStars(state.items?.id)
+
+    axios
+      .get(`http://localhost:8080/api/wikilike/readLikePersonal/${state.items?.id}`, {
+        headers: {
+          Authorization: authToken,
+        },
+      })
+      .then(res2 => {
+        state.like = res2.data
+
+        if (state.like.wiki != undefined) {
+          likedItems.push(state.items?.id)
+        }
+      })
+
+    axios
+      .get(`http://localhost:8080/api/wikistar/readStarPersonal/${state.items?.id}`, {
+        headers: {
+          Authorization: authToken,
+        },
+      })
+      .then(res3 => {
+        state.star = res3.data
+        if (state.star.wiki != undefined) {
+          starredItems.push(state.items?.id)
+        }
+      })
   })
 
 function sendIdToUpdate(id) {
   router.push({ name: 'updatewiki', params: { id } })
+}
+
+function sendIdToViewLogs(id) {
+  router.push({ name: 'viewwikilogs', params: { id } })
 }
 
 function deleteAlert() {
@@ -60,93 +116,83 @@ function deleteAlert() {
   }
 }
 
-const props = defineProps({
-  wiki: Object,
-})
-
-const like = ref([])
-const star = ref([])
-
 const likestar = reactive({
   like: [],
   star: [],
 })
-const userLikes = reactive({})
-const userStars = reactive({})
+
+async function toggleLike(wikiId) {
+  if (isLiked(wikiId)) {
+    likedItems.splice(likedItems.indexOf(wikiId), 1)
+  } else {
+    likedItems.push(wikiId)
+  }
+  await checkLike(wikiId)
+}
+
+async function toggleStar(wikiId) {
+  if (isStarred(wikiId)) {
+    starredItems.splice(starredItems.indexOf(wikiId), 1)
+  } else {
+    starredItems.push(wikiId)
+  }
+
+  await checkStar(wikiId)
+}
+function isLiked(wikiId) {
+  return likedItems.includes(wikiId)
+}
+
+function isStarred(wikiId) {
+  return starredItems.includes(wikiId)
+}
 
 async function checkLike(wikiId) {
-  const response = await fetch(`http://localhost:8080/api/wikilike/check/${wikiId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: authToken,
-    },
-  })
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikilike/check/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .post()
 
-  if (!response.ok) {
-    alert('실패!')
-  } else {
-    getLikes(wikiId)
-    if (userLikes[wikiId]) {
-      delete userLikes[wikiId]
-    } else {
-      userLikes[wikiId] = true
-    }
-  }
+  getLikes(wikiId)
 }
 
 async function checkStar(wikiId) {
-  const response = await fetch(`http://localhost:8080/api/wikistar/check/${wikiId}`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: authToken,
-    },
-  })
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikistar/check/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .post()
 
-  if (!response.ok) {
-    alert('실패!')
-  } else {
-    getStars(wikiId)
-  }
+  getStars(wikiId)
 }
 
-let isLiked = 0
 async function getLikes(wikiId) {
-  const response = await fetch(`http://localhost:8080/api/wikilike/read/${wikiId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: authToken,
-    },
-    withCredentials: true,
-  })
-
-  if (!response.ok) {
-    alert('실패!')
-  } else {
-    const likes = await response.json()
-    likestar.like[wikiId] = likes
-  }
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikilike/read/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .get()
+  const likes = res.data
+  likestar.like[wikiId] = likes
 }
 
-let isStarred = 0
 async function getStars(wikiId) {
-  const response = await fetch(`http://localhost:8080/api/wikistar/read/${wikiId}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: authToken,
-    },
-    withCredentials: true,
-  })
-
-  if (!response.ok) {
-    alert('실패!')
-  } else {
-    const stars = await response.json()
-    likestar.star[wikiId] = stars
-  }
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikistar/read/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .get()
+  const stars = res.data
+  likestar.star[wikiId] = stars
 }
 </script>
 
@@ -188,65 +234,63 @@ async function getStars(wikiId) {
     </table>' -->
 
   <div style="display: flex; justify-content: space-between">
-    <div style="text-align: left; color: #905dff; margin: 10px">{{ wiki?.tag }}</div>
+    <div style="text-align: left; color: #905dff; margin: 10px">{{ state.items?.tag }}</div>
     <div style="margin: 10px; margin-left: auto">
       <button
         type="button"
-        v-if="userLikes[wiki?.id] !== undefined"
-        @click="checkLike(`${wiki?.id}`)"
+        @click="toggleLike(state.items?.id)"
+        :class="{ active: isLiked(state.items?.id) }"
       >
-        <font-awesome-icon :icon="['fas', 'thumbs-up']" />
+        <font-awesome-icon :icon="isLiked(state.items?.id) ? ['fas', 'thumbs-up'] : ['far', 'thumbs-up']" />
       </button>
-      <button
-        type="button"
-        v-else
-        @click="checkLike(`${wiki?.id}`)"
-      >
-        <font-awesome-icon :icon="['far', 'thumbs-up']" />
-      </button>
-      {{ likestar.like[wiki?.id] }}
+      {{ likestar.like[state.items?.id] }}
     </div>
     <div style="margin: 10px; float: right">
       <button
         type="button"
-        v-if="userStars[wiki?.id] !== undefined"
-        @click="checkStar(`${wiki?.id}`)"
+        @click="toggleStar(state.items?.id)"
+        :class="{ active: isStarred(state.items?.id) }"
       >
-        <font-awesome-icon :icon="['fas', 'star']" />
+        <font-awesome-icon :icon="isStarred(state.items?.id) ? ['fas', 'star'] : ['far', 'star']" />
       </button>
-      <button
-        type="button"
-        v-else
-        @click="checkStar(`${wiki?.id}`)"
-      >
-        <font-awesome-icon :icon="['far', 'star']" />
-      </button>
-      {{ likestar.star[wiki?.id] }}
+      {{ likestar.star[state.items?.id] }}
     </div>
   </div>
   <div
     width="100%"
     style="color: gray"
   >
-    <h1>{{ wiki?.title }}</h1>
-    <p>
-      &nbsp;&nbsp;{{ wiki?.user.username }} &nbsp;
-      {{ wiki?.date.substring(0, 10) }}
-      {{ wiki?.date.substring(12, 19) }}에 최종 변경
-    </p>
+    <h1>{{ state.items?.title }}</h1>
+    <p>&nbsp;{{ state.items.user?.username }} &nbsp; {{ date }}에 최종 변경</p>
   </div>
   <br />
   <div
-    v-html="`${wiki?.content}`"
+    v-html="`${state.items?.content}`"
     style="width: 100%; height: 50%"
   />
 
   <div
     align="center"
-    style="flex: auto; float: right"
+    style="flex: auto; float: right; padding-top: 50px"
   >
     <button
-      @click="sendIdToUpdate(`${wiki.id}`)"
+      @click="sendIdToViewLogs(state.items?.id)"
+      style="
+        background-color: #905dff;
+        border: none;
+        color: white;
+        padding: 7px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-style: solid;
+        font-size: 15px;
+      "
+    >
+      변경 이력
+    </button>
+    <button
+      @click="sendIdToUpdate(state.items?.id)"
       style="
         background-color: #905dff;
         border: none;

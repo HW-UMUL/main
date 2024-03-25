@@ -3,6 +3,7 @@ import axios from 'axios'
 import { ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
+// 토큰 브라우저에서 받아오기
 let authToken = 'Bearer '
 const cookies = document.cookie.split(';')
 let jwtToken = ''
@@ -10,6 +11,7 @@ let jwtToken = ''
 for (let i = 0; i < cookies.length; i++) {
   const cookie = cookies[i].trim()
   if (cookie.startsWith('jwtToken=')) {
+    // 'jwtToken'의 값만 추출
     jwtToken = cookie.substring('jwtToken='.length)
     break
   }

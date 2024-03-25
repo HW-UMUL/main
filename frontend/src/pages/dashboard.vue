@@ -1,6 +1,8 @@
 <script setup>
-import AnalyticsTotalProfitLineCharts from '@/views/dashboard/AnalyticsTotalProfitLineCharts.vue';
-import AnalyticsWeeklyOverview from '@/views/dashboard/AnalyticsWeeklyOverview.vue';
+import AnalyticsTotalProfitLineCharts from '@/views/dashboard/AnalyticsTotalProfitLineCharts.vue'
+import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
+import AnalyticsUserTable from '@/views/dashboard/AnalyticsUserTable.vue'
+import AnalyticsWeeklyOverview from '@/views/dashboard/AnalyticsWeeklyOverview.vue'
 
 const totalProfit = {
   title: 'Total Profit',
@@ -19,7 +21,6 @@ const newProject = {
   change: -18,
   subtitle: 'Yearly Project',
 }
-
 </script>
 
 <!-- <script>
@@ -41,7 +42,10 @@ export default {
       md="9"
     >
       <VRow class="match-height">
-        <VCol cols="3" sm="12">
+        <VCol
+          cols="3"
+          sm="12"
+        >
           <AnalyticsWeeklyOverview />
         </VCol>
       </VRow>
@@ -63,14 +67,14 @@ export default {
           cols="5"
           sm="12"
         >
-        <AnalyticsTotalProfitLineCharts />
+          <AnalyticsTransactions />
         </VCol>
 
         <VCol
           cols="5"
           sm="12"
         >
-        <AnalyticsTotalProfitLineCharts />
+          <AnalyticsUserTable />
         </VCol>
       </VRow>
     </VCol>

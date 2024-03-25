@@ -1,7 +1,7 @@
 import ReadWiki from '@/pages/readwiki.vue';
 import UpdateWiki from '@/pages/updatewiki.vue';
+import ViewWikiLogs from '@/pages/viewwikilogs.vue';
 import { createRouter, createWebHistory } from 'vue-router';
-
 export const routes = [
   { path: '/', redirect: '/dashboard' },
   {
@@ -59,6 +59,12 @@ export const routes = [
         name: 'updatewiki',
         component: UpdateWiki,
         props: true // URL 파라미터를 컴포넌트의 props로 전달합니다.
+      },
+      {
+        path: '/viewwikilogs/:id',
+        name: 'viewwikilogs',
+        component: ViewWikiLogs,
+        props: true
       },
       {
         path: 'wikieditorwrite',

@@ -1,4 +1,23 @@
 <script setup>
+import axios from 'axios'
+import { reactive } from 'vue'
+
+// 토큰 브라우저에서 받아오기
+let authToken = 'Bearer '
+const cookies = document.cookie.split(';')
+let jwtToken = ''
+
+for (let i = 0; i < cookies.length; i++) {
+  const cookie = cookies[i].trim()
+  // 쿠키 이름이 'jwtToken'으로 시작하는 경우
+  if (cookie.startsWith('jwtToken=')) {
+    // 'jwtToken'의 값만 추출
+    jwtToken = cookie.substring('jwtToken='.length)
+    break
+  }
+}
+authToken = authToken + jwtToken
+
 const statistics = [
   {
     title: 'Sales',
@@ -25,58 +44,65 @@ const statistics = [
     color: 'info',
   },
 ]
+
+const wiki = reactive([])
+
+axios
+  .get(`http://localhost:8080/api/wiki/readall`, {
+    headers: {
+      Authorization: authToken,
+    },
+  })
+  .then(res => {
+    wiki.value = res.data
+    for (let i = 0; i < res.data.length; i++) {
+      getStars(wiki.value[i]?.id)
+    }
+  })
+
+const likestar = reactive({
+  like: [],
+  star: [],
+})
+
+async function getStars(wikiId) {
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikistar/read/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .get()
+  const stars = res.data
+  likestar.star[wikiId] = stars
+}
+
+const rankedItems = computed(() => {
+  if (!wiki.value) return [] // wiki.value가 비어 있는 경우 빈 배열 반환
+
+  // 좋아요 개수를 기준으로 wiki.value를 정렬
+  const sortedItems = wiki.value.slice().sort((a, b) => {
+    return likestar.star[b.id] - likestar.star[a.id]
+  })
+
+  return sortedItems.slice(0, 5)
+})
 </script>
 
 <template>
-  <VCard title="Transactions">
-    <template #subtitle>
-      <p class="text-body-1 mb-0">
-        <span class="d-inline-block font-weight-medium text-high-emphasis">Total 48.5% Growth</span> <span class="text-high-emphasis">😎</span> this month
-      </p>
-    </template>
-
-    <template #append>
-      <IconBtn class="mt-n5">
-        <VIcon
-          color="high-emphasis"
-          icon="ri-more-2-line"
-        />
-      </IconBtn>
-    </template>
-
-    <VCardText class="pt-10">
-      <VRow>
-        <VCol
-          v-for="item in statistics"
-          :key="item.title"
-          cols="12"
-          sm="6"
-          md="3"
-        >
-          <div class="d-flex align-center gap-x-3">
-            <VAvatar
-              :color="item.color"
-              rounded
-              size="40"
-              class="elevation-2"
-            >
-              <VIcon
-                size="24"
-                :icon="item.icon"
-              />
-            </VAvatar>
-
-            <div class="d-flex flex-column">
-              <div class="text-body-1">
-                {{ item.title }}
-              </div>
-              <h5 class="text-h5">
-                {{ item.stats }}
-              </h5>
-            </div>
-          </div>
-        </VCol>
-      </VRow>
+  <VCard>
+    <VCardTitle class="text-center">Wiki 즐겨찾기 순위</VCardTitle>
+    <VCardText>
+      <div
+        style="justify-content: space-between; display: flex; margin: 5px"
+        v-for="(item, idx) in rankedItems"
+      >
+        <div>{{ idx + 1 }}</div>
+        <div>
+          <a :href="`http://localhost:5173/readwiki/${item.id}`">{{ item.title }}</a>
+        </div>
+        <div>{{ likestar.star[item.id] }}</div>
+      </div>
     </VCardText>
   </VCard>
 </template>

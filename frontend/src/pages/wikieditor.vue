@@ -54,6 +54,15 @@ const editor = useEditor({
     },
   },
 })
+
+watch(
+  () => props.modelValue,
+  (newValue, oldValue) => {
+    if (newValue !== oldValue) {
+      editor.content = newValue
+    }
+  },
+)
 </script>
 
 <template>

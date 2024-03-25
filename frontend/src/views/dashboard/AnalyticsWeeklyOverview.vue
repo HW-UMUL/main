@@ -1,8 +1,8 @@
 <!-- eslint-disable no-restricted-imports -->
 <script setup>
-import { hexToRgb } from '@layouts/utils';
-import axios from "axios";
-import { useTheme } from 'vuetify';
+import { hexToRgb } from '@layouts/utils'
+import axios from 'axios'
+import { useTheme } from 'vuetify'
 
 const route = useRoute()
 
@@ -10,31 +10,32 @@ const route = useRoute()
 // const store = useStore();
 // console.log("auth: ",store.state.authToken)
 
-// 토큰 브라우저에서 받아오기 
+// 토큰 브라우저에서 받아오기
 let authToken = 'Bearer '
-const cookies = document.cookie.split(";");
-let jwtToken = '';
+const cookies = document.cookie.split(';')
+let jwtToken = ''
 
 for (let i = 0; i < cookies.length; i++) {
-  const cookie = cookies[i].trim();
+  const cookie = cookies[i].trim()
   // 쿠키 이름이 'jwtToken'으로 시작하는 경우
   if (cookie.startsWith('jwtToken=')) {
     // 'jwtToken'의 값만 추출
-    jwtToken = cookie.substring('jwtToken='.length);
-    break;
+    jwtToken = cookie.substring('jwtToken='.length)
+    break
   }
 }
 authToken = authToken + jwtToken
-console.log("토큰:", authToken)
 
 const vuetifyTheme = useTheme()
 
 const options = computed(() => {
   const currentTheme = ref(vuetifyTheme.current.value.colors)
   const variableTheme = ref(vuetifyTheme.current.value.variables)
-  const disabledColor = `rgba(${ hexToRgb(currentTheme.value['on-surface']) },${ variableTheme.value['disabled-opacity'] })`
-  const borderColor = `rgba(${ hexToRgb(String(variableTheme.value['border-color'])) },${ variableTheme.value['border-opacity'] })`
-  
+  const disabledColor = `rgba(${hexToRgb(currentTheme.value['on-surface'])},${variableTheme.value['disabled-opacity']})`
+  const borderColor = `rgba(${hexToRgb(String(variableTheme.value['border-color']))},${
+    variableTheme.value['border-opacity']
+  })`
+
   return {
     chart: {
       offsetY: -10,
@@ -73,15 +74,7 @@ const options = computed(() => {
       active: { filter: { type: 'none' } },
     },
     xaxis: {
-      categories: [
-        'Sun',
-        'Mon',
-        'Tue',
-        'Wed',
-        'Thu',
-        'Fri',
-        'Sat',
-      ],
+      categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
       tickPlacement: 'on',
       labels: { show: false },
       crosshairs: { opacity: 0 },
@@ -96,7 +89,7 @@ const options = computed(() => {
           colors: disabledColor,
           fontSize: '13px',
         },
-        formatter: value => `${ value > 999 ? `${ (value / 1000).toFixed(0) }` : value }k`,
+        formatter: value => `${value > 999 ? `${(value / 1000).toFixed(0)}` : value}k`,
       },
     },
     responsive: [
@@ -112,135 +105,151 @@ const options = computed(() => {
   }
 })
 
-const series = [{
-  data: [
-    37,
-    57,
-    45,
-    75,
-    57,
-    40,
-    65,
-  ],
-}]
+const date = reactive([])
 
 const state = reactive({
-  items: []
-})
-axios.get("http://localhost:8080/api/wiki/readall", {
-  headers: {
-    'Authorization': authToken
-  }
-}).then((res) => {
-    console.log(res.data[0])
-    state.items = res;
+  items: [],
+  like: [],
+  star: [],
 })
 
-const props = defineProps({
-    wiki: Object
-})
+const likedItems = reactive([]) // 좋아요에 대한 wikiId를 저장하는 배열
+const starredItems = reactive([]) // 즐겨찾기에 대한 wikiId를 저장하는 배열
 
+axios
+  .get('http://localhost:8080/api/wiki/readall', {
+    headers: {
+      Authorization: authToken,
+    },
+  })
+  .then(res => {
+    state.items = res
+
+    for (let i = 0; i < res.data.length; i++) {
+      getLikes(state.items.data[i]?.id)
+      getStars(state.items.data[i]?.id)
+
+      date[i] = new Date(state.items.data[i]?.date)
+
+      date[i] =
+        date[i].getFullYear() +
+        '-' +
+        (date[i].getMonth() + 1).toString().padStart(2, '0') +
+        '-' +
+        date[i].getDate().toString().padStart(2, '0') +
+        ' ' +
+        date[i].getHours().toString().padStart(2, '0') +
+        ':' +
+        date[i].getMinutes().toString().padStart(2, '0') +
+        ':' +
+        date[i].getSeconds().toString().padStart(2, '0')
+
+      axios
+        .get(`http://localhost:8080/api/wikilike/readLikePersonal/${state.items.data[i]?.id}`, {
+          headers: {
+            Authorization: authToken,
+          },
+        })
+        .then(res2 => {
+          state.like = res2.data
+
+          if (state.like.wiki != undefined) {
+            likedItems.push(state.items.data[i]?.id)
+          }
+        })
+
+      axios
+        .get(`http://localhost:8080/api/wikistar/readStarPersonal/${state.items.data[i]?.id}`, {
+          headers: {
+            Authorization: authToken,
+          },
+        })
+        .then(res3 => {
+          state.star = res3.data
+          if (state.star.wiki != undefined) {
+            starredItems.push(state.items.data[i]?.id)
+          }
+        })
+    }
+  })
 
 const likestar = reactive({
   like: [],
   star: [],
 })
-const userLikes = reactive({});
-const userStars = reactive({});
 
-async function checkLike(wikiId){
-  const response = await fetch(
-      `http://localhost:8080/api/wikilike/check/${wikiId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization' : authToken
-        }
-      }
-  )
+async function toggleLike(wikiId) {
+  if (isLiked(wikiId)) {
+    likedItems.splice(likedItems.indexOf(wikiId), 1)
+  } else {
+    likedItems.push(wikiId)
+  }
+  await checkLike(wikiId)
+}
 
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    getLikes(wikiId)
-    if (userLikes[wikiId]) {
-      delete userLikes[wikiId];
-    } else {
-      userLikes[wikiId] = true;
-    }
+async function toggleStar(wikiId) {
+  if (isStarred(wikiId)) {
+    starredItems.splice(starredItems.indexOf(wikiId), 1)
+  } else {
+    starredItems.push(wikiId)
   }
 
+  await checkStar(wikiId)
+}
+function isLiked(wikiId) {
+  return likedItems.includes(wikiId)
 }
 
-async function checkStar(wikiId){
-
-  const response = await fetch(
-      `http://localhost:8080/api/wikistar/check/${wikiId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization' : authToken
-        },
-      }
-    )
-
-    if(!response.ok) {
-      alert("실패!")
-    } else{
-      getStars(wikiId)
-      if (userStars[wikiId]) {
-        delete userStars[wikiId];
-      } else {
-        userStars[wikiId] = true;
-      }
-    }
+function isStarred(wikiId) {
+  return starredItems.includes(wikiId)
 }
 
-async function getLikes(wikiId){
-
-  const response = await fetch(
-      `http://localhost:8080/api/wikilike/read/${wikiId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization' : authToken
-        },
-        withCredentials: true,
-      }
-      
-  )
-
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    const likes = await response.json()
-    likestar.like[wikiId] = likes;
-  }
-}
-
-async function getStars(wikiId){
-
-const response = await fetch(
-    `http://localhost:8080/api/wikistar/read/${wikiId}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization' : authToken
-      },
+async function checkLike(wikiId) {
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikilike/check/${wikiId}`,
+      headers: { Authorization: authToken },
       withCredentials: true,
-    }
-  )
+    })
+    .post()
 
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    const stars = await response.json()
-    likestar.star[wikiId] = stars;
-  }
+  getLikes(wikiId)
+}
+
+async function checkStar(wikiId) {
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikistar/check/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .post()
+
+  getStars(wikiId)
+}
+
+async function getLikes(wikiId) {
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikilike/read/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .get()
+  const likes = res.data
+  likestar.like[wikiId] = likes
+}
+
+async function getStars(wikiId) {
+  const res = await axios
+    .create({
+      baseURL: `http://localhost:8080/api/wikistar/read/${wikiId}`,
+      headers: { Authorization: authToken },
+      withCredentials: true,
+    })
+    .get()
+  const stars = res.data
+  likestar.star[wikiId] = stars
 }
 
 // function checkLike(wikiId) {
@@ -255,51 +264,55 @@ const response = await fetch(
 //     console.log(error)
 //   })
 // }
-
-
 </script>
 
 <style>
-    .button {
-      position: absolute;
-      top:50%;
-      background-color: lightgray;
-    }
+.button {
+  position: absolute;
+  top: 50%;
+  background-color: lightgray;
+}
 </style>
 <template>
-  <VCol v-for="i in state.items.data?.length" :key="i">
-    <hr/>
+  <VCol
+    v-for="(item, idx) in state.items.data"
+    :key="idx"
+  >
+    <hr />
     <div style="display: flex; justify-content: space-between">
-          <div style="text-align: left; color: #905DFF; margin: 10px">{{ state.items.data[i-1]?.tag }}</div>
-          <div style="margin: 10px; margin-left: auto">
-            <button type="button" v-if="userLikes[state.items.data[i-1].id] !== undefined" @click="checkLike(`${state.items.data[i-1].id}`)">
-              <font-awesome-icon :icon="['fas', 'thumbs-up']" />
-            </button>  
-            <button type="button" v-else @click="checkLike(`${state.items.data[i-1].id}`)">
-              <font-awesome-icon :icon="['far', 'thumbs-up']" />
-            </button>
-            {{ likestar.like[state.items.data[i-1].id] }}
-          </div>
-        <div style="margin: 10px; float: right;">
-          <button type="button" v-if="userStars[state.items.data[i-1].id] !== undefined" @click="checkStar(`${state.items.data[i-1].id}`)">
-            <font-awesome-icon :icon="['fas', 'star']" />
-          </button>
-          <button type="button" v-else @click="checkStar(`${state.items.data[i-1].id}`)">
-            <font-awesome-icon :icon="['far', 'star']" />
-          </button>
-          {{ likestar.star[state.items.data[i-1].id] }}
-        </div>
+      <div style="text-align: left; color: #905dff; margin: 10px">
+        {{ item?.tag }}
       </div>
-    <div width="100%" style="color: gray">
-      <h1>{{ state.items.data[i-1]?.title }}</h1>
-      <p>&nbsp;&nbsp;{{ state.items.data[i-1]?.user.username }} &nbsp;
-         {{ state.items.data[i-1]?.date.substring(0,10) }}
-        {{ state.items.data[i-1]?.date.substring(12,19) }}에 최종 변경
-      </p>
+      <div style="margin: 10px; margin-left: auto">
+        <button
+          type="button"
+          @click="toggleLike(item?.id)"
+          :class="{ active: isLiked(item?.id) }"
+        >
+          <font-awesome-icon :icon="isLiked(item?.id) ? ['fas', 'thumbs-up'] : ['far', 'thumbs-up']" />
+        </button>
+        {{ likestar.like[item.id] }}
+      </div>
+      <div style="margin: 10px; float: right">
+        <button
+          type="button"
+          @click="toggleStar(item?.id)"
+          :class="{ active: isStarred(item?.id) }"
+        >
+          <font-awesome-icon :icon="isStarred(item?.id) ? ['fas', 'star'] : ['far', 'star']" />
+        </button>
+        {{ likestar.star[item.id] }}
+      </div>
     </div>
-    <br/>
-    <div v-html="`${ state.items.data[i-1]?.content }`"/>
-
-    <br/><br/><br/><br/>
-</VCol>
+    <div
+      width="100%"
+      style="color: gray"
+    >
+      <h1>{{ item?.title }}</h1>
+      <p>&nbsp; 작성자: {{ item?.user.username }} &nbsp; {{ date[idx] }} 에 최종 변경</p>
+    </div>
+    <br />
+    <div v-html="`${item?.content}`" />
+    <br /><br /><br /><br />
+  </VCol>
 </template>
