@@ -1,6 +1,7 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
+import TiptapEditor from '@/components/TiptapEditor.vue';
 import PostLikeSort from '@/views/list/PostLikeSort.vue';
 import PostDateSort from '@/views/list/PostDateSort.vue';
 
@@ -73,8 +74,7 @@ async function updatePost(postId){
     >
       <VCard class="position-relative">
         <VCardText>
-          <div >
-            <form @submit.prevent="updatePost(this.$route.query.postId)">
+          <div>
             <p >Post 수정</p>
                 <VCol
                 >
@@ -88,12 +88,19 @@ async function updatePost(postId){
 
                 <VCol
                 >
-                  <VTextarea
+                <div>
+                <TiptapEditor
+                id="Tipcontent"
+                v-model="post.content"
+                />
+                </div>
+
+                  <!-- <VTextarea
                   id="content"
                   v-model="post.content"
                   placeholder="본문"
                   label="본문"
-                  />
+                  /> -->
                 </VCol>
 
                 <VCol
@@ -118,21 +125,21 @@ async function updatePost(postId){
 
               <VCol cols="12">
                 <VBtn
-                  type="submit"
-                  class="me-5"
+                @click="updatePost(this.$route.query.postId)"
+                type="submit"
+                class="me-5"
                 >
                   Submit
                 </VBtn>
 
-                <VBtn
+                <!-- <VBtn
                   color="secondary"
                   type="reset"
                   variant="outlined"
                 >
                   Reset
-                </VBtn>
+                </VBtn> -->
               </VCol>
-            </form>
           </div>
         </VCardText>
       </VCard>

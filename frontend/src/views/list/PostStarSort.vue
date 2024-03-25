@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue';
-import PostLike from '@/views/like/PostLike.vue';
+import PostStar from '@/views/star/PostStar.vue';
 
 const posts = ref([])
 
@@ -22,11 +22,11 @@ async function getPosts() {
     const beforePosts = await response.json()
     
     posts.value = await Promise.all(beforePosts.map(async (post) => {
-      const likes = await getLikes(post.id)
-      return { ...post, likes: likes }
+      const stars = await getStars(post.id)
+      return { ...post, stars: stars }
     }))
 
-    posts.value.sort((a, b) => b.likes - a.likes)
+    posts.value.sort((a, b) => b.stars - a.stars)
 
   } catch (error) {
     console.error(error)
@@ -36,9 +36,9 @@ async function getPosts() {
 
 onMounted(getPosts)
 
-async function getLikes(postId) {
+async function getStars(postId) {
   try {
-    const response = await fetch(`http://localhost:8080/api/postlike/read/${postId}`, {
+    const response = await fetch(`http://localhost:8080/api/poststar/read/${postId}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -47,13 +47,13 @@ async function getLikes(postId) {
     })
 
     if (!response.ok) {
-      alert("실패!")
+    //   alert("실패!")
     }
-    const likes = await response.json()
-    return likes
+    const stars = await response.json()
+    return stars
   } catch (error) {
     console.error(error)
-    alert("실패!")
+    // alert("실패!")
   }
 }
 
@@ -67,7 +67,7 @@ async function getLikes(postId) {
           Title
         </th>
         <th class="text-uppercase text-center">
-          Like
+          Star
         </th>
       </tr>
     </thead>
@@ -78,7 +78,7 @@ async function getLikes(postId) {
           {{ item.title }}
         </td>
         <td class="text-center">
-          <PostLike :postlike="item" />
+          <PostStar :poststar="item" />
         </td>
       </tr>
     </tbody>

@@ -2,7 +2,7 @@
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
 import PostLikeSort from '@/views/list/PostLikeSort.vue';
 import PostDateSort from '@/views/list/PostDateSort.vue';
-
+import TiptapEditor from '@/components/TiptapEditor.vue';
 
 const post = ref({
   title: '',
@@ -48,79 +48,80 @@ async function writePost(){
       md="8"
       class="mb-4"
     >
-      <VCard class="position-relative">
-        <VCardText>
-          <div >
-            <form @submit.prevent="writePost()">
-            <p >Post 작성</p>
-                <VCol
-                >
-                  <VTextField
-                  id="title"
-                  v-model="post.title"
-                  placeholder="제목"
-                  label="제목"
-                  />
-                </VCol>
+    <VCard class="position-relative">
+      <VCardText>
+        <div >
+          <p >Post 작성</p>
+          <VCol
+          > 
+            <VTextField
+            id="title"
+            v-model="post.title"
+            placeholder="제목"
+            label="제목"
+            >
+            </VTextField>
+          </VCol>
 
-              
+          <VCol
+          >
+            <div>
+            <TiptapEditor
+            id="Tipcontent"
+            v-model="post.content"
+            />
+            </div>
 
-                <VCol
-                >
-                  <VTextarea
-                  id="content"
-                  v-model="post.content"
-                  placeholder="본문"
-                  label="본문"
-                  />
-                </VCol>
+            <!-- <VTextarea
+            id="content"
+            v-model="post.content"
+            placeholder="본문"
+            label="본문"
+            /> -->
 
+          </VCol>
 
+          <VCol
+          >
+            <VTextField
+            id="category"
+            v-model="post.category"
+            placeholder="카테고리"
+            label="카테고리"
+            />
+          </VCol>
 
-                <VCol
-                >
-                  <VTextField
-                  id="category"
-                  v-model="post.category"
-                  placeholder="카테고리"
-                  label="카테고리"
-                  />
-                </VCol>
+          <VCol
+          >
+            <VTextField
+            id="tag"
+            v-model="post.tag"
+            placeholder="태그"
+            label="태그"
+            />
+          </VCol>
 
+          <VCol cols="12">
+            <VBtn
+              @click="writePost()"
+              type="submit"
+              class="me-5"
+            >
+              Submit
+            </VBtn>
+            
+            <!-- <VBtn
+              color="secondary"
+              type="reset"
+              variant="outlined"
+            >
+              Reset
+            </VBtn> -->
+          </VCol>
 
-
-                <VCol
-                >
-                  <VTextField
-                  id="tag"
-                  v-model="post.tag"
-                  placeholder="태그"
-                  label="태그"
-                  />
-                </VCol>
-
-
-              <VCol cols="12">
-                <VBtn
-                  type="submit"
-                  class="me-5"
-                >
-                  Submit
-                </VBtn>
-
-                <VBtn
-                  color="secondary"
-                  type="reset"
-                  variant="outlined"
-                >
-                  Reset
-                </VBtn>
-              </VCol>
-
-            </form>
-          </div>
-        </VCardText>
-      </VCard>
+        </div>
+      </VCardText>
+    </VCard>
     
     </VCol>
     

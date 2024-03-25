@@ -1,7 +1,4 @@
 <script setup>
-import { formatDateToMonthShort } from '@/@core/utils/formatters';
-import index from 'vue-prism-component';
-import { VCard, VCardItem, VCardText, VCardTitle, VCol, VDivider, VIcon, VTextField } from 'vuetify/lib/components/index.mjs';
 
 // 년-월-일
 const formatDate = function(value) {

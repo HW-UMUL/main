@@ -323,7 +323,8 @@ getReply(props.post.id)
           </div>
 
           <VDivider />
-            <VCol class="post-content, mt-2" style="margin-left: 5px;">{{ post.content.length > 100 ? post.content.slice(0, 100) + '...': post.content }}
+            <VCol class="post-content, mt-2" style="margin-left: 5px;">
+              <div v-html="post.content.length  > 100 ? post.content.slice(0,100) + '...' :post.content"></div>
             </VCol>
           <VCardActions>
             <VBtn @click="isDetails = !isDetails">
@@ -345,7 +346,7 @@ getReply(props.post.id)
             <div v-show="isDetails">
               <VDivider />
               <VCardText>
-                {{ post.content }}
+                <div v-html="post.content"></div>
               </VCardText>
             </div>
           </VExpandTransition>

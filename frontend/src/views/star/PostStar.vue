@@ -1,15 +1,16 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+
 const props = defineProps({
-    postlike: Object
+    poststar: Object
 })
 
-const like = ref([])
+const star = ref([])
 
-async function getLikes(){
+async function getStars(){
   
   const response = await fetch(
-    `http://localhost:8080/api/postlike/read/${props.postlike.id}`,
+    `http://localhost:8080/api/poststar/read/${props.poststar.id}`,
     {
         method: 'GET',
         headers: {
@@ -22,17 +23,17 @@ async function getLikes(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    like.value = await response.json()
+    star.value = await response.json()
   }
 }
 
-onMounted(getLikes)
+onMounted(getStars)
 
 </script>
 
 <template>
     <span>
-        {{ like }}
+        {{ star }}
     </span>
 </template>
   

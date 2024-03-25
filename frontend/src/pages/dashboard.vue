@@ -2,10 +2,9 @@
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
 import Post from '@/views/post/Post.vue';
 import PostLikeSort from '@/views/list/PostLikeSort.vue';
+import PostStarSort from '@/views/list/PostStarSort.vue';
 import PostDateSort from '@/views/list/PostDateSort.vue';
 import { VCard } from 'vuetify/lib/components/index.mjs';
-
-// import post from '@/views/'
 
 const totalProfit = {
   title: 'Total Profit',
@@ -67,13 +66,14 @@ getPosts()
       md="4"
     >
       <VCard title="추천순" style="margin-bottom: 20px">
-      <PostLikeSort style="margin-bottom: 20px" />
+        <PostLikeSort style="margin-bottom: 20px" />
+      </VCard>
+      <VCard title="즐겨찾기순" style="margin-bottom: 20px">
+        <PostStarSort style="margin-bottom: 20px" />
       </VCard>
       <VCard title="최신순" style="margin-bottom: 20px">
-        <PostDateSort />
+        <PostDateSort style="margin-bottom: 20px" />
       </VCard>
-      <AnalyticsAward style="margin-bottom: 20px"/>
-      <AnalyticsAward style="margin-bottom: 20px"/>
     </VCol>
 
   </VRow>
