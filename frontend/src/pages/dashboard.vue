@@ -1,12 +1,6 @@
 <script setup>
 import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
 import Post from '@/views/post/Post.vue';
-// import Wiki from '@/views/wiki/Wiki.vue';
-
-
-// import DefaultLayoutWithVerticalNav from '@/layouts/components/DefaultLayoutWithVerticalNav.vue'
-
-// import post from '@/views/'
 import { watchEffect } from 'vue';
 
 const props = defineProps({
@@ -30,27 +24,6 @@ watchEffect(() => {
   }
 });
 
-
-// 데이터 받아오기
-// async function getSearchList(){
-//   const response = await fetch(
-//       `http://localhost:8080/api/post/search/all`,
-//       {
-//         method: 'GET',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         credentials: 'include'
-//       }
-//   )
-
-//   if(!response.ok) {
-//     alert("실패!")
-//   } else{
-//     searchList.value = await response.json()
-//     console.log(searchList.value)
-//   }
-// }
 
 async function getPosts(){
   const response = await fetch(

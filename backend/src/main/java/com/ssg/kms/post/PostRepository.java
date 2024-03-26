@@ -14,4 +14,10 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("SELECT title FROM Post")
     List<String> findAllTitles();
 
+//    @Query("SELECT title FROM Post where replace(con_title,\" \",\"\")")
+//    List<String> findAllByTitleContaining();
+
+    
+    
+    
 }
