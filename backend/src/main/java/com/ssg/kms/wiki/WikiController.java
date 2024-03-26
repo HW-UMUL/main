@@ -14,6 +14,8 @@ import com.ssg.kms.user.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -46,4 +48,5 @@ public class WikiController {
     public ResponseEntity<Wiki> deleteWiki(@PathVariable Long wikiId) {
         return ResponseEntity.ok(wikiService.deleteWiki(wikiId, userService.getMyUserWithAuthorities()));
     }
+
 }

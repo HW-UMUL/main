@@ -45,4 +45,16 @@ public class WikiStarService {
     public int readStar(Long wikiId, Optional<User> user) {
     	return wikiStarRepository.findAllByWikiId(wikiId).size();
     }
+
+	@Transactional(readOnly = true)
+    public WikiStar readStarPersonal(Long wikiId, Optional<User> user) {
+		Wiki wiki = wikiRepository.findById(wikiId).get();
+    	WikiStar wikiStar = wikiStarRepository.findByWikiAndUser(wiki, user.get()).orElse(null);
+		
+		if(wikiStar != null) {
+    		return wikiStar;
+    	}
+    	    	
+		return null;
+    }
 }

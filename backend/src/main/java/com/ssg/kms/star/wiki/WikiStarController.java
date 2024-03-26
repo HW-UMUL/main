@@ -33,4 +33,9 @@ public class WikiStarController {
     public ResponseEntity readWikiStar(@PathVariable Long wikiId) {
 		return ResponseEntity.ok(wikiService.readStar(wikiId, userService.getMyUserWithAuthorities()));
     }
+
+	@GetMapping("/readStarPersonal/{wikiId}")
+	public ResponseEntity readStarPersonal(@PathVariable Long wikiId) {
+		return ResponseEntity.ok(wikiService.readStarPersonal(wikiId, userService.getMyUserWithAuthorities()));
+	}
 }

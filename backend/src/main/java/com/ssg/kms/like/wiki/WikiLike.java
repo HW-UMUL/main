@@ -28,7 +28,7 @@ public class WikiLike {
     private Long id;
 
 	@ManyToOne //(cascade = CascadeType.ALL)    
-	private User user;
+	private User user;	
 
 	@ManyToOne //(cascade = CascadeType.ALL)    
 	private Wiki wiki;

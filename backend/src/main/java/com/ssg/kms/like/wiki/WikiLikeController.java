@@ -33,4 +33,9 @@ public class WikiLikeController {
     public ResponseEntity readwikiLike(@PathVariable Long wikiId) {
 		return ResponseEntity.ok(wikiService.readLike(wikiId, userService.getMyUserWithAuthorities()));
     }
+
+	@GetMapping("/readLikePersonal/{wikiId}")
+	public ResponseEntity readLikePersonal(@PathVariable Long wikiId) {
+		return ResponseEntity.ok(wikiService.readLikePersonal(wikiId, userService.getMyUserWithAuthorities()));
+	}
 }
