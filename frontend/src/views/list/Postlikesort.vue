@@ -1,8 +1,11 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import PostLike from '@/views/like/PostLike.vue';
+import SelectedPost from '@/views/post/Post.vue';
 
 const posts = ref([])
+const ispostmodal = ref(false)
+const selectedPostId = ref(null)
 
 async function getPosts() {
   try {
@@ -57,6 +60,31 @@ async function getLikes(postId) {
   }
 }
 
+async function checkLike(postId){
+
+const response = await fetch(
+    `http://localhost:8080/api/postlike/check/${postId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  getLikes(postId)
+}
+}
+
+function clickpostmodal(postId) {
+  ispostmodal.value = !ispostmodal.value
+  selectedPostId.value = postId
+}
+
 </script>
 
 <template>
@@ -75,13 +103,53 @@ async function getLikes(postId) {
     <tbody>
       <tr v-for="(item, index) in posts.slice(0,5)" :key="index">
         <td class="text-center">
-          {{ item.title }}
+          <VIconBtn @click="clickpostmodal(item.id)" style="cursor: pointer;">
+            {{ item.title }}
+          </VIconBtn>
         </td>
         <td class="text-center">
-          <PostLike :postlike="item" />
+          <VIconBtn @click="checkLike(item.id)" style="cursor: pointer;">
+            <PostLike :postlike="item" />
+          </VIconBtn>
         </td>
+
       </tr>
     </tbody>
   </VTable>
 
+  <div class="modal-wrap" v-show="ispostmodal">
+    <div class="modal-container">
+      <div>
+        <!-- <SelectedPost :post="item" style="margin-bottom: 20px;"/> -->
+      </div>
+      <div class="modal-btn">
+        <button @click="ispostmodal=!ispostmodal"> 확인 </button>
+      </div>
+    </div>
+  </div>
+
 </template>
+
+<style lang="scss">
+/* dimmed */
+.modal-wrap {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+}
+/* modal or popup */
+.modal-container {
+  position: relative;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 550px;
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-sizing: border-box;
+}
+</style>

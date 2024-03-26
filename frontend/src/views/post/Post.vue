@@ -58,25 +58,25 @@ async function checkLike(){
   }
 }
 
-async function checkReplyLike(replyId){
+// async function checkReplyLike(replyId){
 
-  const response = await fetch(
-      `http://localhost:8080/api/replylike/check/${replyId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-      }
-  )
+//   const response = await fetch(
+//       `http://localhost:8080/api/replylike/check/${replyId}`,
+//       {
+//         method: 'POST',
+//         headers: {
+//           'Content-Type': 'application/json',
+//         },
+//         credentials: 'include'
+//       }
+//   )
 
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    getReplyLikes(replyId)
-  }
-}
+//   if(!response.ok) {
+//     alert("실패!")
+//   } else{
+//     getReplyLikes(replyId)
+//   }
+// }
 
 async function getReplyLikes(replyId){
   

@@ -181,7 +181,7 @@ watch(() => props.modelValue, (value) => {
 }
 
 .btn{
-  margin-right: 5px;
+  margin-right: 10px;
   font-size: 12pt;
   font-weight: 700;
 }
