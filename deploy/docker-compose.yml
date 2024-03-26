@@ -19,4 +19,4 @@ services:
     depends_on:
       - mariadb-container
     ports:
-      - "8080:8080"
+      - "8088:8080"

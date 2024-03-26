@@ -8,8 +8,6 @@ const auth = inject('auth')
 
 // websocket
 
-socketModule.connectionString = `ws://${serverAddress}/ws`
-
 socketModule.setConnectionString(`ws://${serverAddress}/ws`)
 socketModule.connect()
 
@@ -50,6 +48,8 @@ async function addChatRoomUsers(){
   inviteUsers.value.forEach(function(user) {
     formData.email.push(user.email)
   })
+
+  inviteUsers.value = [{ email : ''}]
 
   const response = await fetch(
     `http://${serverAddress}/api/chatroomuser/create/${props.roomId}`,
@@ -100,14 +100,28 @@ const addUser = () => {
 
 const message = ref('')
 async function sendMessage(){
-  const formData = { 
-    chatRoomId: props.roomId,
-    content: message.value     
+  const formData = {
+    content: message.value
   }
-  message.value = ''
+  const response = await fetch(
+    `http://${serverAddress}/api/chat/create/${props.roomId}`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include',
+      body: JSON.stringify(formData)
+    }
+  )
 
-  socketModule.socket.value.send(JSON.stringify(formData))
-}
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    message.value = ''
+    getMessages()
+  }}
 
 async function getMessages(){
   const response = await fetch(
@@ -145,7 +159,7 @@ getChatRoomUsers()
       <hr/>
       <div>
         <!-- 사용자 입력을 위한 폼 -->
-        <form @submit="addChatRoomUsers">
+        <form @submit.prevent="addChatRoomUsers">
           <!-- 여러 유저의 정보를 입력할 수 있는 입력란 -->
           <div v-for="(user, index) in inviteUsers" :key="index">
             <label>이메일:</label>

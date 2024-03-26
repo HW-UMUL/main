@@ -2,34 +2,97 @@
 import DefaultLayoutWithVerticalNav from './components/MyPageLayoutWithVerticalNav.vue'
 import socketModule from '/test/index.js'
 
-
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
-
-// websocket
-
-socketModule.connectionString = `ws://${serverAddress}/ws/notifier`
 
 socketModule.setConnectionString(`ws://${serverAddress}/ws/notifier`)
 socketModule.connect()
 
 socketModule.onOpen(() => {
+  sessionStorage.removeItem('alarms')
   const formData = { auth: auth }
   socketModule.socket.value.send(JSON.stringify(formData))
+
+  getAlarms()
 })
 
 socketModule.onMessage(message => {
     const jsonData = JSON.parse(message.data)
-    var alarms = JSON.parse(localStorage.getItem("alarms"));
+    var alarms = JSON.parse(sessionStorage.getItem("alarms"));
     if(alarms == null) alarms = [];
     alarms.push(jsonData);
-    localStorage.setItem("alarms", JSON.stringify(alarms));
+    sessionStorage.setItem("alarms", JSON.stringify(alarms));
 })
 
 socketModule.onClose(() => {
+  
   socketModule.connect()
 })
 
+async function getAlarms(){
+
+  const postAlarmRes = await fetch(
+      `http://${serverAddress}/api/alarm/read/post`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  const wikiAlarmRes = await fetch(
+    `http://${serverAddress}/api/alarm/read/wiki`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  const replyAlarmRes = await fetch(
+    `http://${serverAddress}/api/alarm/read/reply`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!postAlarmRes.ok || !wikiAlarmRes.ok || !replyAlarmRes.ok) {
+    alert("실패!")
+  } else{
+    var alarms = JSON.parse(sessionStorage.getItem("alarms"));
+    if(alarms == null) alarms = [];
+
+    var postAlarms = await postAlarmRes.json()
+    var wikiAlarms = await wikiAlarmRes.json()
+    var replyAlarms = await replyAlarmRes.json()
+
+    postAlarms.forEach(function(postAlarm){
+      alarms.push(postAlarm)
+    })
+
+    wikiAlarms.forEach(function(wikiAlarm){
+      alarms.push(wikiAlarm)
+    })
+
+    replyAlarms.forEach(function(replyAlarm){
+      alarms.push(replyAlarm)
+    })
+
+    sessionStorage.setItem("alarms", JSON.stringify(alarms));
+
+  }
+}
 
 function openModal() {
   document.getElementById('myModal').style.display = 'block';
@@ -50,6 +113,13 @@ onMounted(() => {
 
 })
 
+
+window.addEventListener('beforeunload', function() {
+    // 웹 소켓 연결을 닫음
+    socketModule.socket.close();
+});
+
+
 </script>
 
 <template>
@@ -61,6 +131,7 @@ onMounted(() => {
     </div>
   </div>
 
+  
   <DefaultLayoutWithVerticalNav>
     <RouterView />
   </DefaultLayoutWithVerticalNav>

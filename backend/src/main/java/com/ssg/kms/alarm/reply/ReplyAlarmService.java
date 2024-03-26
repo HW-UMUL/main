@@ -26,28 +26,22 @@ public class ReplyAlarmService {
 	private final NotifierWebSocketHandler notifierWebSocketHandler;
 	
 	@Transactional
-	public void createAlarm(Reply reply, List<User> users, User me) {
-		
-		List<ReplyAlarm> replyAlarms = new ArrayList<>();
-		
-		for(User user : users) {
-			if(user.getId() != me.getId()) {
-				ReplyAlarm replyAlarm = ReplyAlarm.builder()
-						.user(user)
-						.reply(reply)
-						.build();
-				replyAlarms.add(replyAlarm);
+	public void createAlarm(Reply reply) {
 				
-				try {
-					sendAlarm(reply, user);	
-				} catch(Exception e) {
-					
-				}
-				
-			}
+		User user = reply.getPost().getUser();
+		
+		ReplyAlarm replyAlarm = ReplyAlarm.builder()
+				.user(user)
+				.reply(reply)
+				.build();
+		
+		try {
+			sendAlarm(reply, user);	
+		} catch(Exception e) {
+			
 		}
-		
-		replyAlarmRepository.saveAll(replyAlarms);
+
+		replyAlarmRepository.save(replyAlarm);
 	}
 	
 	// 접속 중인 사람들에게 실시간으로 알람을 보냄.

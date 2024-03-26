@@ -37,10 +37,7 @@ public class NotifierWebSocketHandler extends TextWebSocketHandler {
 	private Map<String, WebSocketSession> usernameSession = new HashMap<>();
 
 	private final TokenProvider tokenProvider;
-	private final UserRepository userRepository;
 	private final JSONParser jsonParser = new JSONParser();
-	private final ChatRoomUserService chatRoomUserService;
-	private final ChatService chatService;
 
 	public Map<String, WebSocketSession> getUsernameSession(){
 		return usernameSession;

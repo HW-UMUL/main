@@ -25,30 +25,31 @@ async function searchPost(){
     alert('검색어를 입력해주세요!')
   }
 
-  /*
-  const response = await fetch(
-      `http://localhost:8080/api/post/search/${searchKeyword.value.keyword}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include'
-      }
-  )
-
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    posts.value = await response.json()
-    router.push({
-      path: 'search',
-      params: { posts: posts} 
-    })
-  }
-  */
-
 }
+
+
+function openModal() {
+  document.getElementById('myModal').style.display = 'block';
+}
+
+// 모달 닫기
+function closeModal() {
+  document.getElementById('myModal').style.display = 'none';
+}
+
+
+onMounted(() => {
+
+  // 닫기 버튼에 클릭 이벤트 추가
+  if (document.querySelector('.close')) {
+      document.querySelector('.close').addEventListener('click', closeModal);
+  }
+
+})
+
+const props = defineProps({
+  modelValue: Number
+})
 </script>
 
 <template>
@@ -116,7 +117,8 @@ async function searchPost(){
         </IconBtn>
 
         <IconBtn class="me-2">
-          <VIcon icon="ri-notification-line" />
+          <VIcon @click="openModal()" icon="ri-notification-line" />
+          <div class="notification-badge">{{ props.modelValue }}</div>
         </IconBtn>
 
         <NavbarThemeSwitcher class="me-2" />
@@ -184,4 +186,5 @@ async function searchPost(){
     text-transform: uppercase;
   }
 }
+
 </style>

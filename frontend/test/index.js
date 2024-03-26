@@ -20,10 +20,6 @@ export const connect = () => {
     socket.value = new WebSocket(connectionString.value);
     socket.value.addEventListener(EVENT_OPEN, () => {
         console.log("Connection opened");
-        openCallbacks.forEach(callback => socket.value.addEventListener(EVENT_OPEN, callback));
-        messageCallbacks.forEach(callback => socket.value.addEventListener(EVENT_MESSAGE, callback));
-        closeCallbacks.forEach(callback => socket.value.addEventListener(EVENT_CLOSE, callback));
-        errorCallbacks.forEach(callback => socket.value.addEventListener(EVENT_ERROR, callback));
     });
     socket.value.addEventListener(EVENT_CLOSE, event => {
         console.log("Connection closed", event);
