@@ -1,9 +1,8 @@
 <script setup>
-import AnalyticsTotalProfitLineCharts from '@/views/dashboard/AnalyticsTotalProfitLineCharts.vue'
-import AnalyticsTransactions from '@/views/dashboard/AnalyticsTransactions.vue'
-import AnalyticsUserTable from '@/views/dashboard/AnalyticsUserTable.vue'
-import AnalyticsWeeklyOverview from '@/views/dashboard/AnalyticsWeeklyOverview.vue'
-
+import ViewAllWiki from '@/views/dashboard/ViewAllWiki.vue'
+import ViewRecentWiki from '@/views/dashboard/ViewRecentWiki.vue'
+import ViewWikiLikeRank from '@/views/dashboard/ViewWikiLikeRank.vue'
+import ViewWikiStarRank from '@/views/dashboard/ViewWikiStarRank.vue'
 const totalProfit = {
   title: 'Total Profit',
   color: 'secondary',
@@ -46,7 +45,7 @@ export default {
           cols="3"
           sm="12"
         >
-          <AnalyticsWeeklyOverview />
+          <ViewAllWiki />
         </VCol>
       </VRow>
     </VCol>
@@ -60,21 +59,21 @@ export default {
           cols="5"
           sm="12"
         >
-          <AnalyticsTotalProfitLineCharts />
+          <ViewWikiLikeRank />
         </VCol>
 
         <VCol
           cols="5"
           sm="12"
         >
-          <AnalyticsTransactions />
+          <ViewWikiStarRank />
         </VCol>
 
         <VCol
           cols="5"
           sm="12"
         >
-          <AnalyticsUserTable />
+          <ViewRecentWiki />
         </VCol>
       </VRow>
     </VCol>

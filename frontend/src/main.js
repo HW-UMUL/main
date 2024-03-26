@@ -1,5 +1,4 @@
 import App from '@/App.vue';
-import store from '@/api/store';
 
 import { registerPlugins } from '@core/utils/plugins';
 import { createApp } from 'vue';
@@ -27,7 +26,6 @@ const app = createApp(App)
 registerPlugins(app)
 
 // Mount vue app
-app.use(store);
 app.mount('#app')
 
 library.add(faUserSecret, farThumsUp, fasThumsUp, farStar, fasStar)

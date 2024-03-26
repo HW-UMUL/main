@@ -194,6 +194,11 @@ async function getStars(wikiId) {
   const stars = res.data
   likestar.star[wikiId] = stars
 }
+
+const cancelForm = () => {
+  // 이전 페이지로 이동
+  router.go(-1)
+}
 </script>
 
 <template>
@@ -273,6 +278,22 @@ async function getStars(wikiId) {
     align="center"
     style="flex: auto; float: right; padding-top: 50px"
   >
+    <button
+      @click="cancelForm"
+      style="
+        background-color: #905dff;
+        border: none;
+        color: white;
+        padding: 7px 15px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        border-style: solid;
+        font-size: 15px;
+      "
+    >
+      목록
+    </button>
     <button
       @click="sendIdToViewLogs(state.items?.id)"
       style="

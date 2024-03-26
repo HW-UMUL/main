@@ -3,6 +3,7 @@ import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
+import { defineEmits, defineProps, ref, watch } from 'vue'
 
 import { EditorContent, useEditor } from '@tiptap/vue-3'
 import CodeIcon from 'vue-material-design-icons/CodeTags.vue'
@@ -28,6 +29,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
+const editorcontent = ref(props.modelValue)
 
 const editor = useEditor({
   content: props.modelValue,
@@ -45,9 +47,6 @@ const editor = useEditor({
       inline: true,
     }),
   ],
-  style: {
-    height: '700px',
-  },
   editorProps: {
     attributes: {
       class: 'border border-gray-400 p-2 outline-none prose max-w-none',
@@ -57,10 +56,8 @@ const editor = useEditor({
 
 watch(
   () => props.modelValue,
-  (newValue, oldValue) => {
-    if (newValue !== oldValue) {
-      editor.content = newValue
-    }
+  newValue => {
+    editor.content = newValue
   },
 )
 </script>
@@ -227,6 +224,7 @@ watch(
 
     <EditorContent
       :editor="editor"
+      :content="editorcontent"
       :style="{ width: '1000px', height: '500px', overflowY: 'auto' }"
     />
   </div>
@@ -287,5 +285,8 @@ watch(
     border-top: 2px solid rgba(#0d0d0d, 0.1);
     margin: 2rem 0;
   }
+}
+.ProseMirror {
+  height: 500px;
 }
 </style>

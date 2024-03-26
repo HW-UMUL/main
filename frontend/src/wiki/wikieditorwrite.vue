@@ -1,5 +1,5 @@
 <script setup>
-import MyEditor from '@/pages/wikieditor.vue'
+import MyEditor from '@/wiki/wikieditor.vue'
 import axios from 'axios'
 
 // 토큰 브라우저에서 받아오기

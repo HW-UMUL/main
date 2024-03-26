@@ -1,4 +1,3 @@
-import store from '@/api/store'; // Vuex 스토어 설정
 import { createRouter, createWebHistory } from 'vue-router';
 import { routes } from './routes';
 
@@ -9,8 +8,7 @@ const router = createRouter({
 
 export default function (app) {
   app.use(router)
-  app.use(store)
 }
 
-export { router, store };
+export { router };
 

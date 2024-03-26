@@ -1,7 +1,8 @@
 <script setup>
-import MyEditor from '@/pages/wikieditor.vue'
+import MyEditor from '@/wiki/wikieditor.vue'
 import axios from 'axios'
 import { onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 
 // 토큰 브라우저에서 받아오기
 let authToken = 'Bearer '
@@ -20,6 +21,7 @@ for (let i = 0; i < cookies.length; i++) {
 authToken = authToken + jwtToken
 console.log('토큰:', authToken)
 
+const router = useRouter()
 const route = useRoute()
 const wiki = ref(null)
 
@@ -31,22 +33,24 @@ const formData = reactive({
   tag: '',
 })
 
-onMounted(async () => {
+onMounted(() => {
   try {
-    const res = await axios.get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
-      headers: {
-        Authorization: authToken,
-      },
-    })
+    axios
+      .get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
+        headers: {
+          Authorization: authToken,
+        },
+      })
+      .then(res => {
+        wiki.value = res.data
 
-    wiki.value = res.data
+        formData.title = res.data.title
+        formData.category = res.data.category
+        formData.content = res.data.content
+        formData.tag = res.data.tag
 
-    formData.title = res.data.title
-    formData.category = res.data.category
-    formData.content = res.data.content
-    formData.tag = res.data.tag
-
-    console.log('내부:', formData)
+        console.log('내부:', formData)
+      })
   } catch (error) {
     console.log('에러 발생: ', error)
   }
@@ -72,6 +76,11 @@ const submitForm = async () => {
 
 const handleContentUpdate = content => {
   formData.content = content
+}
+
+const cancelForm = () => {
+  // 이전 페이지로 이동
+  router.go(-1)
 }
 </script>
 
@@ -111,7 +120,7 @@ th {
             type="text"
             v-model="formData.category"
             placeholder="category"
-            style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px"
+            style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px; width: 100%"
           />
         </td>
       </tr>
@@ -127,7 +136,7 @@ th {
           <div>
             <MyEditor
               v-model:modelValue="formData.content"
-              @contentUpdated="handleContentUpdate"
+              @update:modelValue="handleContentUpdate"
             />
           </div>
         </td>
@@ -172,7 +181,8 @@ th {
               border-style: solid;
               font-size: 15px;
             "
-            @click="location.href = 'this.$router.go(-1)'"
+            type="button"
+            @click="cancelForm"
           >
             취소
           </button>

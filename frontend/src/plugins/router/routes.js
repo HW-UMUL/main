@@ -1,6 +1,6 @@
-import ReadWiki from '@/pages/readwiki.vue';
-import UpdateWiki from '@/pages/updatewiki.vue';
-import ViewWikiLogs from '@/pages/viewwikilogs.vue';
+import ReadWiki from '@/wiki/readwiki.vue';
+import UpdateWiki from '@/wiki/updatewiki.vue';
+import ViewWikiLogs from '@/wiki/viewwikilogs.vue';
 import { createRouter, createWebHistory } from 'vue-router';
 export const routes = [
   { path: '/', redirect: '/dashboard' },
@@ -38,15 +38,15 @@ export const routes = [
       },
       {
         path: 'wikieditorwrite',
-        component: () => import('@/pages/wikieditorwrite.vue'),
+        component: () => import('@/wiki/wikieditorwrite.vue'),
       },
       {
         path: 'wikiwrite',
-        component: () => import('@/pages/wikiwrite.vue'),
+        component: () => import('@/wiki/wikiwrite.vue'),
       },
       {
         path: 'wikilist',
-        component: () => import('@/pages/wikilist.vue'),
+        component: () => import('@/wiki/wikilist.vue'),
       },
       {
         path: '/readwiki/:id',
@@ -68,10 +68,11 @@ export const routes = [
       },
       {
         path: 'wikieditorwrite',
-        component: () => import('@/pages/wikieditorwrite.vue'),
-      },{
+        component: () => import('@/wiki/wikieditorwrite.vue'),
+      },
+      {
         path: 'wikieditor',
-        component: () => import('@/pages/wikieditor.vue'),
+        component: () => import('@/wiki/wikieditor.vue'),
       }
     ],
   },
@@ -89,7 +90,7 @@ export const routes = [
       },
       {
         path: 'wikiwrite',
-        component: () => import('@/pages/wikiwrite.vue'),
+        component: () => import('@/wiki/wikiwrite.vue'),
       },
       {
         path: '/:pathMatch(.*)*',
@@ -97,15 +98,15 @@ export const routes = [
       },
       {
         path: 'wikilist',
-        component: () => import('@/pages/wikilist.vue'),
+        component: () => import('@/wiki/wikilist.vue'),
       },
       {
         path: 'wikieditorwrite',
-        component: () => import('@/pages/wikieditorwrite.vue'),
+        component: () => import('@/wiki/wikieditorwrite.vue'),
       },
       {
         path: 'wikieditor',
-        component: () => import('@/pages/wikieditor.vue'),
+        component: () => import('@/wiki/wikieditor.vue'),
       }
     ],
   },
