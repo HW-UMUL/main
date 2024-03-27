@@ -3,9 +3,9 @@ import Image from '@tiptap/extension-image'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
-import { defineEmits, defineProps, ref, watch } from 'vue'
+import { Editor, EditorContent } from '@tiptap/vue-3'
+import { defineEmits, defineProps } from 'vue'
 
-import { EditorContent, useEditor } from '@tiptap/vue-3'
 import CodeIcon from 'vue-material-design-icons/CodeTags.vue'
 import BoldIcon from 'vue-material-design-icons/FormatBold.vue'
 import H1Icon from 'vue-material-design-icons/FormatHeader1.vue'
@@ -29,9 +29,8 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['update:modelValue'])
-const editorcontent = ref(props.modelValue)
 
-const editor = useEditor({
+const editor = new Editor({
   content: props.modelValue,
   onUpdate: ({ editor }) => {
     // console.log(editor.getHTML())
@@ -56,8 +55,10 @@ const editor = useEditor({
 
 watch(
   () => props.modelValue,
-  newValue => {
-    editor.content = newValue
+  value => {
+    if (editor && editor.getHTML() !== value) {
+      editor.commands.setContent(value, false)
+    }
   },
 )
 </script>
@@ -66,7 +67,7 @@ watch(
   <div>
     <section
       v-if="editor"
-      class="buttons text-gray-700 flex items-center flex-wrap gap-x-4 border-t border-l border-r border-gray-400 p-4"
+      class="buttons text-gray-700 flex items-center flex-wrap gap-x-4 border-l border-r border-gray-400 p-4"
       style="display: flex"
     >
       <button
@@ -224,7 +225,7 @@ watch(
 
     <EditorContent
       :editor="editor"
-      :content="editorcontent"
+      content-type="html"
       :style="{ width: '1000px', height: '500px', overflowY: 'auto' }"
     />
   </div>
@@ -288,5 +289,10 @@ watch(
 }
 .ProseMirror {
   height: 500px;
+  padding: 5px;
+}
+
+.border-t {
+  border-top-width: 10px;
 }
 </style>

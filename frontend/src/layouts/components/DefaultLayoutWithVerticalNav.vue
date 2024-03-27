@@ -9,8 +9,8 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 </script>
 
 <style scope>
-  .button {
-  background-color: #04AA6D; /* Green */
+.button {
+  background-color: #04aa6d; /* Green */
   border: none;
   color: white;
   padding: 15px 32px;
@@ -37,7 +37,7 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
         <!-- 👉 Search -->
         <div
           class="d-flex align-center cursor-pointer"
-          style="user-select: none;"
+          style="user-select: none"
         >
           <!-- 👉 Search Trigger button -->
           <span class="d-none d-md-flex align-center text-disabled">
@@ -51,35 +51,49 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 
         <VSpacer />
 
-      <IConBtn>
-        <ThumbRegular/>
-      </IConBtn>
+        <IConBtn>
+          <ThumbRegular />
+        </IConBtn>
 
-      <IConBtn>
-        <ThumbSolid />
-      </IConBtn>
+        <IConBtn>
+          <ThumbSolid />
+        </IConBtn>
 
-        <button type="button" onclick="location.href='http://localhost:5173/post'"
-         style="background-color: #905DFF; 
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        border-color: black;
-        font-size: 15px;">Post 작성</button> 
+        <button
+          type="button"
+          onclick="location.href='http://localhost:5173/post'"
+          style="
+            background-color: #905dff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-color: black;
+            font-size: 15px;
+          "
+        >
+          Post 작성
+        </button>
         &nbsp;
-        <button type="button" onclick="location.href='http://localhost:5173/wikiwrite'"
-         style="background-color: #905DFF; 
-        border: none;
-        color: white;
-        padding: 10px 20px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        border-style: solid;
-        font-size: 15px;">Wiki 작성</button>
+        <button
+          type="button"
+          onclick="location.href='http://localhost:5173/wikieditorwrite'"
+          style="
+            background-color: #905dff;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-style: solid;
+            font-size: 15px;
+          "
+        >
+          Wiki 작성
+        </button>
 
         &nbsp;
         <!-- <IconBtn
@@ -111,9 +125,7 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
           v-html="logo"
         />
 
-        <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-          KMS
-        </h1>
+        <h1 class="font-weight-medium leading-normal text-xl text-uppercase">KMS</h1>
       </RouterLink>
 
       <IconBtn
@@ -122,8 +134,6 @@ import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
       >
         <VIcon icon="ri-close-line" />
       </IconBtn>
-
-      
     </template>
 
     <template #vertical-nav-content>

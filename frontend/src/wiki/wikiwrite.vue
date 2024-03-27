@@ -61,21 +61,13 @@ export default {
     },
   },
 }
+
+const cancelForm = () => {
+  // 이전 페이지로 이동
+  router.go(-1)
+}
 </script>
 
-<style scoped>
-table {
-  border-collapse: collapse;
-  border-radius: 10px;
-  border-style: hidden;
-  box-shadow: 0 0 0 1px #905dff;
-}
-
-td,
-th {
-  border: 1px solid #905dff; /* 테두리 스타일 및 색상을 설정합니다. */
-}
-</style>
 <template>
   <h2>Write Wiki</h2>
   <br />
@@ -144,8 +136,9 @@ th {
           >
             작성
           </button>
-
-          <button
+          <a
+            href="http://localhost:5173/dashboard"
+            class="button"
             style="
               background-color: #905dff;
               border: none;
@@ -157,12 +150,24 @@ th {
               border-style: solid;
               font-size: 15px;
             "
-            @click="location.href = 'this.$router.go(-1)'"
+            >취소</a
           >
-            취소
-          </button>
         </td>
       </tr>
     </table>
   </form>
 </template>
+
+<style scoped>
+table {
+  border-collapse: collapse;
+  border-radius: 10px;
+  border-style: hidden;
+  box-shadow: 0 0 0 1px #905dff;
+}
+
+td,
+th {
+  border: 1px solid #905dff; /* 테두리 스타일 및 색상을 설정합니다. */
+}
+</style>

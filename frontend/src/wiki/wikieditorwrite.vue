@@ -70,7 +70,7 @@ const renderedContent = ref(exampleContent)
         class="w-full border border-gray-400 p-2"
         v-model="formData.title"
         placeholder="title"
-        style="padding-left: 10px"
+        style="padding-left: 10px; width: 1000px; height: 35px"
       />
 
       <div>
@@ -96,12 +96,37 @@ const renderedContent = ref(exampleContent)
       <br />
       <div>
         <button
+          style="
+            background-color: #905dff;
+            border: none;
+            color: white;
+            padding: 7px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-style: solid;
+            font-size: 15px;
+          "
           type="submit"
-          class="bg-blue-600 text-white p-2 rounded"
-          style="background-color: #905dff"
         >
-          Create Post
+          작성
         </button>
+        <a
+          href="http://localhost:5173/dashboard"
+          class="button"
+          style="
+            background-color: #905dff;
+            border: none;
+            color: white;
+            padding: 7px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-style: solid;
+            font-size: 15px;
+          "
+          >취소</a
+        >
       </div>
     </form>
   </div>

@@ -45,7 +45,11 @@ const rankedItems = computed(() => {
 <template>
   <VCard>
     <VCardTitle class="text-center">최신 Wiki 게시글</VCardTitle>
-    <VCardText>
+    <VCardText style="margin-top: 15px">
+      <div style="display: flex">
+        <span style="margin-right: 80px">순위</span>
+        <span>제목</span>
+      </div>
       <div
         style="justify-content: space-between; display: flex; margin: 5px"
         v-for="(item, idx) in rankedItems"

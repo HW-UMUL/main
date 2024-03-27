@@ -1,5 +1,5 @@
 <script setup>
-import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
+import VerticalNavLink from '@layouts/components/VerticalNavLink.vue'
 </script>
 
 <template>
@@ -159,14 +159,6 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 
   <VerticalNavLink
     :item="{
-      title: 'Wiki Write',
-      icon: 'ri-user-settings-line',
-      to: '/wikiwrite',
-    }"
-  />
-
-  <VerticalNavLink
-    :item="{
       title: 'Wiki list',
       icon: 'ri-user-settings-line',
       to: '/wikilist',
@@ -178,14 +170,6 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       title: 'Wiki write test',
       icon: 'ri-user-settings-line',
       to: '/wikieditorwrite',
-    }"
-  />
-
-  <VerticalNavLink
-    :item="{
-      title: 'Wiki write test2',
-      icon: 'ri-user-settings-line',
-      to: '/wikieditor',
     }"
   />
 

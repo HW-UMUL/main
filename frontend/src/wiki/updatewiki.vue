@@ -1,7 +1,6 @@
 <script setup>
 import MyEditor from '@/wiki/wikieditor.vue'
 import axios from 'axios'
-import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 
 // 토큰 브라우저에서 받아오기
@@ -19,69 +18,65 @@ for (let i = 0; i < cookies.length; i++) {
   }
 }
 authToken = authToken + jwtToken
-console.log('토큰:', authToken)
 
 const router = useRouter()
 const route = useRoute()
-const wiki = ref(null)
 
-console.log('wiki', wiki)
-const formData = reactive({
+const wiki = reactive({
   title: '',
   category: '',
   content: '',
   tag: '',
 })
 
-onMounted(() => {
+async function readWiki() {
   try {
-    axios
-      .get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
-        headers: {
-          Authorization: authToken,
-        },
-      })
-      .then(res => {
-        wiki.value = res.data
-
-        formData.title = res.data.title
-        formData.category = res.data.category
-        formData.content = res.data.content
-        formData.tag = res.data.tag
-
-        console.log('내부:', formData)
-      })
+    const res = await axios.get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
+      headers: {
+        Authorization: authToken,
+      },
+    })
+    const data = res.data
+    wiki.title = data.title
+    wiki.category = data.category
+    wiki.content = data.content
+    wiki.tag = data.tag
   } catch (error) {
     console.log('에러 발생: ', error)
   }
-})
+}
 
 const submitForm = async () => {
+  const formData = {
+    title: wiki.value.title,
+    category: wiki.value.category,
+    content: wiki.value.content,
+    tag: wiki.value.tag,
+  }
+
   const headers = {
     'Content-Type': 'application/json',
     Authorization: authToken,
   }
+  const res = axios.put(`http://localhost:8080/api/wiki/update/${route.params.id}`, data, { headers })
+
   // 서버로 보낼 데이터
   const data = JSON.stringify(formData)
 
   try {
-    axios.put(`http://localhost:8080/api/wiki/update/${route.params.id}`, data, { headers }).then(res => {
-      console.log('updatewiki:', res.data)
-      window.location.href = `http://localhost:5173/readwiki/${route.params.id}`
-    })
+    console.log('updatewiki:', res.data)
+    window.location.href = `http://localhost:5173/readwiki/${route.params.id}`
   } catch (error) {
     console.error('에러 발생: ', error)
   }
-}
-
-const handleContentUpdate = content => {
-  formData.content = content
 }
 
 const cancelForm = () => {
   // 이전 페이지로 이동
   router.go(-1)
 }
+
+readWiki(route.params.id)
 </script>
 
 <style scoped>
@@ -101,14 +96,14 @@ th {
   <form @submit.prevent="submitForm">
     <table
       border="1"
-      width="90%"
-      height="700"
+      width="1000px"
+      height="700px"
     >
       <tr>
         <td>
           <input
             type="text"
-            v-model="formData.title"
+            v-model="wiki.title"
             placeholder="title"
             style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px; width: 100%"
           />
@@ -118,7 +113,7 @@ th {
         <td>
           <input
             type="text"
-            v-model="formData.category"
+            v-model="wiki.category"
             placeholder="category"
             style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px; width: 100%"
           />
@@ -135,8 +130,8 @@ th {
           ></textarea> -->
           <div>
             <MyEditor
-              v-model:modelValue="formData.content"
-              @update:modelValue="handleContentUpdate"
+              :modelValue="wiki.content"
+              contentType="html"
             />
           </div>
         </td>
@@ -145,7 +140,7 @@ th {
         <td>
           <input
             type="text"
-            v-model="formData.tag"
+            v-model="wiki.tag"
             placeholder="tag"
             style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px; width: 100%"
           />
