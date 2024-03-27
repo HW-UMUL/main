@@ -59,6 +59,11 @@ public class WikiController {
     public ResponseEntity<Wiki> deleteWiki(@PathVariable Long wikiId) {
         return ResponseEntity.ok(wikiService.deleteWiki(wikiId, userService.getMyUserWithAuthorities()));
     }
+	
+	@GetMapping("/search/{searchKeyword}")
+    public ResponseEntity<List<Wiki>> searchWiki(@PathVariable String searchKeyword) {        
+        return ResponseEntity.ok(wikiService.searchWiki(searchKeyword, userService.getMyUserWithAuthorities()));
+    }
 	/////////////////////////////////////////////////
 	// Table
 	/////////////////////////////////////////////////

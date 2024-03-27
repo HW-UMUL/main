@@ -5,7 +5,7 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
-
+import Search from '@/layouts/components/Search.vue'
 import { useRouter } from 'vue-router';
 
 //import router from '@/plugins/router/routes.js'
@@ -66,24 +66,7 @@ const props = defineProps({
         </IconBtn>
 
         <!-- 👉 Search -->
-        <div
-          class="d-flex align-center cursor-pointer"
-          style="user-select: none;"
-        >
-          <!-- 👉 Search Trigger button -->
-          <form @submit.prevent="searchPost()">
-            <input type="text" v-model="searchKeyword.keyword"></input>
-            <input type="submit"></input>
-          </form>
-          <IconBtn>
-            <VIcon icon="ri-search-line" />
-          </IconBtn>
-
-          <span class="d-none d-md-flex align-center text-disabled">
-            <span class="me-3">Search</span>
-            <span class="meta-key">&#8984;K</span>
-          </span>
-        </div>
+          <Search/>
 
         <VSpacer />
 

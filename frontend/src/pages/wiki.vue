@@ -14,7 +14,6 @@ const props = defineProps({
 const wikis = ref([])
 
 watchEffect(() => {
-  // props를 감시하고, 변경될 때마다 실행되는 코드
   if(props.keyword == null){
     getWikis()
   } else{

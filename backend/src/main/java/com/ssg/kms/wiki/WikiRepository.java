@@ -27,4 +27,6 @@ public interface WikiRepository extends JpaRepository<Wiki, Long> {
 	@Query(value = "SELECT w.id FROM wiki w WHERE w.table_id = :tableId", nativeQuery = true)
 	List<Long> findWikiIdAllByTableId(Long tableId);
 
+	List<Wiki> findAllByTitleContaining(String searchKeyword);
+
 }

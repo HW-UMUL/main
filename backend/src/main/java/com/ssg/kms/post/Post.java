@@ -5,6 +5,7 @@ import java.util.Date;
 import com.ssg.kms.table.Tables;
 import com.ssg.kms.user.User;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,6 +37,7 @@ public class Post {
     private String title;
 
     @NotBlank
+    @Column(columnDefinition = "TEXT")
     private String content;
 
 //    @NotBlank

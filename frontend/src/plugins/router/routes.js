@@ -8,22 +8,83 @@ export const routes = [
         path: 'dashboard',
         component: () => import('@/pages/dashboard.vue'),
       },
+      ///////////////// 대호
+
+      {
+        path: 'wiki',
+        component: () => import('@/d_wiki/wikilist.vue'),
+      },
+      {
+        path: '/readwiki/:id',
+        name: 'readwiki',
+        component: () => import('@/d_wiki/readwiki.vue'),
+        props: true // URL 파라미터를 컴포넌트의 props로 전달합니다.
+      }, 
+
+      {
+        path: 'writewiki',
+        component: () => import('@/d_wiki/wikieditorwrite.vue')
+      },
+
+      {
+        path: 'updatewiki/:id',
+        component: () => import('@/d_wiki/wikiupdate.vue'),
+        props: true
+      },
+
+      {
+        path: 'wikilog/:id',
+        component: () => import('@/d_wiki/viewwikilogs.vue'),
+        props: true
+      },
+
+
+      /////////////////////////////////////
+      /*
       {
         path: 'wiki',
         component: () => import('@/pages/wiki.vue'),
       },
-      {
-        path: 'account-settings',
-        component: () => import('@/pages/account-settings.vue'),
-      },
-      {
-        path: 'writepost',
-        component: () => import('@/pages/writepost.vue')
-      },
+
       {
         path: 'writewiki',
         component: () => import('@/pages/writewiki.vue')
       },
+
+      */
+
+      /////////////////////////////////////
+
+
+
+      // updatepost
+      //////////////////////////// 규혁
+      {
+        path: 'updatepost/:id',
+        component: () => import('@/k_pages/updatepost.vue'),
+        props: true
+      },
+      {
+        path: 'writepost',
+        component: () => import('@/k_pages/writepost.vue')
+      },
+
+      /*
+      {
+        path: 'writepost',
+        component: () => import('@/pages/writepost.vue')
+      },
+
+      */
+      /////////////////////////////////////
+
+      {
+        path: 'account-settings',
+        component: () => import('@/pages/account-settings.vue'),
+      },
+
+
+
       {
         path: 'table',
         component: () => import('@/pages/table.vue')
@@ -55,11 +116,18 @@ export const routes = [
 
 
       {
-        path: '/search/:keyword',
-        name: 'search',
+        path: `/search/:keyword/Post`,
         component: () => import('@/pages/dashboard.vue'),
         props: true
       },
+      {
+        path: `/search/:keyword/Wiki`,
+        component: () => import('@/pages/wiki.vue'),
+        props: true
+      },
+
+
+
       {
         path: '/search',
         component: () => import('@/pages/dashboard.vue'),

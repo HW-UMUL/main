@@ -12,5 +12,7 @@ public interface TagPostRepository extends JpaRepository<TagPost, Long> {
 
 	void deleteAllByPostId(Long postId);
 
+	List<TagPost> findAllByPostId(Long postId);
+
 
 }

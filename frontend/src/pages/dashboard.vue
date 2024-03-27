@@ -1,6 +1,8 @@
 <script setup>
-import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import Post from '@/views/post/Post.vue';
+import Post from '@/k_views/post/Post.vue';
+import PostLikeSort from '@/k_views/list/PostLikeSort.vue';
+import PostStarSort from '@/k_views/list/PostStarSort.vue';
+import PostDateSort from '@/k_views/list/PostDateSort.vue';
 
 // import post from '@/views/'
 import { watchEffect } from 'vue';
@@ -79,7 +81,7 @@ if(props.keyword == null){
       class="mb-4"
     >
     
-    <div v-for="(item, index) in posts" :key="index">
+    <div v-for="(item, index) in posts.slice().reverse()" :key="index">
 
       <Post :post="item" style="margin-bottom: 20px;"/>
     </div>
@@ -91,7 +93,15 @@ if(props.keyword == null){
       cols="12"
       md="4"
     >
-        <AnalyticsAward />
+      <VCard title="추천순" style="margin-bottom: 20px">
+        <PostLikeSort style="margin-bottom: 20px" />
+      </VCard>
+      <VCard title="즐겨찾기순" style="margin-bottom: 20px">
+        <PostStarSort style="margin-bottom: 20px" />
+      </VCard>
+      <VCard title="최신순" style="margin-bottom: 20px">
+        <PostDateSort style="margin-bottom: 20px" />
+      </VCard>
     </VCol>  
 
   </VRow>

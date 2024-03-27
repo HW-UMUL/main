@@ -159,6 +159,11 @@ public class WikiService {
     	return wiki;
     }
     
+    @Transactional
+    public List<Wiki> searchWiki(String searchKeyword, Optional<User> user){
+        return wikiRepository.findAllByTitleContaining(searchKeyword);
+    }   
+    
  // 카테고리 생성
     public Category createCategory(String categoryName){
 

@@ -52,4 +52,18 @@ public class WikiStarService {
     public List<GetWikiMapping> readMyStar(Optional<User> user) {
     	return wikiStarRepository.findWikiAllByUserId(user.get().getId());
     }
+    
+    //////////////////////
+    
+	@Transactional(readOnly = true)
+    public WikiStar readStarPersonal(Long wikiId, Optional<User> user) {
+		Wiki wiki = wikiRepository.findById(wikiId).get();
+    	WikiStar wikiStar = wikiStarRepository.findByWikiAndUser(wiki, user.get()).orElse(null);
+		
+		if(wikiStar != null) {
+    		return wikiStar;
+    	}
+    	    	
+		return null;
+    }
 }
