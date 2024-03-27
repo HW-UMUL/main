@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssg.kms.alarm.post.PostAlarmService;
+import com.ssg.kms.alarm.reply.ReplyAlarmRepository;
 import com.ssg.kms.alarm.reply.ReplyAlarmService;
 import com.ssg.kms.like.post.PostLikeRepository;
 import com.ssg.kms.like.reply.ReplyLikeRepository;
@@ -41,6 +42,7 @@ public class PostService {
     private final TagPostRepository tagPostRepository;
     private final ReplyRepository replyRepository;
     private final ReplyLikeRepository replyLikeRepository;
+    private final ReplyAlarmRepository replyAlarmRepository;
     
     private final PostAlarmService postAlarmService;
     private final ReplyAlarmService replyAlarmService;
@@ -160,13 +162,16 @@ public class PostService {
     public Post deletePost(Long postId, Optional<User> user) {
     	Post post = postRepository.findById(postId).get();
     	
+    	// 연결된 것들 삭제
     	List<Reply> replies = replyRepository.findAllByPostId(postId);
     	for(Reply item:replies) {
     		replyLikeRepository.deleteAllByReplyId(item.getId());
+    		replyAlarmRepository.deleteAllByReplyId(item.getId());
     	}
     	replyRepository.deleteAllByPostId(post.getId());
     	postLikeRepository.deleteAllByPostId(post.getId());
     	postStarRepository.deleteAllByPostId(post.getId());
+    	tagPostRepository.deleteAllByPostId(post.getId());
     	
     	post.setUser(null);
     	postRepository.deleteById(postId);

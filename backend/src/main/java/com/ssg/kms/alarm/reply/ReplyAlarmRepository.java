@@ -15,5 +15,8 @@ public interface ReplyAlarmRepository extends JpaRepository<ReplyAlarm, Long> {
 	List<ReplyAlarm> findAllByUserId(Long id);
 
 //	void deleteByPostInAndUser(List<Post> posts, User user);
-
+	
+	void deleteAllByReplyId(Long id);
+	
+	List<ReplyAlarm> findAllByReplyId(Long id);
 }

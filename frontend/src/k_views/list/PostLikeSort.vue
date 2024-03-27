@@ -1,13 +1,15 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import PostLike from '@/k_views/like/PostLike.vue';
+import PostCom from '@/k_views/post/PostModal.vue';
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 
 const posts = ref([])
 const ispostmodal = ref(false)
-const selectedPostId = ref(null)
+const selectedPost = ref([])
+const replies = ref([])
 
 async function getPosts() {
   try {
@@ -26,14 +28,13 @@ async function getPosts() {
       alert("실패!")
     }
     const beforePosts = await response.json()
-    
+
     posts.value = await Promise.all(beforePosts.map(async (post) => {
       const likes = await getLikes(post.id)
       return { ...post, likes: likes }
     }))
 
     posts.value.sort((a, b) => b.likes - a.likes)
-
   } catch (error) {
     console.error(error)
     alert("실패!")
@@ -66,29 +67,63 @@ async function getLikes(postId) {
 
 async function checkLike(postId){
 
+  const response = await fetch(
+      `http://${serverAddress}/api/postlike/check/${postId}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getLikes(postId)
+  }
+}
+
+async function getReply(postId){
+
 const response = await fetch(
-    `http://${serverAddress}/api/postlike/check/${postId}`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth}`
-      },
-      credentials: 'include'
-    }
+  `http://${serverAddress}/api/reply/readpost/${postId}`,
+  {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${auth}`
+    },
+    credentials: 'include'
+  }
 )
 
-if(!response.ok) {
-  alert("실패!")
-} else{
-  getLikes(postId)
-}
+  if(!response.ok) {
+    // alert("실패!")
+  } else{
+    replies.value = await response.json()
+  }
 }
 
-function clickpostmodal(postId) {
+function openpostmodal(post) {
   ispostmodal.value = !ispostmodal.value
-  selectedPostId.value = postId
+  selectedPost.value = post
+  getReply(selectedPost.value.id)
 }
+function closepostmodal() {
+  ispostmodal.value = !ispostmodal.value
+  // selectedPost.value = null
+}
+
+watch(ispostmodal, (value) => {
+  if (value === true) {
+    document.documentElement.style.overflow = 'hidden'
+  } else {
+    document.documentElement.style.overflow = 'auto'
+  }
+})
 
 </script>
 
@@ -108,7 +143,7 @@ function clickpostmodal(postId) {
     <tbody>
       <tr v-for="(item, index) in posts.slice(0,5)" :key="index">
         <td class="text-center">
-          <VIconBtn @click="clickpostmodal(item.id)" style="cursor: pointer;">
+          <VIconBtn @click="openpostmodal(item)" style="cursor: pointer;">
             {{ item.title }}
           </VIconBtn>
         </td>
@@ -118,20 +153,17 @@ function clickpostmodal(postId) {
           </VIconBtn>
         </td>
 
+        <div class="modal-wrap" v-show="ispostmodal" @click="closepostmodal()">
+          <div class="modal-container" @click.stop="">
+            <div class="modal-body">
+              <PostCom :post="selectedPost" :replies="replies" :getLikes="getLikes"/>
+            </div>
+          </div>
+        </div>
+
       </tr>
     </tbody>
   </VTable>
-
-  <div class="modal-wrap" v-show="ispostmodal">
-    <div class="modal-container">
-      <div>
-        <!-- <SelectedPost :post="item" style="margin-bottom: 20px;"/> -->
-      </div>
-      <div class="modal-btn">
-        <button @click="ispostmodal=!ispostmodal"> 확인 </button>
-      </div>
-    </div>
-  </div>
 
 </template>
 
@@ -143,7 +175,7 @@ function clickpostmodal(postId) {
   top: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.4);
+  background: rgba(0, 0, 0, 0.2);
 }
 /* modal or popup */
 .modal-container {
@@ -152,9 +184,20 @@ function clickpostmodal(postId) {
   left: 50%;
   transform: translate(-50%, -50%);
   width: 550px;
-  background: #fff;
+  // background: #fff;
   border-radius: 10px;
   padding: 20px;
   box-sizing: border-box;
 }
+.modal-body {
+  max-height: calc(100vh - 200px);
+  overflow-y: auto;
+}
+// html {
+//   -ms-overflow-style: none; /* IE and Edge */
+//   scrollbar-width: none; /* Firefox */
+// }
+// html::-webkit-scrollbar {
+//   display: none; /* Chrome, Safari, Opera*/
+// }
 </style>

@@ -1,6 +1,9 @@
 <script setup>
 import {ref} from 'vue'
 
+const serverAddress = inject('serverAddress')
+const auth = inject('auth')
+
 const props = defineProps({
     replyvue: Object,
     postob: Object
@@ -37,11 +40,12 @@ async function getReply(postId){
   }
 
   const response = await fetch(
-    `http://localhost:8080/api/reply/readpost/${postId}`,
+    `http://${serverAddress}/api/reply/readpost/${postId}`,
     {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
       credentials: 'include'
     }
@@ -58,11 +62,12 @@ async function getReply(postId){
 async function checkReplyLike(){
 
     const response = await fetch(
-        `http://localhost:8080/api/replylike/check/${props.replyvue.id}`,
+        `http://${serverAddress}/api/replylike/check/${props.replyvue.id}`,
         {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${auth}`,
         },
         credentials: 'include'
         }
@@ -80,11 +85,12 @@ const replylike = ref([])
 async function getReplyLikes(){
   
   const response = await fetch(
-      `http://localhost:8080/api/replylike/read/${props.replyvue.id}`,
+      `http://${serverAddress}/api/replylike/read/${props.replyvue.id}`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
         },
         credentials: 'include'
       }
@@ -114,11 +120,12 @@ async function updateReply(replyId){
   }
 
   const response = await fetch(
-      `http://localhost:8080/api/reply/update/${replyId}`,
+      `http://${serverAddress}/api/reply/update/${replyId}`,
       {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
         },
         body: JSON.stringify(formData),
         credentials: 'include'
@@ -136,11 +143,12 @@ async function updateReply(replyId){
 async function delReply(replyId) {
   if(confirm("삭제하시겠습니까?")) {
     const response = await fetch(
-      `http://localhost:8080/api/reply/delete/${replyId}`,
+      `http://${serverAddress}/api/reply/delete/${replyId}`,
       {
         method: 'DELETE',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
         },
         credentials: 'include'
       }
