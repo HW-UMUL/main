@@ -34,11 +34,12 @@ public class WikiLikeService {
     		
     		wikiLikeRepository.save(newWikiLike);
     		wikiLike = newWikiLike;
-			
     	} else {
     		wikiLikeRepository.deleteById(wikiLike.getId());
     	}
     	    	
+    	
+    	
 		return wikiLike;
     }
     
@@ -46,7 +47,14 @@ public class WikiLikeService {
     public int readLike(Long wikiId, Optional<User> user) {
     	return wikiLikeRepository.findAllByWikiId(wikiId).size();
     }
-
+    
+    @Transactional(readOnly = true)
+    public List<GetWikiMapping> readMyLike(Optional<User> user) {
+    	return wikiLikeRepository.findWikiAllByUserId(user.get().getId());
+    }
+    
+    ////////////////////////////
+    
 	@Transactional(readOnly = true)
     public WikiLike readLikePersonal(Long wikiId, Optional<User> user) {
 		Wiki wiki = wikiRepository.findById(wikiId).get();
@@ -57,10 +65,5 @@ public class WikiLikeService {
     	}
     	    	
 		return null;
-    }
-    
-    @Transactional(readOnly = true)
-    public List<GetWikiMapping> readMyLike(Optional<User> user) {
-    	return wikiLikeRepository.findWikiAllByUserId(user.get().getId());
     }
 }

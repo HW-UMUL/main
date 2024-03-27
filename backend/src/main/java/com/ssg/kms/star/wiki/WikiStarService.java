@@ -53,6 +53,7 @@ public class WikiStarService {
     	return wikiStarRepository.findWikiAllByUserId(user.get().getId());
     }
     
+    //////////////////////
     
 	@Transactional(readOnly = true)
     public WikiStar readStarPersonal(Long wikiId, Optional<User> user) {

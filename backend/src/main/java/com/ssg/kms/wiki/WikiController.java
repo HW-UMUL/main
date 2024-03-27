@@ -17,8 +17,6 @@ import com.ssg.kms.user.UserService;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @RestController
 @RequiredArgsConstructor
@@ -32,11 +30,6 @@ public class WikiController {
 		return ResponseEntity.ok(wikiService.createWiki(wikiDto, userService.getMyUserWithAuthorities()));
 	}
 	
-    @GetMapping("/readall")
-    public ResponseEntity<Wiki> readWikiAll() {
-        return (ResponseEntity)ResponseEntity.ok(wikiService.readWikiAll(userService.getMyUserWithAuthorities()));
-    }
-
 	@GetMapping("/read/{wikiId}")
     public ResponseEntity<Wiki> readWiki(@PathVariable Long wikiId) {
         return ResponseEntity.ok(wikiService.readWiki(wikiId, userService.getMyUserWithAuthorities()));
@@ -88,4 +81,5 @@ public class WikiController {
 	public ResponseEntity<List<Wiki>> readAllTableWiki(){
 		return ResponseEntity.ok(wikiService.readAllTableWiki(userService.getMyUserWithAuthorities()));
 	}
+
 }

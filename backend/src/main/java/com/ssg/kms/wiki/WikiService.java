@@ -59,12 +59,6 @@ public class WikiService {
     	    	
 		return wiki;
     }
-
-    @Transactional(readOnly = true)
-    public List<Wiki> readWikiAll(Optional<User> user) {
-		return wikiRepository.findAll();
-    }
-
     
     @Transactional
     public Wiki createTableWiki(Long tableId, WikiDTO wikiDto, Optional<User> user) {
@@ -95,7 +89,8 @@ public class WikiService {
 		return wiki;
     }
 
-        @Transactional(readOnly = true)
+    
+    @Transactional(readOnly = true)
     public Wiki readWiki(Long wikiId, Optional<User> user) {
 		return wikiRepository.findById(wikiId).get();
     }
