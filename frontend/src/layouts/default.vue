@@ -135,6 +135,7 @@ function getAlarmCnt(){
   </DefaultLayoutWithVerticalNav>
 </template>
 
+
 <style>
 
 .modal {

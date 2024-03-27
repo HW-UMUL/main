@@ -1,3 +1,9 @@
+import ReadWiki from '@/wiki/readwiki.vue';
+import UpdateWiki from '@/wiki/updatewiki.vue';
+import ViewWikiLogs from '@/wiki/viewwikilogs.vue';
+import { createRouter, createWebHistory } from 'vue-router';
+
+
 export const routes = [
   { path: '/', redirect: '/dashboard' },
   {

@@ -103,6 +103,5 @@ if(props.keyword == null){
         <PostDateSort style="margin-bottom: 20px" />
       </VCard>
     </VCol>  
-
   </VRow>
 </template>

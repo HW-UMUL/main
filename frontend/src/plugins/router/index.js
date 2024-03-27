@@ -8,9 +8,6 @@ const router = createRouter({
   routes,
 })
 
-
-
-
 export default function (app) {
   app.use(VueCookies)
 

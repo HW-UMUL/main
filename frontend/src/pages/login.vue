@@ -6,6 +6,7 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
+
 import { useRouter } from "vue-router"
 //import VueCookies from 'vue-cookies'
 
@@ -56,7 +57,6 @@ async function login() {
   }
 }
 
-
 </script>
 
 <template>
@@ -74,7 +74,7 @@ async function login() {
           </div>
         </template>
 
-        <VCardTitle class="font-weight-semibold text-2xl text-uppercase">
+  <VCardTitle class="font-weight-semibold text-2xl text-uppercase">
           Materio
         </VCardTitle>
       </VCardItem>

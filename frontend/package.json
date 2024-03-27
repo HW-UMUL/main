@@ -18,6 +18,9 @@
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
     "@fortawesome/vue-fontawesome": "^3.0.6",
     "@iconify-json/bxl": "^1.1.10",
+    "@inertiajs/inertia-vue3": "^0.6.0",
+    "@inertiajs/progress": "^0.2.7",
+    "@inertiajs/vue3": "^1.0.15",
     "@tiptap/extension-color": "^2.2.4",
     "@tiptap/extension-image": "^2.2.4",
     "@tiptap/extension-placeholder": "^2.2.4",
@@ -80,6 +83,23 @@
     "vite-plugin-vuetify": "2.0.1",
     "vite-svg-loader": "^5.1.0"
   },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/vue3-essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "@babel/eslint-parser"
+    },
+    "rules": {
+      "vue/multi-word-component-names": 0
+    }
+  },
+
   "resolutions": {
     "stylelint-order": "6.0.3"
   },

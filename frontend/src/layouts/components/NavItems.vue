@@ -47,6 +47,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
   />
   <VerticalNavLink
     :item="{
+
       title: 'Logout',
       icon: 'ri-login-box-line',
       to: '/logout',
@@ -84,6 +85,5 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       to: '/follow',
     }"
   /> 
-
 
 </template>

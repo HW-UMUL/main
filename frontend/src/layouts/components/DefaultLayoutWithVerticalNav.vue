@@ -1,10 +1,13 @@
 <script setup>
+import ThumbRegular from '@/assets/images/icons/thumbs-up-regular.svg'
+import ThumbSolid from '@/assets/images/icons/thumbs-up-solid.svg'
 import Footer from '@/layouts/components/Footer.vue'
 import NavItems from '@/layouts/components/NavItems.vue'
 import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
+
 import Search from '@/layouts/components/Search.vue'
 import { useRouter } from 'vue-router';
 
@@ -169,5 +172,4 @@ const props = defineProps({
     text-transform: uppercase;
   }
 }
-
 </style>

@@ -7,6 +7,7 @@ import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
 
+
 const serverAddress = inject('serverAddress')
 const router = inject('router')
 
@@ -18,6 +19,7 @@ const form = ref({
 })
 
 const vuetifyTheme = useTheme()
+
 
 const authThemeMask = computed(() => {
   return vuetifyTheme.global.name.value === 'light' ? authV1MaskLight : authV1MaskDark
@@ -52,7 +54,6 @@ const response = await fetch(
 //    window.location.href = '/login'
   }
 }
-
 
 </script>
 
@@ -133,7 +134,6 @@ const response = await fetch(
                   >privacy policy & terms</a>
                 </VLabel>
               </div>
-
               
               <VBtn
               @click="signup()"
