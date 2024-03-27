@@ -50,9 +50,4 @@ public class WikiLogService {
     	wikiLogRepository.deleteById(wikiLogId);
     	return wikiLog;
     }    
-
-	@Transactional
-	public WikiLog readFirstWikiLog(Long wikiId, Optional<User> user) {
-		return wikiLogRepository.findFirstByWikiIdOrderByDateAsc(wikiId);
-	}
 }
