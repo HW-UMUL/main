@@ -48,6 +48,7 @@ public class User {
     private String password;
 
     @NotBlank
+    @Column(unique = true)
     @Size(max = 50)
     @Email
     private String email;

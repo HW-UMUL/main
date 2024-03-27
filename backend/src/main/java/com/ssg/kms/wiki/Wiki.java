@@ -2,9 +2,11 @@ package com.ssg.kms.wiki;
 
 import java.util.Date;
 
+import com.ssg.kms.category.Category;
+import com.ssg.kms.table.Tables;
 import com.ssg.kms.user.User;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,15 +38,19 @@ public class Wiki {
     private String title;
 
     @NotBlank
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String content;
-
-    @NotBlank
-    private String tag;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date date;
     
 	@ManyToOne //(cascade = CascadeType.ALL)    
 	private User user;
+	
+	@ManyToOne
+	private Tables table;
+	
+	@ManyToOne
+	private Category category;
 
 }

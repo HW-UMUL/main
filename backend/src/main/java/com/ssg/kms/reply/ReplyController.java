@@ -1,5 +1,8 @@
 package com.ssg.kms.reply;
 
+import java.util.List;
+import java.util.Set;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ssg.kms.mapping.GetPostMapping;
 import com.ssg.kms.user.UserService;
 
 import jakarta.validation.Valid;
@@ -31,6 +35,17 @@ public class ReplyController {
     public ResponseEntity<Reply> readReply(@PathVariable Long replyId) {
         return ResponseEntity.ok(replyService.readReply(replyId, userService.getMyUserWithAuthorities()));
     }
+	
+	@GetMapping("/readpost/{postId}")
+    public ResponseEntity<List<Reply>> readAllReply(@PathVariable Long postId) {
+        return ResponseEntity.ok(replyService.readAllReply(postId, userService.getMyUserWithAuthorities()));
+    }
+	
+	@GetMapping("/read/my")
+    public ResponseEntity<Set<GetPostMapping>> readMyReply() {
+        return ResponseEntity.ok(replyService.readMyReply(userService.getMyUserWithAuthorities()));
+    }
+
 	
 	@PutMapping("/update/{replyId}")
     public ResponseEntity<Reply> updateReply(@PathVariable Long replyId, @Valid @RequestBody ReplyDTO replyDto) {

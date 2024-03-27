@@ -21,9 +21,6 @@ public class WikiDTO {
     private String title;
 
     private String content;
-
-//    @DateTimeFormat(iso = ISO.DATE_TIME)
-//    private LocalDateTime endDate;
     
-    private String tag;
+    private String category;
 }

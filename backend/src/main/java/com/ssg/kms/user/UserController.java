@@ -1,19 +1,21 @@
 package com.ssg.kms.user;
 
+import java.util.List;
+
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssg.kms.auth.AuthService;
 
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -30,24 +32,58 @@ public class UserController {
 		return ResponseEntity.ok(userService.signup(userDto));
 	}
 	
+	/// find email
+	///////////////////////////
+	
+	@GetMapping("/search/email/{searchKeyword}")
+	public ResponseEntity<List<String>> searchEmails(@PathVariable String searchKeyword) {
+		return ResponseEntity.ok(userService.searchEmails(searchKeyword, userService.getMyUserWithAuthorities()));
+	}	
+	
+	///////////////////////////
+	/// update info
+	@PutMapping("/update/username")
+	public ResponseEntity<String> updateUsername(@Valid @RequestBody UsernameDTO usernameDto) {
+		return ResponseEntity.ok(userService.updateUsername(usernameDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	@PutMapping("/update/email")
+	public ResponseEntity<String> updateEmail(@Valid @RequestBody EmailDTO emailDto) {
+		return ResponseEntity.ok(userService.updateEmail(emailDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	@PutMapping("/update/password")
+	public ResponseEntity<Boolean> updatePassword(@Valid @RequestBody PasswordDTO passwordDto) {
+		return ResponseEntity.ok(userService.updatePassword(passwordDto, userService.getMyUserWithAuthorities()));
+	}
+	
+	///////////////////////////////
+	
+	@GetMapping("/getinfo")
+	public ResponseEntity<List<String>> getInfo() {
+		return ResponseEntity.ok(userService.getInfo(userService.getMyUserWithAuthorities()));
+	}	
+	
 	@PostMapping("/login")
-	public ResponseEntity login(HttpServletResponse response, @Valid @RequestBody LoginDto loginDto) {
+	public ResponseEntity<String> login(@Valid @RequestBody LoginDto loginDto) {
 		
 		String jwtToken = authService.authorize(loginDto);
         // 서버에서 쿠키 설정
-        Cookie cookie = new Cookie("jwtToken", jwtToken.substring(7));
-        cookie.setMaxAge(60 * 60 * 24); // 쿠키의 유효기간 설정
-        cookie.setPath("/");
-        response.addCookie(cookie);
+//        Cookie cookie = new Cookie("jwtToken", jwtToken.substring(7));
+//        cookie.setMaxAge(60 * 60 * 24); // 쿠키의 유효기간 설정
+//        cookie.setPath("/");
+//        response.addCookie(cookie);
 
-		return ResponseEntity.ok(loginDto.getUsername());
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Set-Cookie", "jwtToken=" + jwtToken.substring(7) + "; Path=/; Max-Age=3600"); //3600초
+
+		return ResponseEntity.ok().headers(headers).body(loginDto.getUsername());
 	}
 
 
-	@PostMapping("/testtest")
-	public ResponseEntity<User> test(@Valid @RequestBody UserDto userDto) {
-		System.out.println("test");
-		return ResponseEntity.ok(userService.test(userDto));
+	@DeleteMapping("/delete")
+	public ResponseEntity<Boolean> test() {
+		return ResponseEntity.ok(userService.delete(userService.getMyUserWithAuthorities()));
 	}
 	
 	@GetMapping("/user")

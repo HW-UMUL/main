@@ -25,7 +25,7 @@ public class PostDTO {
 //    @DateTimeFormat(iso = ISO.DATE_TIME)
 //    private LocalDateTime endDate;
 
-    private String category;
-    
+//    private String category;
+//    
     private String tag;
 }
