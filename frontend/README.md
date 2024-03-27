@@ -1,30 +1,35 @@
-# TEAM 1 KMS
-![image](https://github.com/final-kms/main/assets/44054359/ee167743-9c9e-4470-9d94-56baa296ac30)
+# vue
 
-### MEMBER
-- 이경민 : PR(Project Manager)
-- 김민우 : TL(Tech Leader)
-- 박대호 : GM(Git Manager)
-- 심규혁 : AC(Agile Coach)
+This template should help get you started developing with Vue 3 in Vite.
 
-### Team Goal
-1) 대략 2주 정도를 한 사이클 시간으로 설정해 작업.
-2) 사이클이 끝나면 부족한 부분 보안.
-3) 팀원 모두가 프로젝트 프로세스 전 과정 경험.<br>
-3-1) 테스트 작업<br>
-3-2) (시간 허용 범위 안에서) 팀원 기능 구현 파트 맡아 작업
-4) 코드 작업보다 팀원 질문(소통) 우선
-5) 코드 규약 작성(대소문자, 케이스 정리 등)
-6) 코드 주석 철저히
-7) 팀 회의 시간 정하기(오전 할일, 하루 일정 회고 등)
-8) main 브런치 이외 본인 브런치에 만들어진 PR은 본인이 합친다.
+## Recommended IDE Setup
 
+[VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur).
 
-### Personal Goals
-- 민우 : 백엔드와 프론트엔드에 대해 더 깊게 이해하기, CI/CD 경험해보기, 서버에 대한 지식 높이기, 보안과 테스트에 대해 신경쓰기
-- 경민 : 프로젝트 전체 이해하기, 차분히 천천히 진행, Issue 및 PR 활용 최대화 하기, 매일 팀프로젝트 회고하고 정리하기
-- 대호 : 컴포넌트 기반 개발 이해
-- 규혁 : 팀 프로젝트 경험과 개발 이해하기, git 사용 이해하고 익숙해지기
+## Type Support for `.vue` Imports in TS
 
+Since TypeScript cannot handle type information for `.vue` imports, they are shimmed to be a generic Vue component type by default. In most cases this is fine if you don't really care about component prop types outside of templates.
 
-### 개발 목표
+However, if you wish to get actual prop types in `.vue` imports (for example to get props validation when using manual `h(...)` calls), you can run `Volar: Switch TS Plugin on/off` from VS Code command palette.
+
+## Customize configuration
+
+See [Vite Configuration Reference](https://vitejs.dev/config/).
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```

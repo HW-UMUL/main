@@ -7,6 +7,10 @@ import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
 
+
+const serverAddress = inject('serverAddress')
+const router = inject('router')
+
 const form = ref({
   username: '',
   email: '',
@@ -15,6 +19,13 @@ const form = ref({
 })
 
 const vuetifyTheme = useTheme()
+
+
+const authThemeMask = computed(() => {
+  return vuetifyTheme.global.name.value === 'light' ? authV1MaskLight : authV1MaskDark
+})
+
+const isPasswordVisible = ref(false)
 
 async function signup() {
 
@@ -25,7 +36,7 @@ const formData = {
 }
 
 const response = await fetch(
-    `http://localhost:8080/api/signup`,
+    `http://${serverAddress}/api/signup`,
     {
       method: 'POST',
       headers: {
@@ -38,15 +49,12 @@ const response = await fetch(
   if(!response.ok) {
     alert("실패!")
   } else{
-    window.location.href = 'http://localhost:5173/'
+    router.push('/')
+
+//    window.location.href = '/login'
   }
 }
 
-const authThemeMask = computed(() => {
-  return vuetifyTheme.global.name.value === 'light' ? authV1MaskLight : authV1MaskDark
-})
-
-const isPasswordVisible = ref(false)
 </script>
 
 <template>
@@ -126,9 +134,9 @@ const isPasswordVisible = ref(false)
                   >privacy policy & terms</a>
                 </VLabel>
               </div>
-
+              
               <VBtn
-                @click="signup()"
+              @click="signup()"
               >
                 Sign up
               </VBtn>

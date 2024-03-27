@@ -1,4 +1,4 @@
-  <script setup>
+<script setup>
 const navigationTab = ref('ITEM ONE')
 const navigationTab2 = ref('ITEM ONE')
 

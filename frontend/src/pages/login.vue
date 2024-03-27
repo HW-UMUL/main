@@ -1,5 +1,4 @@
 <script setup>
-import store from '@/api/store'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
 import logo from '@images/logo.svg?raw'
 import authV1MaskDark from '@images/pages/auth-v1-mask-dark.png'
@@ -8,8 +7,15 @@ import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
 
+import { useRouter } from "vue-router"
+//import VueCookies from 'vue-cookies'
+
+
+const serverAddress = inject('serverAddress')
+const router = useRouter()
+
 const form = ref({
-  username: '',
+  usernmae: '',
   password: '',
   remember: false,
 })
@@ -23,46 +29,34 @@ const authThemeMask = computed(() => {
 const isPasswordVisible = ref(false)
 
 async function login() {
+
   const formData = {
     username: form.value.username,
-    password: form.value.password,
+    password: form.value.password
   }
-
-  const response = await fetch(`http://localhost:8080/api/login`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(formData),
-    credentials: 'include',
-  })
-
-  if (!response.ok) {
-    alert('실패!')
-  } else {
-    // 로그인 로직 수행 후 토큰을 받아온다고 가정
-    const authToken = 'Bearer '
-    const cookies = document.cookie.split(';')
-    const jwtToken = ''
-    for (let i = 0; i < cookies.length; i++) {
-      const cookie = cookies[i].trim()
-      // 쿠키 이름이 'jwtToken'으로 시작하는 경우
-      if (cookie.startsWith('jwtToken=')) {
-        // 'jwtToken'의 값만 추출
-        this.jwtToken = cookie.substring('jwtToken='.length)
-        break
+   
+  const response = await fetch(
+      `http://${serverAddress}/api/auth`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+//        credentials: 'include'
       }
-    }
-    this.authToken = authToken + this.jwtToken
-    console.log(this.authToken)
+  )
 
-    //Vuex 스토어에 로그인 정보 저장
-    store.commit('login', this.authToken)
+  if(!response.ok) {
+    alert("실패!")
+  } else{
 
-    // 로그인 성공 후 메인 페이지로 이동
-    window.location.href = 'http://localhost:5173/'
+    const jwtToken = await response.headers.get('Authorization').substr(7)
+    $cookies.set("jwtToken", jwtToken)
+    router.push({ path: '/' }); 
   }
 }
+
 </script>
 
 <template>
@@ -80,12 +74,18 @@ async function login() {
           </div>
         </template>
 
-        <VCardTitle class="font-weight-semibold text-2xl text-uppercase"> KMS </VCardTitle>
+  <VCardTitle class="font-weight-semibold text-2xl text-uppercase">
+          Materio
+        </VCardTitle>
       </VCardItem>
 
       <VCardText class="pt-2">
-        <h5 class="text-h5 font-weight-semibold mb-1">Welcome to Materio! 👋🏻</h5>
-        <p class="mb-0">Please sign-in to your account and start the adventure</p>
+        <h5 class="text-h5 font-weight-semibold mb-1">
+          Welcome to Materio! 👋🏻
+        </h5>
+        <p class="mb-0">
+          Please sign-in to your account and start the adventure
+        </p>
       </VCardText>
 
       <VCardText>
@@ -95,8 +95,8 @@ async function login() {
             <VCol cols="12">
               <VTextField
                 v-model="form.username"
-                label="Email"
-                type="email"
+                label="ID"
+                type="text"
               />
             </VCol>
 
@@ -127,12 +127,16 @@ async function login() {
               </div>
 
               <!-- login button -->
-              <VBtn @click="login()">
-                <!-- <VBtn
+              <VBtn 
+                @click="login()"
+              >
+              <!--
+              <VBtn 
                 block
                 type="submit"
                 to="/"
-              > -->
+              >
+              -->
                 Login
               </VBtn>
             </VCol>
@@ -193,5 +197,5 @@ async function login() {
 </template>
 
 <style lang="scss">
-@use '@core/scss/pages/page-auth.scss';
+@use "@core/scss/pages/page-auth.scss";
 </style>

@@ -1,81 +1,107 @@
 <script setup>
-import ViewAllWiki from '@/views/dashboard/ViewAllWiki.vue'
-import ViewRecentWiki from '@/views/dashboard/ViewRecentWiki.vue'
-import ViewWikiLikeRank from '@/views/dashboard/ViewWikiLikeRank.vue'
-import ViewWikiStarRank from '@/views/dashboard/ViewWikiStarRank.vue'
-const totalProfit = {
-  title: 'Total Profit',
-  color: 'secondary',
-  icon: 'ri-pie-chart-2-line',
-  stats: '$25.6k',
-  change: 42,
-  subtitle: 'Weekly Project',
+import Post from '@/k_views/post/Post.vue';
+import PostLikeSort from '@/k_views/list/PostLikeSort.vue';
+import PostStarSort from '@/k_views/list/PostStarSort.vue';
+import PostDateSort from '@/k_views/list/PostDateSort.vue';
+
+// import post from '@/views/'
+import { watchEffect } from 'vue';
+
+const serverAddress = inject('serverAddress')
+const auth = inject('auth')
+
+const props = defineProps({
+    keyword: String
+})
+
+const posts = ref([])
+
+watchEffect(() => {
+  if(props.keyword == null){
+    getPosts()
+  } else{
+    searchPost()
+  }
+});
+
+
+async function getPosts(){
+
+  const response = await fetch(
+      `http://${serverAddress}/api/post/read/public`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    posts.value = await response.json()
+  }
 }
 
-const newProject = {
-  title: 'New Project',
-  color: 'primary',
-  icon: 'ri-file-word-2-line',
-  stats: '862',
-  change: -18,
-  subtitle: 'Yearly Project',
+async function searchPost(){
+  const response = await fetch(
+      `http://${serverAddress}/api/post/search/${props.keyword}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    posts.value = await response.json()
+ }
+ 
 }
+
+
+if(props.keyword == null){
+  getPosts()
+} 
 </script>
 
-<!-- <script>
-import axios from "axios"
-export default {
- name: "dashboard",
- setup() {
-  axios.get("/api/wiki/read/1").then((res) => {
-    console.log(res.data);
-  })
- } 
-}
-</script> -->
-
 <template>
-  <VRow class="match-height">
+  <VRow>
     <VCol
       cols="12"
-      md="9"
+      md="8"
+      class="mb-4"
     >
-      <VRow class="match-height">
-        <VCol
-          cols="3"
-          sm="12"
-        >
-          <ViewAllWiki />
-        </VCol>
-      </VRow>
-    </VCol>
+    
+    <div v-for="(item, index) in posts.slice().reverse()" :key="index">
 
+      <Post :post="item" style="margin-bottom: 20px;"/>
+    </div>
+        <!-- <Post style="margin-bottom: 20px;"/>
+        <Post style="margin-bottom: 20px;"/>
+        <Post style="margin-bottom: 20px;"/> -->
+    </VCol>  
     <VCol
       cols="12"
-      md="3"
+      md="4"
     >
-      <VRow class="match-height">
-        <VCol
-          cols="5"
-          sm="12"
-        >
-          <ViewWikiLikeRank />
-        </VCol>
-
-        <VCol
-          cols="5"
-          sm="12"
-        >
-          <ViewWikiStarRank />
-        </VCol>
-
-        <VCol
-          cols="5"
-          sm="12"
-        >
-          <ViewRecentWiki />
-        </VCol>
-      </VRow>
-    </VCol>
+      <VCard title="추천순" style="margin-bottom: 20px">
+        <PostLikeSort style="margin-bottom: 20px" />
+      </VCard>
+      <VCard title="즐겨찾기순" style="margin-bottom: 20px">
+        <PostStarSort style="margin-bottom: 20px" />
+      </VCard>
+      <VCard title="최신순" style="margin-bottom: 20px">
+        <PostDateSort style="margin-bottom: 20px" />
+      </VCard>
+    </VCol>  
   </VRow>
 </template>

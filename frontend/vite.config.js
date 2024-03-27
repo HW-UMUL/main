@@ -1,6 +1,6 @@
+import { fileURLToPath } from 'node:url'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { fileURLToPath } from 'node:url'
 import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { defineConfig } from 'vite'
@@ -9,18 +9,6 @@ import svgLoader from 'vite-svg-loader'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  server: {
-    proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        rewrite: path => path.replace(/^\/api/, '')
-      }
-    },
-    fs: {
-      cachedChecks: false
-    }
-  },
   plugins: [
     vue(),
     vueJsx(),
@@ -50,7 +38,7 @@ export default defineConfig({
     }),
     svgLoader(),
   ],
-  define: { 'process.env': {} },
+  define: { 'process.env': {}, 'global': {} },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -69,5 +57,5 @@ export default defineConfig({
     entries: [
       './src/**/*.vue',
     ],
-  }
+  },
 })
