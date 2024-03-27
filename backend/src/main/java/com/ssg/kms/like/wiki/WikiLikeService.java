@@ -63,18 +63,4 @@ public class WikiLikeService {
     public List<GetWikiMapping> readMyLike(Optional<User> user) {
     	return wikiLikeRepository.findWikiAllByUserId(user.get().getId());
     }
-    
-    ////////////////////////////
-    
-	@Transactional(readOnly = true)
-    public WikiLike readLikePersonal(Long wikiId, Optional<User> user) {
-		Wiki wiki = wikiRepository.findById(wikiId).get();
-    	WikiLike wikiLike = wikiLikeRepository.findByWikiAndUser(wiki, user.get()).orElse(null);
-		
-		if(wikiLike != null) {
-    		return wikiLike;
-    	}
-    	    	
-		return null;
-    }
 }
