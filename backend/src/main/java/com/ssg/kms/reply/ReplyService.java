@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssg.kms.alarm.reply.ReplyAlarmService;
+import com.ssg.kms.like.reply.ReplyLikeRepository;
 import com.ssg.kms.mapping.GetPostMapping;
 import com.ssg.kms.post.Post;
 import com.ssg.kms.post.PostRepository;
@@ -21,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class ReplyService {
     private final ReplyRepository replyRepository;
     private final PostRepository postRepository;
+    private final ReplyLikeRepository replyLikeRepository;
     
     private final ReplyAlarmService replyAlarmService;
     
@@ -65,6 +67,7 @@ public class ReplyService {
     	Reply reply = replyRepository.findById(replyId).get();
     	reply.setUser(null);
     	reply.setPost(null);
+    	replyLikeRepository.deleteAllByReplyId(reply.getId());
     	replyRepository.deleteById(replyId);
     	reply.setUser(user.get());
     	return reply;

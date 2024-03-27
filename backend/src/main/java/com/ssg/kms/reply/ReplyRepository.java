@@ -15,6 +15,6 @@ public interface ReplyRepository extends JpaRepository<Reply, Long> {
 
 	Set<GetPostMapping> findPostAllByUserId(Long id);
 	
-	
+	void deleteAllByPostId(Long id);
 	
 }

@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.ssg.kms.alarm.post.PostAlarmService;
 import com.ssg.kms.alarm.reply.ReplyAlarmService;
 import com.ssg.kms.like.post.PostLikeRepository;
+import com.ssg.kms.like.reply.ReplyLikeRepository;
+import com.ssg.kms.reply.Reply;
+import com.ssg.kms.reply.ReplyRepository;
 import com.ssg.kms.star.post.PostStarRepository;
 import com.ssg.kms.table.TableRepository;
 import com.ssg.kms.table.Tables;
@@ -36,6 +39,8 @@ public class PostService {
     private final PostStarRepository postStarRepository;
     private final TagRepository tagRepository;
     private final TagPostRepository tagPostRepository;
+    private final ReplyRepository replyRepository;
+    private final ReplyLikeRepository replyLikeRepository;
     
     private final PostAlarmService postAlarmService;
     private final ReplyAlarmService replyAlarmService;
@@ -155,6 +160,11 @@ public class PostService {
     public Post deletePost(Long postId, Optional<User> user) {
     	Post post = postRepository.findById(postId).get();
     	
+    	List<Reply> replies = replyRepository.findAllByPostId(postId);
+    	for(Reply item:replies) {
+    		replyLikeRepository.deleteAllByReplyId(item.getId());
+    	}
+    	replyRepository.deleteAllByPostId(post.getId());
     	postLikeRepository.deleteAllByPostId(post.getId());
     	postStarRepository.deleteAllByPostId(post.getId());
     	
