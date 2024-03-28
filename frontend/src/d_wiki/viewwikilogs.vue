@@ -1,6 +1,6 @@
 <script setup>
 import axios from 'axios'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 // 토큰 브라우저에서 받아오기
 const serverAddress = inject('serverAddress')
@@ -13,6 +13,8 @@ let jwtToken = auth
 authToken = authToken + jwtToken
 
 const route = useRoute()
+const router = useRouter()
+
 const logs = reactive([])
 let date = reactive([])
 
@@ -26,7 +28,6 @@ axios
   .then(res => {
     logs.value = res.data
 
-    
     for (let i = 0; i < logs.value.length; i++) {
       date[i] = new Date(logs.value[i].date)
 
@@ -44,6 +45,11 @@ axios
         date[i].getSeconds().toString().padStart(2, '0')
     }
   })
+
+const cancelForm = () => {
+  // 이전 페이지로 이동
+  router.go(-1)
+}
 </script>
 
 <template>
@@ -70,4 +76,6 @@ axios
       <td v-html="`${item.content}`"></td>
     </tr>
   </table>
+  <br />
+  <VBtn @click="cancelForm">뒤로가기</VBtn>
 </template>

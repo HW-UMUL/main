@@ -1,11 +1,12 @@
 <script setup>
 import Image from '@tiptap/extension-image'
-import Placeholder from '@tiptap/extension-placeholder'
+import { Placeholder } from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
 import StarterKit from '@tiptap/starter-kit'
+import HardBreak from '@tiptap/extension-hard-break'
 import { defineEmits, defineProps, ref, watch } from 'vue'
 
-import { EditorContent, useEditor } from '@tiptap/vue-3'
+import { EditorContent, useEditor, Editor } from '@tiptap/vue-3'
 import CodeIcon from 'vue-material-design-icons/CodeTags.vue'
 import BoldIcon from 'vue-material-design-icons/FormatBold.vue'
 import H1Icon from 'vue-material-design-icons/FormatHeader1.vue'
@@ -32,9 +33,18 @@ const props = defineProps({
 
 const emit = defineEmits(['update:modelValue'])
 
-const editor = useEditor({
-//  content: props.modelValue,
+const CustomHardBreak = HardBreak.extend({
+  addKeyboardShortcuts() {
+    return {
+      Enter: () => this.editor.commands.setHardBreak(),
+    }
+  },
+})
+
+const editor = new Editor({
+  content: props.modelValue,
   onUpdate: ({ editor }) => {
+    // console.log(editor.getHTML())
     emit('update:modelValue', editor.getHTML())
   },
   extensions: [
@@ -46,27 +56,30 @@ const editor = useEditor({
     Image.configure({
       inline: true,
     }),
+    CustomHardBreak,
   ],
   editorProps: {
     attributes: {
-      class: 'border border-gray-400 p-2 outline-none prose max-w-none',
+      class: 'p-2 outline-none prose max-w-none',
     },
   },
 })
 
-
-onMounted(()=>{
-    setTimeout(() => editor.value.commands.setContent(props.modelValue), 10);  
-})
-
+watch(
+  () => props.modelValue,
+  value => {
+    if (editor && editor.getHTML() !== value) {
+      editor.commands.setContent(value, false)
+    }
+  },
+)
 </script>
 
 <template>
-  <div>
-       
-    <section
+  <div style="border: 1px solid">
+    <div
       v-if="editor"
-      class="buttons text-gray-700 flex items-center flex-wrap gap-x-4 border-t border-l border-r border-gray-400 p-4"
+      class="buttons text-gray-700 flex items-center flex-wrap gap-x-4 border border-l border-r border-gray-400 p-4"
       style="display: flex"
     >
       <button
@@ -220,21 +233,13 @@ onMounted(()=>{
       >
         <b style="text-decoration: line-through; font-size: 23px; line-height: 1">S</b>
       </button>
-    </section>
+    </div>
 
     <EditorContent
       :editor="editor"
-      :style="{ width: '1000px', height: '500px', overflowY: 'auto' }"
+      content-type="html"
+      style="overflow-x: auto; width: 1010px; padding: 5px"
     />
-    <!--
-    <EditorContent
-      :editor="editor"
-      :content="editorcontent"
-      :style="{ width: '1000px', height: '500px', overflowY: 'auto' }"
-    />
-
-
-    -->
   </div>
 </template>
 <style lang="scss">
@@ -295,6 +300,19 @@ onMounted(()=>{
   }
 }
 .ProseMirror {
-  height: 500px;
+  height: 550px;
+  width: 1000px;
+  outline: none;
+}
+
+.border-t {
+  border-top-width: 10px;
+}
+.tiptap p.is-editor-empty:first-child::before {
+  color: #a0a1a2;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
 }
 </style>

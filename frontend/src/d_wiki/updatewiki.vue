@@ -1,7 +1,7 @@
 <script setup>
 import MyEditor from '@/d_wiki/wikieditor.vue'
-import axios from 'axios'
 import { onMounted } from 'vue'
+import axios from 'axios'
 import { useRouter } from 'vue-router'
 
 // 토큰 브라우저에서 받아오기
@@ -19,44 +19,39 @@ for (let i = 0; i < cookies.length; i++) {
   }
 }
 authToken = authToken + jwtToken
-console.log('토큰:', authToken)
 
 const router = useRouter()
 const route = useRoute()
-const wiki = ref(null)
 
-console.log('wiki', wiki)
-const formData = reactive({
+const wiki = reactive({
   title: '',
   category: '',
   content: '',
-  tag: '',
 })
 
-onMounted(() => {
+async function readWiki() {
   try {
-    axios
-      .get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
-        headers: {
-          Authorization: authToken,
-        },
-      })
-      .then(res => {
-        wiki.value = res.data
-
-        formData.title = res.data.title
-        formData.category = res.data.category
-        formData.content = res.data.content
-        formData.tag = res.data.tag
-
-        console.log('내부:', formData)
-      })
+    const res = await axios.get(`http://localhost:8080/api/wiki/read/${route.params.id}`, {
+      headers: {
+        Authorization: authToken,
+      },
+    })
+    const data = res.data
+    wiki.title = data.title
+    wiki.category = data.category
+    wiki.content = data.content
   } catch (error) {
     console.log('에러 발생: ', error)
   }
-})
+}
 
 const submitForm = async () => {
+  const formData = {
+    title: wiki.title,
+    category: wiki.category,
+    content: wiki.content,
+    tag: wiki.tag,
+  }
   const headers = {
     'Content-Type': 'application/json',
     Authorization: authToken,
@@ -64,24 +59,22 @@ const submitForm = async () => {
   // 서버로 보낼 데이터
   const data = JSON.stringify(formData)
 
+  axios.put(`http://localhost:8080/api/wiki/update/${route.params.id}`, data, {
+    headers,
+  })
+
   try {
-    axios.put(`http://localhost:8080/api/wiki/update/${route.params.id}`, data, { headers }).then(res => {
-      console.log('updatewiki:', res.data)
-      window.location.href = `http://localhost:5173/readwiki/${route.params.id}`
-    })
   } catch (error) {
     console.error('에러 발생: ', error)
   }
-}
-
-const handleContentUpdate = content => {
-  formData.content = content
 }
 
 const cancelForm = () => {
   // 이전 페이지로 이동
   router.go(-1)
 }
+
+readWiki(route.params.id)
 </script>
 
 <style scoped>
@@ -98,59 +91,41 @@ th {
 }
 </style>
 <template>
-  <form @submit.prevent="submitForm">
-    <table
-      border="1"
-      width="90%"
-      height="700"
-    >
-      <tr>
-        <td>
-          <input
-            type="text"
-            v-model="formData.title"
-            placeholder="title"
-            style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px; width: 100%"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input
-            type="text"
-            v-model="formData.category"
-            placeholder="category"
-            style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px; width: 100%"
-          />
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <!-- <textarea
+  <div class="container mx-auto max-w-4xl my-8">
+    <form @submit.prevent="submitForm">
+      <div>
+        <input
+          type="text"
+          class="w-full border border-gray-400 p-2"
+          v-model="wiki.title"
+          placeholder="title"
+          style="padding-left: 10px; width: 100%; height: 40px"
+        />
+      </div>
+      <div>
+        <MyEditor
+          :modelValue="wiki.content"
+          contentType="html"
+        />
+      </div>
+      <div>
+        <input
+          class="w-full border border-gray-400 p-2"
+          type="text"
+          v-model="wiki.category"
+          placeholder="category"
+          style="padding-left: 10px; width: 100%; height: 40px"
+        />
+      </div>
+
+      <!-- <textarea
             placeholder="content"
             v-model="formData.content"
             rows="25"
             cols="130"
             style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px"
           ></textarea> -->
-          <div>
-            <MyEditor
-              v-model:modelValue="formData.content"
-              @update:modelValue="handleContentUpdate"
-            />
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          <input
-            type="text"
-            v-model="formData.tag"
-            placeholder="tag"
-            style="padding-left: 20px; padding-top: 10px; padding-bottom: 10px; width: 100%"
-          />
-        </td>
-      </tr>
+
       <tr align="center">
         <td>
           <button
@@ -188,6 +163,6 @@ th {
           </button>
         </td>
       </tr>
-    </table>
-  </form>
+    </form>
+  </div>
 </template>

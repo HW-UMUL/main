@@ -267,74 +267,20 @@ const cancelForm = () => {
   />
 
   <div
+    class="button-container"
     align="center"
     style="flex: auto; float: right; padding-top: 50px"
   >
-    <button
-      @click="cancelForm"
-      style="
-        background-color: #905dff;
-        border: none;
-        color: white;
-        padding: 7px 15px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        border-style: solid;
-        font-size: 15px;
-      "
-    >
-      목록
-    </button>
-    <button
-      @click="sendIdToViewLogs(state.items?.id)"
-      style="
-        background-color: #905dff;
-        border: none;
-        color: white;
-        padding: 7px 15px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        border-style: solid;
-        font-size: 15px;
-      "
-    >
-      변경 이력
-    </button>
-    <button
-      @click="sendIdToUpdate(state.items?.id)"
-      style="
-        background-color: #905dff;
-        border: none;
-        color: white;
-        padding: 7px 15px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        border-style: solid;
-        font-size: 15px;
-      "
-    >
-      수정
-    </button>
-
-    <button
-      @click="deleteAlert()"
-      style="
-        background-color: #905dff;
-        border: none;
-        color: white;
-        padding: 7px 15px;
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        border-style: solid;
-        font-size: 15px;
-      "
-    >
-      삭제
-    </button>
+    <VBtn @click="cancelForm"> 목록</VBtn>
+    <VBtn @click="sendIdToViewLogs(state.items?.id)">변경 이력</VBtn>
+    <VBtn @click="sendIdToUpdate(state.items?.id)">수정</VBtn>
+    <VBtn @click="deleteAlert()">삭제</VBtn>
   </div>
   <!-- <button v-if="isAuthorized" @click="edit">수정</button> -->
 </template>
+
+<style>
+.button-container button {
+  margin-right: 10px; /* 각 버튼 오른쪽에 마진을 추가합니다. */
+}
+</style>

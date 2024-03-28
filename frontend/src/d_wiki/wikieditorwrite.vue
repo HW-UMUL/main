@@ -18,27 +18,22 @@ authToken = authToken + jwtToken
 const formData = ref({
   title: '',
   content: '',
-  category: ''
+  category: '',
 })
 
-if(route.params.id){
-
+if (route.params.id) {
   axios
-  .get(`http://${serverAddress}/api/wiki/read/${route.params.id}`, {
-    headers: {
-      Authorization: authToken,
-    },
-  })
-  .then(res => {
-    formData.value.title = res.data.title
-    formData.value.content = res.data.content
-    formData.value.category = res.data.category.name
-  })
-
-
+    .get(`http://${serverAddress}/api/wiki/read/${route.params.id}`, {
+      headers: {
+        Authorization: authToken,
+      },
+    })
+    .then(res => {
+      formData.value.title = res.data.title
+      formData.value.content = res.data.content
+      formData.value.category = res.data.category.name
+    })
 }
-
-
 
 function submitForm() {
   // 헤더 정보 설정
@@ -71,8 +66,11 @@ function submitForm() {
 const props = defineProps({
   posts: Array,
 })
-const exampleContent = `<p>This is <strong>bold</strong> and <em>italic</em> text.</p>`
-const renderedContent = ref(exampleContent)
+
+const cancelForm = () => {
+  // 이전 페이지로 이동
+  router.go(-1)
+}
 </script>
 
 <template>
@@ -81,35 +79,47 @@ const renderedContent = ref(exampleContent)
       @submit.prevent="submitForm"
       class="space-y-8"
     >
-      <input
-        type="text"
-        class="w-full border border-gray-400 p-2"
-        v-model="formData.title"
-        placeholder="title"
-        style="padding-left: 10px"
-      />
+      <div>
+        <input
+          type="text"
+          class="w-full border border-gray-400 p-2"
+          v-model="formData.title"
+          placeholder="title"
+          style="padding-left: 10px; width: 100%; height: 40px"
+        />
+      </div>
+      <br />
 
       <div>
         <MyEditor v-model="formData.content" />
       </div>
+
+      <br />
+
       <div>
         <input
           type="text"
           class="w-full border border-gray-400 p-2"
           v-model="formData.category"
           placeholder="category"
-          style="padding-left: 10px"
+          style="padding-left: 10px; width: 100%; height: 40px"
         />
       </div>
       <br />
+
       <div>
-        <button
+        <VBtn
           type="submit"
-          class="bg-blue-600 text-white p-2 rounded"
-          style="background-color: #905dff"
+          style="margin-right: 10px"
         >
           Create Wiki
-        </button>
+        </VBtn>
+        <VBtn
+          type="button"
+          @click="cancelForm"
+        >
+          Cancel
+        </VBtn>
       </div>
     </form>
   </div>
