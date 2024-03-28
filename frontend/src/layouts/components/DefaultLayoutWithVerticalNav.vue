@@ -59,6 +59,8 @@ function keyHandle() {
     filterKeywords.value = searchHistory.value
   }
 
+  console.log(filterKeywords)
+
 }
 
 
@@ -185,14 +187,17 @@ async function getData() { // Post 데이터 가져오기
 
 async function getSearchHistory() { // 검색 기록 불러오기
   try {
-    const responseHistory = await axios.get(`http://localhost:8080/api/searchlog/read`, {
+    const responseSearchHistory = await axios.get(`http://localhost:8080/api/searchlog/read`, {
       headers: {
         // 권한 풀고 상황에 맞게 넣어줘야 함.
         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
       }
     });
-    searchHistory.value = responseHistory.data.map(item => item.content);
-    console.log(searchHistory)
+    searchHistory.value = responseSearchHistory.data.map(item => item.content);
+    // searchHistory.value = responseSearchHistory.data.map(item => ({
+    //   content: item.content,
+    //   searchLogId: item.searchLogId
+    // }));
   } catch (error) {
     console.error(error);
   }
@@ -284,7 +289,7 @@ async function search(){
             <form @submit.prevent="search()" @keydown.tab="KeydownTab"> 
               
               <div class="input-group">
-                <img src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\search.png"
+                <img src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\search-keyword.png"
                 class="icons"/>
 
                 <section>
@@ -305,15 +310,20 @@ async function search(){
                       @mouseleave="mouseleaveHandler(filterKeyword)"
                       :class="{ 'highlighted': highlightedKeyword === filterKeyword, 
                       'highlightedFilter': highlightedFilterKeyword === filterKeyword }"
-    
                       style="position: relative;"
-                      > {{ filterKeyword }}
-                      <v-btn icon="$vuetify" variant="text" class="search-delete"
-
-                      @mousedown="deleteSearchHistory(filterKeyword)">
-                        삭제
-                      </v-btn> 
-                      <!-- v-if="isDeleteButtonVisible(filterKeyword)" -->
+                      >                 
+                        <img class="searchlog-icons" 
+                        src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\history.png"
+                        v-if="filterKeywords === searchHistory"/> 
+                        <img class="searchlog-icons" 
+                        src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\search-keyword.png"
+                        v-if="filterKeywords != searchHistory"/> 
+                        <ul class="search-keyword">{{ filterKeyword }}</ul>
+                        <v-btn icon="$vuetify" variant="text" class="search-delete"
+                        v-if="filterKeywords === searchHistory"
+                        @mousedown="deleteSearchHistory(filterKeyword)">
+                          삭제
+                        </v-btn> 
                       </ul> 
                     </div>
                   </div>
@@ -465,6 +475,20 @@ async function search(){
       font-size: 1.02em;
       // display: flex;
 
+        .search-keyword {
+          margin-left: 46px;
+        }
+
+        .searchlog-icons {
+          position: absolute;
+          left: -5px;
+          top: -7px;
+          width: 12%;
+          display: flex;
+          padding: 12px 20px;
+          pointer-events: none;
+        }
+
         .highlighted {
           background-color: rgb(228, 213, 236);
         }
@@ -483,6 +507,7 @@ async function search(){
         }
 
       }
+
     }
 
 
