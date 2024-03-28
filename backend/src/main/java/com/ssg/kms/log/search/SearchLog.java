@@ -28,7 +28,7 @@ public class SearchLog {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long search_log_id;
+	private Long searchLogId;
 	
 	@NotBlank
 	private String content;
