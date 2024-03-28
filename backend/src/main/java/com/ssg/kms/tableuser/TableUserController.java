@@ -44,6 +44,13 @@ public class TableUserController {
         return ResponseEntity.ok(tableUserService.readAllTableUser(userService.getMyUserWithAuthorities()));
     }
 	
+	//유저가 포함된 승인한 모든 테이블 출력
+	@GetMapping("/read/accept")
+    public ResponseEntity readAllAcceptTableUser() {
+        return ResponseEntity.ok(tableUserService.readAllAcceptTableUser(userService.getMyUserWithAuthorities()));
+    }
+
+	
 	//참여한 모든 인원 확인
 	@GetMapping("/readuser/{tableId}")
     public ResponseEntity<List<GetUserMapping>> readTableUsersByTable(@PathVariable Long tableId) {

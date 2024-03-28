@@ -48,9 +48,6 @@ axios
       ':' +
       date.getSeconds().toString().padStart(2, '0')
 
-    console.log(state.items)
-    console.log(state.items.user.username)
-
     getLikes(state.items?.id)
     getStars(state.items?.id)
 

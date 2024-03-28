@@ -5,7 +5,6 @@ import PostDateSort from '@/k_views/list/PostDateSort.vue';
 import TiptapEditor from '@/k_components/TiptapEditor.vue';
 import { useRouter } from "vue-router"
 
-
 const router = useRouter()
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
@@ -22,7 +21,6 @@ async function writePost(){
   const formData = {
     title: post.value.title,
     content: post.value.content,
-    category: post.value.category,
     tag: post.value.tag
   }
 
@@ -42,7 +40,8 @@ async function writePost(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    router.push(`/`) 
+//    router.push(`/`) 
+    router.go(-1) 
   }
 }
 
@@ -86,16 +85,6 @@ async function writePost(){
             label="본문"
             /> -->
 
-          </VCol>
-
-          <VCol
-          >
-            <VTextField
-            id="category"
-            v-model="post.category"
-            placeholder="카테고리"
-            label="카테고리"
-            />
           </VCol>
 
           <VCol

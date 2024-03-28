@@ -32,9 +32,9 @@ async function getPosts(){
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`
         },
         credentials: 'include',
-        'Authorization': `Bearer ${auth}`
       }
   )
 

@@ -78,17 +78,13 @@ export const routes = [
       */
       /////////////////////////////////////
 
-      {
-        path: 'account-settings',
-        component: () => import('@/pages/account-settings.vue'),
-      },
-
-
 
       {
         path: 'table',
-        component: () => import('@/pages/table.vue')
+        component: () => import('@/pages/mytables.vue')
       },
+
+
       {
         path: 'createtable',
         component: () => import('@/pages/createtable.vue')
@@ -132,7 +128,60 @@ export const routes = [
         path: '/search',
         component: () => import('@/pages/dashboard.vue'),
         props: true
-      }
+      },
+
+
+
+
+
+
+      /////////////// MYMY
+      {
+        path: 'mypage',
+        component: () => import('@/pages/mypage.vue'),
+      },
+      {
+        path: 'mytables/:tableId',
+        component: () => import('@/pages/tabledetail.vue'),
+        props: true
+      },
+
+
+      {
+        path: 'writepost/:tableId',
+        component: () => import('@/pages/writetablepost.vue'),
+        props: true
+      },
+
+
+      {
+        path: 'writewiki/:tableId',
+        component: () => import('@/pages/writetablewiki.vue'),
+          props: true
+      },
+
+
+
+      {
+        path: 'myposts',
+        component: () => import('@/pages/myposts.vue'),
+      },
+      {
+        path: 'mywikis',
+        component: () => import('@/pages/mywikis.vue'),
+      },
+      {
+        path: 'myreplys',
+        component: () => import('@/pages/myreplys.vue'),
+      },
+      {
+        path: 'mylikes',
+        component: () => import('@/pages/mylikes.vue'),
+      },
+      {
+        path: 'mystars',
+        component: () => import('@/pages/mystars.vue'),
+      },
     ],
   },
   {
@@ -157,65 +206,7 @@ export const routes = [
       },
     ],
   },
-  // mypage
-  {
-    path: '/',
-    component: () => import('@/layouts/mypage.vue'),
-    children: [
-      {
-        path: 'mypage',
-        component: () => import('@/pages/mypage.vue'),
-      },
-      {
-        path: 'myinfo',
-        component: () => import('@/pages/mypage.vue'),
-      },
-      {
-        path: 'mytables',
-        component: () => import('@/pages/mytables.vue'),
-      },
-      {
-        path: 'mytables/:tableId',
-        component: () => import('@/pages/tabledetail.vue'),
-        props: true
-      },
-      {
-        path: 'writepost/:tableId',
-        component: () => import('@/pages/writetablepost.vue'),
-        props: true
-      },
-      {
-        path: 'writewiki/:tableId',
-        component: () => import('@/pages/writetablewiki.vue'),
-        props: true
-      },
 
-
-
-
-      {
-        path: 'myposts',
-        component: () => import('@/pages/myposts.vue'),
-      },
-      {
-        path: 'mywikis',
-        component: () => import('@/pages/mywikis.vue'),
-      },
-      {
-        path: 'myreplys',
-        component: () => import('@/pages/myreplys.vue'),
-      },
-      {
-        path: 'mylikes',
-        component: () => import('@/pages/mylikes.vue'),
-      },
-      {
-        path: 'mystars',
-        component: () => import('@/pages/mystars.vue'),
-      },
-
-    ],
-  },
 ]
 
 export default routes

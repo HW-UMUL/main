@@ -21,29 +21,9 @@ const props = defineProps({
     id: String
 })
 
-async function getTag(postId){
-  const response = await fetch(
-      `http://${serverAddress}/api/tagpost/read/${postId}`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth}`,
-        },
-        credentials: 'include'
-      }
-  )
-
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    const tags = await response.json()
-    console.log(tags)
-  }
-}
 async function getPost(postId){
 
-  const response = await fetch(
+  const postResponse = await fetch(
       `http://${serverAddress}/api/post/read/${postId}`,
       {
         method: 'GET',
@@ -55,16 +35,29 @@ async function getPost(postId){
       }
   )
 
-  if(!response.ok) {
+  const tagResponse = await fetch(
+      `http://${serverAddress}/api/tagpost/read/${postId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!postResponse.ok || !tagResponse.ok) {
     alert("실패!")
   } else{
-    post.value = await response.json()
+    post.value = await postResponse.json()
+    post.value.tag = await tagResponse.text()
+    console.log(post.value.tag)
   }
 }
 
 const postId = props.id
 getPost(postId)
-
 async function updatePost(postId){
 
   const formData = {
@@ -89,7 +82,8 @@ async function updatePost(postId){
   if(!response.ok) {
     alert("실패!")
   } else{
-    router.push(`/`) 
+    router.go(-1)
+//    router.push(`/`) 
   }
 }
 

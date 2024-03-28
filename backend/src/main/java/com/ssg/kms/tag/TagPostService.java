@@ -22,8 +22,14 @@ public class TagPostService {
     
     
     @Transactional(readOnly = true)
-    public List<TagPost> readTagByPostId(Long postId, Optional<User> user) {
-    	return tagPostRepository.findAllByPostId(postId);
+    public String readTagByPostId(Long postId, Optional<User> user) {
+    	List<TagPost> tagPosts = tagPostRepository.findAllByPostId(postId);
+    	StringBuilder tagPostsSB = new StringBuilder();
+    	for(TagPost tagPost : tagPosts) {
+    		tagPostsSB.append(tagPost.getTag().getName());
+    		tagPostsSB.append(" ");
+    	}
+    	return tagPostsSB.toString();
     }
     
 }

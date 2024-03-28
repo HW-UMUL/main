@@ -54,10 +54,12 @@ const editor = useEditor({
   },
 })
 
-
 onMounted(()=>{
-    setTimeout(() => editor.value.commands.setContent(props.modelValue), 10);  
+  watch(() => props.modelValue, (value) => {
+    editor.value.commands.setContent(props.modelValue)
+  })
 })
+
 
 </script>
 

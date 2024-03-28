@@ -83,6 +83,11 @@ async function moveChatRoom(chatRoomId){
 }
 
 getChatRooms()
+
+
+
+const createChatRoomDialog = ref(false)
+
 </script>
 
 <template>
@@ -90,17 +95,9 @@ getChatRooms()
     <VCol
       cols="12"
       md="8"
-      class="mb-4"
+      class="mb-4"      
     >
-    <div>
-      <form @submit.prevent="createChatRoom()">        
-        {{ chatRoom.name }}
-        <input type="text" v-model="chatRoom.name"></input>
-        <input type="submit">정보 제출</input>
-      </form>
-    </div>
-    <hr/>
-    <div v-for="(item, index) in chatRooms" :key="index">
+    <div v-for="(item, index) in chatRooms" :key="index" >
       <div>    
         <ChatRoomSummary :chatRoom="item.chatRoom" style="margin-bottom: 20px;" @click="moveChatRoom(item.chatRoom.id)" />
       </div>
@@ -110,8 +107,40 @@ getChatRooms()
       cols="12"
       md="4"
     >
-      <AnalyticsAward />
+      <VCard title="Create Chat Room" @click="inviteUserDialog=true" style="margin-bottom: 20px;"/>
+
     </VCol>  
 
   </VRow>
+
+
+
+  <VDialog v-model="createChatRoomDialog" max-width="50%">
+              <VCard>
+                <VCardTitle>Create Chat Room</VCardTitle>
+                <form @submit.prevent="createChatRoom()">
+                  <VCol>
+                  <VTextField
+                  id="name"
+                  v-model="chatRoom.name"
+                  placeholder="채팅방 이름"
+                  label="채팅방 이름"
+                  />
+                  <VBtn
+                  type="submit"
+                  class="me-5"
+                  style="margin-top:10px;"
+                  >
+                  Submit
+                  </VBtn>
+                </VCol>
+                </form>
+                <VCardActions>
+                  <!-- 팝업을 닫는 버튼 -->
+                  <VBtn color="primary" @click="createChatRoomDialog = false">Close</VBtn>
+                </VCardActions>
+              </VCard>
+            </VDialog>
+
 </template>
+

@@ -1,5 +1,9 @@
 <script setup>
 import { onMounted, ref } from 'vue';
+
+const serverAddress = inject('serverAddress')
+const auth = inject('auth')
+
 const props = defineProps({
     postlike: Object
 })
@@ -9,11 +13,12 @@ const like = ref([])
 async function getLikes(){
   
   const response = await fetch(
-    `http://localhost:8080/api/postlike/read/${props.postlike.id}`,
+    `http://${serverAddress}/api/postlike/read/${props.postlike.id}`,
     {
         method: 'GET',
         headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
         },
         credentials: 'include'
     }

@@ -38,6 +38,12 @@ public class ChatController {
     public ResponseEntity<List<Chat>> readChat(@PathVariable Long chatRoomId) {
         return ResponseEntity.ok(chatService.readChat(chatRoomId, userService.getMyUserWithAuthorities()));
     }
+	
+	@GetMapping("/read/recent/{chatRoomId}")
+    public ResponseEntity<Chat> readRecentChat(@PathVariable Long chatRoomId) {
+        return ResponseEntity.ok(chatService.readRecentChat(chatRoomId, userService.getMyUserWithAuthorities()));
+    }
+
 
 	@DeleteMapping("/delete/{chatId}")
     public BodyBuilder deleteChatRoom(@PathVariable Long chatId) {

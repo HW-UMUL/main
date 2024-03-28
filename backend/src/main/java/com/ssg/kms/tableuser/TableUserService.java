@@ -69,8 +69,14 @@ public class TableUserService {
     }
     
     @Transactional(readOnly = true)
-    public List<TableUser> readAllInvite(Optional<User> user) {
+    public List<TableUser> readAllAcceptTableUser(Optional<User> user) {
     	
+    	return tableUserRepository.findAllByUserIdAndAcceptTrue(user.get().getId());
+    	
+    }
+    
+    @Transactional(readOnly = true)
+    public List<TableUser> readAllInvite(Optional<User> user) {    	
     	return tableUserRepository.findByUserIdAndAcceptFalse(user.get().getId());
     	
     }
@@ -81,7 +87,7 @@ public class TableUserService {
     @Transactional(readOnly = true)
     public List<GetUserMapping> readTableUsersByTable(Long tableId, Optional<User> user) {
     	
-    	return tableUserRepository.findAllUsersByTableId(tableId);
+    	return tableUserRepository.findAllUsersByTableIdAndAcceptTrue(tableId);
     	
     }
     

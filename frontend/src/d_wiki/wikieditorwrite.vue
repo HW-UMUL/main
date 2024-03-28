@@ -56,12 +56,10 @@ function submitForm() {
     .post(`http://${serverAddress}/api/wiki/create`, data, { headers })
     .then(response => {
       console.log('서버로부터의 응답:', response.data)
-      // 서버로부터의 응답에 따라 적절한 동작을 수행할 수 있음.
-      // ex) 성공 메시지를 표시하거나 페이지를 리디렉션할 수 있음.
 
-      // const router = useRouter()  -- 라우터로 리다이렉트 하기 위한 코드. 잘 안됨. 보류.
-      // router.push(route.query.redirect || '/dashboard');
-      router.push({ path: '/wiki' })
+      
+//      router.push({ path: '/wiki' })
+      router.go(-1)
     })
     .catch(error => {
       console.error('에러 발생:', error)

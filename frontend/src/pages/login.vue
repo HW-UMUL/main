@@ -51,6 +51,7 @@ async function login() {
   } else{
 
     const jwtToken = await response.headers.get('Authorization').substr(7)
+    sessionStorage.setItem("myname", formData.username);
     $cookies.set("jwtToken", jwtToken)
     router.push({ path: '/' }); 
   }

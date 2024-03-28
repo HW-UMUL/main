@@ -1,6 +1,7 @@
 <script setup>
-import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import Table from '@/views/table/TableSummary.vue';
+import Post from '@/k_views/post/Post.vue';
+import WikiList from '@/views/wiki/WikiList.vue'
+
 import { useRouter } from "vue-router"
 
 const serverAddress = inject('serverAddress')
@@ -11,14 +12,13 @@ const tables = ref([])
 const invites = ref([])
 
 async function getTables(){
-
   const response = await fetch(
-      `http://${serverAddress}/api/tableuser/read`,
+      `http://${serverAddress}/api/tableuser/read/accept`,
       {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth}`,          
+          'Authorization': `Bearer ${auth}`,
         },
         credentials: 'include'
       }
@@ -33,6 +33,10 @@ async function getTables(){
 
 function moveTable(tableId){
   router.push(`/mytables/${tableId}`)
+}
+
+function createTable(){
+  router.push('/createtable')
 }
 
 async function getInvites(){
@@ -72,6 +76,7 @@ async function acceptInvite(tableUserId){
     alert("실패!")
   } else{
     getInvites()
+    getTables()
   }
 }
 
@@ -98,6 +103,61 @@ async function rejectInvite(tableUserId){
 getInvites()
 getTables()
 
+
+const posts = ref([])
+
+async function getPosts(){
+
+const response = await fetch(
+    `http://${serverAddress}/api/post/read/table`,
+   {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  posts.value = await response.json()
+}
+}
+
+const wikis = ref([])
+
+async function getWikis(){
+
+const response = await fetch(
+    `http://${serverAddress}/api/wiki/read/table`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include'
+    }
+)
+
+if(!response.ok) {
+  alert("실패!")
+} else{
+  wikis.value = await response.json()
+}
+}
+
+
+
+
+getPosts()
+getWikis()
+
+const changePostWiki = ref(true)
+
 </script>
 
 <template>
@@ -107,50 +167,80 @@ getTables()
       md="8"
       class="mb-4"
     >
-
-    <div style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
-      <VBtn 
-      to="/createtable"
-      >
-      Create Table
-      </VBtn>    
-    </div>
-    <!-- 초대 받은 내용들~ -->
-    <div v-for="(item, index) in invites" :key="index">
-      <VCard class="position-relative">
-          <VCol class="mb-2">
-            {{ item.table.name }} - {{ item.table.description }}
-            <VBtn 
-            @click="acceptInvite(item.id)"
-            >
-              accept
-            </VBtn>
-            <VBtn 
-            @click="rejectInvite(item.id)"
-            >
-              reject
-            </VBtn>
-          </VCol>
-      </VCard>
-    </div>
-
-    <div v-for="(item, index) in tables" :key="index">
-      <Table @click="moveTable(item.table.id)" :table="item" style="margin-bottom: 20px;"/>
-    </div>
-    
-      <!-- 조직 생성 출력 -->
-      <!-- 조직 리스트 출력       -->
-      <div v-for="(item, index) in posts" :key="index">
-      <Post :post="item" style="margin-bottom: 20px;"/>
-    </div>
-
+    <VRow style="height: 30px; margin-bottom: 20px;">
+      <div class="selectPostWiki" @click="changePostWiki=true">POST</div>
+      <div class="bar"></div>
+      <div class="selectPostWiki" @click="changePostWiki=false">WIKI</div>
+    </VRow>
+      <div v-if="changePostWiki" v-for="(item, index) in posts" :key="index">
+        <Post :post="item" style="margin-bottom: 20px;"/>       
+      </div>
+      <div v-if="!changePostWiki">
+        <WikiList/>
+      </div>
     </VCol>  
     <VCol
       cols="12"
       md="4"
     >
-        <AnalyticsAward />
+      <VCard title="Create Table" @click="createTable" style="margin-bottom: 20px;"/>
+      <VCard v-if=invites.length title="Invite Table" style="margin-bottom: 20px;">
+        <div v-for="(item, index) in invites" :key="index">
+          <VDivider/>
+          <VListItem>
+          <VRow>            
+            <VCol
+            cols="12"
+            md="7"
+            class="mb-4">
+              {{ item.table.name }}
+            </VCol>
+            <VCol
+            cols="12"
+            md="5"
+            class="mb-4">
+            <span @click="acceptInvite(item.id)">Accept/</span>
+            <span @click="rejectInvite(item.id)">Reject</span>
+            </VCol>
+          </VRow>
+        </VListItem>
+        </div>
+      </VCard>
+
+      <VCard v-if=tables.length title="My Table" style="margin-bottom: 20px;">
+        <div v-for="(item, index) in tables" :key="index">
+          <VDivider/>
+          <VListItem>
+            <VRow>
+              <VCol
+              cols="12"
+              md="12"
+              class="mb-4"
+              @click="moveTable(item.table.id)">
+                {{ item.table.name }}
+              </VCol>
+            </VRow>
+        </VListItem>
+        </div>
+      </VCard>
+
     </VCol>  
 
   </VRow>
 </template>
+<style lang="scss">
+@use "@core/scss/pages/page-auth.scss";
+.selectPostWiki{
+  align-items: center;
+  width: 49%;
+  display: flex;
+  justify-content: center;
+  font-size: 20px; 
+//  font-weight: bold;
+}
+
+.bar {
+    width: 1px; /* 바의 너비 */
+    background-color: gray; /* 바의 배경색 */
+}
+</style>

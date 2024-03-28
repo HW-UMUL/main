@@ -1,18 +1,25 @@
 <script setup>
-import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import Post from '@/views/post/Post.vue';
-import Wiki from '@/views/wiki/Wiki.vue';
+import Post from '@/k_views/post/Post.vue';
+import TableWikiList from '@/views/wiki/TableWikiList.vue'
 import { useRouter } from "vue-router"
+import avatar1 from '@images/avatars/avatar-1.png';
+import { useDisplay } from 'vuetify'
+
+const { mdAndUp, mdAndDown } = useDisplay()
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 const router = useRouter()
 
 const props = defineProps({
-    tableId: String
+    tableId: Number
 })
 
 const table = ref([])
+const oriTable = ref({
+  name: '',
+  description: ''
+})
 const tableUsers = ref([])
 const inviteUsers = ref([{ email: '' }])
 const adminUser = ref({
@@ -37,6 +44,9 @@ async function getTable(){
     alert("실패!")
   } else{
     table.value = await response.json()
+    oriTable.value.name = table.value.name
+    oriTable.value.description = table.value.description
+
   }
 }
 
@@ -213,112 +223,254 @@ if(!response.ok) {
 }
 }
 
-const wikis = ref([])
-
-async function getWikis(){
-
-const response = await fetch(
-    `http://${serverAddress}/api/wiki/read/table/${props.tableId}`,
-    {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth}`,          
-      },
-      credentials: 'include'
-    }
-)
-
-if(!response.ok) {
-  alert("실패!")
-} else{
-  wikis.value = await response.json()
-}
-}
-
-
 
 
 getPosts()
-getWikis()
+
+
+
+
+
+//////////////////////////////////////// 초대, 화면 이동, create
+
+const tables = ref([])
+const invites = ref([])
+
+async function getTables(){
+  const response = await fetch(
+      `http://${serverAddress}/api/tableuser/read/accept`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    tables.value = await response.json()
+  }
+}
+
+function moveTable(tableId){
+  router.push(`/mytables/${tableId}`).then(() =>{
+    getTable()
+    getTableUsers()
+    getPosts()
+    test.value = tableId
+  })
+}
+
+async function getInvites(){
+  const response = await fetch(
+      `http://${serverAddress}/api/tableuser/invite`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    invites.value = await response.json()
+  }
+}
+
+async function acceptInvite(tableUserId){
+  const response = await fetch(
+      `http://${serverAddress}/api/tableuser/update/${tableUserId}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getInvites()
+    getTables()
+  }
+}
+
+async function rejectInvite(tableUserId){
+  const response = await fetch(
+      `http://${serverAddress}/api/tableuser/delete/${tableUserId}`,
+      {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    getInvites()
+  }
+}
+
+getInvites()
+getTables()
+
+
+/////////////////////////////////////////////////////////
+
+const changePostWiki = ref(true)
 
 </script>
 
 <template>
+
   <VRow>
     <VCol
       cols="12"
       md="8"
       class="mb-4"
     >
-    
-      <!-- 정보 출력 / 추후 업데이트 가능하게 -->
-      <VCard class="position-relative" style="margin-bottom: 20px;">
-        <VCol class="mb-2">
-          <VCol>
-            {{ table.name }}
-            <p class="table-desc">{{ table.description }}</p>
-          </VCol>
-          <VCol>
-              <VBtn
-                @click="handleTableDialog"
-                style="display: flex; justify-content: space-between;"
-                >
-                Table Edit
-                </VBtn>
-          </VCol>
-        </VCol>
-      </VCard>
-
-      <!-- 멤버 출력 / 버튼 같은거 클릭하면 초대하기 기능 팝업으로 -->
-      <VCard class="position-relative" style="margin-bottom: 20px;">
-        <VCol class="mb-2">
-          <div style="margin-bottom: 20px; display: flex; justify-content: flex-end;">
-            <VBtn 
-            @click="handleUserManageDialog"
-            >
-            User Manage
-            </VBtn>
-          </div>
-          <!-- 멤버 리스트 -->
-          <div v-for="(item, index) in tableUsers" :key="index" >
-            {{ item.user.username }}
-          </div>
-        </VCol>
-      </VCard>      
-
-      <VRow>
-        <VBtn @click="createTablePost">
-          Post+
-        </VBtn>
-        <VBtn @click="createTableWiki">
-          Wiki+
-        </VBtn>
-      </VRow>
-
-
-
-
-
-      <!-- 조직 위키 / 포스트 싹 다 출력 -->
-      <div v-for="(item, index) in posts" :key="index">
-        <Post :post="item" style="margin-bottom: 20px;"/>
+    <VRow>
+      <div
+      class="table-image"
+      >
+      <img class="table-propile-img" :src="avatar1">
+    </div>
+      <div
+      class="table-info"
+      >
+      <div
+      style="
+      margin-left: 5%;
+      font-size:40px;
+      font-weight: 700;
+      ">
+      {{ oriTable.name }}
       </div>
-      <div v-for="(item, index) in wikis" :key="index">
-        <Wiki :wiki="item" style="margin-bottom: 20px;"/>
+      <div
+      style="
+      margin-bottom: 5%;
+      ">
+      </div>
+      <div
+      style="
+      margin-left: 5%;
+      font-size:18px;
+      word-wrap: break-word;
+      white-space: pre-line;
+      ">
+      {{ oriTable.description }}
+      </div>
+      <div 
+      style="
+      margin-left: 5%;
+      margin-top: 5%;
+      margin-bottom: 5%;
+      ">
+        <VBtn
+        style="
+        margin-right:5%;
+        "
+        @click="tableDialog=true"
+        >
+          Table Edit
+        </VBtn>
+        <VBtn
+        @click="handleUserManageDialog"
+        >
+          User Manage
+        </VBtn>
+      </div>
+      
+
+  </div>
+    </VRow>
+    <VRow style="height: 30px; margin-bottom: 20px;">
+      <div class="selectPostWiki" @click="changePostWiki=true">POST</div>
+      <div class="bar"></div>
+      <div class="selectPostWiki" @click="changePostWiki=false">WIKI</div>
+    </VRow>
+
+
+
+
+
+      <div v-if="changePostWiki" v-for="(item, index) in posts" :key="index">
+        <Post :post="item" style="margin-bottom: 20px;"/>       
+      </div>
+      <div v-if="!changePostWiki">
+        <TableWikiList v-bind:tableId="props.tableId"/>
       </div>
 
 
     </VCol>  
     <VCol
       cols="12"
-      md="4"
+      md="4" 
     >
-        <AnalyticsAward />
+      <VCard v-if="changePostWiki && mdAndUp" title="Create POST" @click="createTablePost" style="margin-bottom: 20px;"/>
+      <VCard v-if="!changePostWiki && mdAndUp" title="Create WIKI" @click="createTableWiki" style="margin-bottom: 20px;"/>
+
+      <VCard v-if="invites.length && mdAndUp" title="Invite Table" style="margin-bottom: 20px;">
+        <div v-for="(item, index) in invites" :key="index">
+          <VDivider/>
+          <VListItem>
+          <VRow>            
+            <VCol
+            cols="12"
+            md="7"
+            class="mb-4">
+              {{ item.table.name }}
+            </VCol>
+            <VCol
+            cols="12"
+            md="5"
+            class="mb-4">
+            <span @click="acceptInvite(item.id)">Accept/</span>
+            <span @click="rejectInvite(item.id)">Reject</span>
+            </VCol>
+          </VRow>
+        </VListItem>
+        </div>
+      </VCard>
+
+      <VCard v-if="tables.length && mdAndUp" title="My Table" style="margin-bottom: 20px;">
+        <div v-for="(item, index) in tables" :key="index">
+          <VDivider/>
+          <VListItem>
+            <VRow>
+              <VCol
+              cols="12"
+              md="12"
+              class="mb-4"
+              @click="moveTable(item.table.id)">
+                {{ item.table.name }}
+              </VCol>
+            </VRow>
+        </VListItem>
+        </div>
+      </VCard>
     </VCol>  
 
   </VRow>
 
+
+
+  <!-- Dialog -->
             <VDialog v-model="tableDialog" max-width="50%">
               <VCard>
                 <VCardTitle>Table Edit</VCardTitle>
@@ -335,13 +487,14 @@ getWikis()
                     </VCol>
                     <VCol
                     >
-                      <VTextField
+                      <VTextarea
                       id="description"
                       v-model="table.description"
                       placeholder="설명"
                       label="설명"
                       />
                     </VCol>
+                    <VRow>
                     <VRadioGroup
                     v-model="table.isPublic" 
                     inline>
@@ -357,9 +510,11 @@ getWikis()
                     <VBtn
                       type="submit"
                       class="me-5"
+                      style="margin-top:10px;"
                     >
                       Submit
                     </VBtn>
+                  </VRow>
                   </form>               
                 </VCardText>
                 <VCardActions>
@@ -375,35 +530,47 @@ getWikis()
               <VCard>
                 <VCardTitle>Invite</VCardTitle>
                 <VCardText>
-                  초대
                   <form @submit="addTableUsers">
-                    <!-- 여러 유저의 정보를 입력할 수 있는 입력란 -->
                     <div v-for="(user, index) in inviteUsers" :key="index">
-                      <label>이메일:</label>
-                      <input type="email" v-model="user.email"> <!-- required> -->
+                      <VTextField
+                      id="email"
+                      v-model="user.email"
+                      placeholder="email"
+                      label="email"
+                      style="margin-bottom: 5px;"
+                      />
                     </div>
-                    <!-- 새로운 사용자 추가 버튼 -->
-                    <button type="button" @click="addUser">새로운 사용자 추가</button><br/>
-                    <!-- 정보를 서버로 전송하는 버튼 -->
-                    <button type="submit">정보 제출</button>
+                    <VBtn 
+                    type="button" 
+                    @click="addUser"
+                    style="margin-right: 5px;">Add User</VBtn>
+                    <VBtn type="submit">Submit</VBtn>
                   </form>               
                 </VCardText>
                 <VCardTitle>Add Admin</VCardTitle>
                 <VCardText>
-                  권한 추가
                   <form @submit="addAdminUser">
-                    <label>이메일:</label>
-                    <input type="email" v-model="adminUser.email"> <!-- required> -->
-                    <button type="submit">정보 제출</button>
+                    <VTextField
+                      id="email"
+                      v-model="adminUser.email"
+                      placeholder="email"
+                      label="email"
+                      style="margin-bottom: 5px;"
+                      />
+                      <VBtn type="submit">Submit</VBtn>
                   </form>               
                 </VCardText>
                 <VCardTitle>Remove Admin</VCardTitle>
                 <VCardText>
-                  권한 삭제
                   <form @submit="removeAdminUser">
-                    <label>이메일:</label>
-                    <input type="email" v-model="adminUser.email"> <!-- required> -->
-                    <button type="submit">정보 제출</button>
+                    <VTextField
+                      id="email"
+                      v-model="adminUser.email"
+                      placeholder="email"
+                      label="email"
+                      style="margin-bottom: 5px;"
+                      />
+                      <VBtn type="submit">Submit</VBtn>
                   </form>               
                 </VCardText>
                 <VCardActions>
@@ -414,3 +581,37 @@ getWikis()
             </VDialog>
 
 </template>
+
+<style lang="scss">
+@use "@core/scss/pages/page-auth.scss";
+.selectPostWiki{
+  align-items: center;
+  width: 49%;
+  display: flex;
+  justify-content: center;
+  font-size: 20px; 
+//  font-weight: bold;
+}
+
+.bar {
+    width: 1px; /* 바의 너비 */
+    background-color: gray; /* 바의 배경색 */
+}
+
+.table-image{
+  width: 30%;
+  height:100%;
+}
+.table-info{
+  width: 70%;
+}
+
+.table-propile-img {
+  margin-left: 5%;
+   width: 100%;
+   height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+</style>

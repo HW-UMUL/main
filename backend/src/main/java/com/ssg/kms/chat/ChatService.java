@@ -64,6 +64,12 @@ public class ChatService {
     public List<Chat> readChat(Long chatRoomId, Optional<User> user) {
     	return chatRepository.findAllByChatRoomId(chatRoomId);
     }
+    
+    @Transactional(readOnly = true)
+    public Chat readRecentChat(Long chatRoomId, Optional<User> user) {
+    	return chatRepository.findTopByChatRoomIdOrderByidDesc(chatRoomId);
+    }
+
 
     @Transactional
     public void deleteChat(Long chatId, Optional<User> user) {

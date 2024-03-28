@@ -6,19 +6,61 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
 </script>
 
 <template>
-    <VerticalNavLink
-    :item=" {
-      title: 'My Page',
-      to: '/mypage',
-      icon: 'ri-home-line'      
-    }">    
-  </VerticalNavLink>
+    <VerticalNavGroup
+      :item="{
+        title: 'My Page',
+        icon: 'ri-user-smile-line'
+      }"
+    >
+      <VerticalNavLink
+      :item=" {
+        title: 'Account Setting',
+        to: '/mypage',
+        icon: 'ri-home-line'      
+      }"/>
+
+      <VerticalNavLink
+      :item=" {
+        title: 'Post',
+        to: '/myposts',
+        icon: 'ri-chat-smile-line'      
+      }"/>
+
+      <VerticalNavLink
+      :item=" {
+        title: 'Wiki',
+        to: '/mywikis',
+        icon: 'ri-book-line'      
+      }"/>
+
+      <VerticalNavLink
+      :item=" {
+        title: 'Reply',
+        to: '/myreplys',
+        icon: 'ri-reply-line'      
+      }"/>
+
+      <VerticalNavLink
+      :item=" {
+        title: 'Star',
+        to: '/mylikes',
+        icon: 'ri-star-line'      
+      }"/>
+
+      <VerticalNavLink
+      :item=" {
+        title: 'Like',
+        to: '/mystars',
+        icon: 'ri-heart-line'      
+      }"/>      
+
+  </VerticalNavGroup>
 
   <VerticalNavLink
     :item=" {
       title: 'Post',
       to: '/dashboard',
-      icon: 'ri-home-line'      
+      icon: 'ri-chat-smile-line'      
     }">    
   </VerticalNavLink>
 
@@ -29,15 +71,7 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
         icon:'ri-book-line'
       }"
   />
-
-  <VerticalNavLink
-    :item="{
-      title: 'Account Settings',
-      icon: 'ri-user-settings-line',
-      to: '/account-settings',
-    }"
-  />
-
+  
   <VerticalNavLink
     :item="{
       title: 'Login',
@@ -80,10 +114,9 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
   <VerticalNavLink
     :item="{
       title: 'Follow',
-      icon: 'ri-chat-1-line',
+      icon: 'ri-user-heart-line',
       to: '/follow',
     }"
   /> 
-
 
 </template>

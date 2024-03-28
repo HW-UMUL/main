@@ -30,7 +30,7 @@ async function createTable(){
   if(!response.ok) {
     alert("실패!")
   } else{
-    router.push({ path: '/mytables' })
+    router.push({ path: '/table' })
   }
 }
 

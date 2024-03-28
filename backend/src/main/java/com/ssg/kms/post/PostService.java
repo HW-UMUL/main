@@ -2,8 +2,10 @@ package com.ssg.kms.post;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -182,7 +184,7 @@ public class PostService {
     	
     	String[] strTags = splitTag(postDto.getTag());
     	List<Tag> tags = new ArrayList<>();
-    	List<TagPost> tagPosts = new ArrayList<>();
+    	Set<TagPost> tagPosts = new HashSet<>();
     	
     	for(String str : strTags) {
     		    		

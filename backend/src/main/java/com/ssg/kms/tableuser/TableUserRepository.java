@@ -24,6 +24,8 @@ public interface TableUserRepository extends JpaRepository<TableUser, Long> {
 	List<TableUser> findByTableIdAndUserId(Long tableId, Long UserId);
 	
 	List<TableUser> findByUserIdAndAcceptFalse(Long userId);
+	
+	List<TableUser> findAllByUserIdAndAcceptTrue(Long userId);
 
 	TableUser findByTableId(Long tableId);
 
@@ -39,6 +41,10 @@ public interface TableUserRepository extends JpaRepository<TableUser, Long> {
 	// 알람
 	@Query(value = "SELECT tu.user_id FROM table_user tu WHERE tu.table_id = :tableId", nativeQuery = true)
 	List<Long> findAllUserAllByTableId(Long tableId);
+
+	List<GetUserMapping> findAllUsersByTableIdAndAcceptTrue(Long tableId);
+
+	
 
 
 	

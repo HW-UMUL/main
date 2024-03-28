@@ -1,125 +1,100 @@
 <script setup>
-import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
-import { useRouter } from "vue-router"
-
-const router = useRouter()
-const serverAddress = inject('serverAddress')
-const auth = inject('auth')
+import MyEditor from '@/d_wiki/wikieditor.vue'
+import axios from 'axios'
+import { useRouter, useRoute } from 'vue-router'
 
 const props = defineProps({
     tableId: String
 })
 
-const wiki = ref({
+
+
+const router = useRouter()
+const route = useRoute()
+
+const serverAddress = inject('serverAddress')
+const auth = inject('auth')
+
+// 토큰 브라우저에서 받아오기
+let authToken = 'Bearer '
+let jwtToken = auth
+
+authToken = authToken + jwtToken
+
+const formData = ref({
   title: '',
   content: '',
   category: ''
 })
 
-async function writeWiki(){
 
-  const formData = {
-    title: wiki.value.title,
-    content: wiki.value.content,
-    category: wiki.value.category
+function submitForm() {
+  // 헤더 정보 설정
+  const headers = {
+    'Content-Type': 'application/json',
+    Authorization: authToken,
   }
 
-  const response = await fetch(
-      `http://${serverAddress}/api/wiki/create/${props.tableId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth}`,
-        },
-        body: JSON.stringify(formData),
-        credentials: 'include'
-      }
-  )
+  // 서버로 보낼 데이터
+  const data = JSON.stringify(formData.value)
 
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    router.push('/')
-//    window.location.href = '/wiki'
-  }
+  console.log(data)
+  // POST 요청 보내기
+  axios
+    .post(`http://${serverAddress}/api/wiki/create/${props.tableId}`, data, { headers })
+    .then(response => {
+      console.log('서버로부터의 응답:', response.data)
+      // 서버로부터의 응답에 따라 적절한 동작을 수행할 수 있음.
+      // ex) 성공 메시지를 표시하거나 페이지를 리디렉션할 수 있음.
+
+      // const router = useRouter()  -- 라우터로 리다이렉트 하기 위한 코드. 잘 안됨. 보류.
+      // router.push(route.query.redirect || '/dashboard');
+      router.push({ path: `/mytables/${props.tableId}` })
+    })
+    .catch(error => {
+      console.error('에러 발생:', error)
+      // 에러 처리 로직을 추가할 수 있습니다.
+    })
 }
 
 </script>
 
 <template>
-  <VRow>
-    <VCol
-      cols="12"
-      md="8"
-      class="mb-4"
+  <div class="container mx-auto max-w-4xl my-8">
+    <form
+      @submit.prevent="submitForm"
+      class="space-y-8"
     >
-      <VCard class="position-relative">
-        <VCardText>
-          <div >
-            <form @submit.prevent="writeWiki()">
-            <p>Wiki 작성</p>
-                <VCol
-                >
-                  <VTextField
-                  id="title"
-                  v-model="wiki.title"
-                  placeholder="제목"
-                  label="제목"
-                  />
-                </VCol>
+      <input
+        type="text"
+        class="w-full border border-gray-400 p-2"
+        v-model="formData.title"
+        placeholder="title"
+        style="padding-left: 10px"
+      />
 
-              
-
-                <VCol
-                >
-                  <VTextarea
-                  id="content"
-                  v-model="wiki.content"
-                  placeholder="본문"
-                  label="본문"
-                  />
-                </VCol>
-
-                <VCol
-                >
-                  <VTextField
-                  id="tag"
-                  v-model="wiki.category"
-                  placeholder="카테고리"
-                  label="카테고리"
-                  />
-                </VCol>
-
-
-              <VCol cols="12">
-                <VBtn
-                  type="submit"
-                  class="me-5"
-                >
-                  Submit
-                </VBtn>
-
-                <VBtn
-                  color="secondary"
-                  type="reset"
-                  variant="outlined"
-                >
-                  Reset
-                </VBtn>
-              </VCol>
-
-              <!-- <div><label>제목</label><input type="text" v-model="post.title"></input></div>
-              <div><label>본문</label><input type="text" v-model="post.content"></input></div>
-              <div><label>카테고리</label><input type="text" v-model="post.category"></input></div>
-              <div><label>태그</label><input type="text" v-model="post.tag"></input></div>
-              <div><input type="submit"></input></div> -->
-            </form>
-          </div>
-        </VCardText>
-      </VCard>
-    
-    </VCol>  
-
-  </VRow>
+      <div>
+        <MyEditor v-model="formData.content" />
+      </div>
+      <div>
+        <input
+          type="text"
+          class="w-full border border-gray-400 p-2"
+          v-model="formData.category"
+          placeholder="category"
+          style="padding-left: 10px"
+        />
+      </div>
+      <br />
+      <div>
+        <button
+          type="submit"
+          class="bg-blue-600 text-white p-2 rounded"
+          style="background-color: #905dff"
+        >
+          Create Wiki
+        </button>
+      </div>
+    </form>
+  </div>
 </template>
