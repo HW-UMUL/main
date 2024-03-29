@@ -29,4 +29,6 @@ public interface WikiRepository extends JpaRepository<Wiki, Long> {
 
 	List<Wiki> findAllByTitleContaining(String searchKeyword);
 
+	List<Wiki> findAllByTableIsPublicTrueAndUserId(Long userId);
+
 }

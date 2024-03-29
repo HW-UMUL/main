@@ -132,6 +132,12 @@ public class PostService {
     	return postRepository.findAllByTableIdIn(tableIds);
     }
    
+    @Transactional(readOnly = true)
+    public List<Post> readUserPublicPost(Long userId, Optional<User> user) {
+    	
+		return postRepository.findAllByTableIsPublicTrueAndUserId(userId);
+    }
+
 
 
     @Transactional

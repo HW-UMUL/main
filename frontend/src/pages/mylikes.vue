@@ -1,41 +1,20 @@
 <script setup>
-import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
-import Post from '@/views/post/Post.vue';
-import Wiki from '@/views/wiki/Wiki.vue';
+import Post from '@/k_views/post/Post.vue';
+import MyLikeWikiList from '@/views/wiki/MyLikeWikiList.vue'
+import PostLikeSort from '@/k_views/list/PostLikeSort.vue';
+import ViewWikiLikeRank from '@/d_dashboard/ViewWikiLikeRank.vue'
 
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 
 const posts = ref([])
-const wikis = ref([])
 
 async function getPosts(){
 
-  const response = await fetch(
-      `http://${serverAddress}/api/postlike/read/my`,
-      {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth}`,          
-        },
-        credentials: 'include'
-      }
-  )
-
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    posts.value = await response.json()
-  }
-}
-
-async function getWikis(){
-
 const response = await fetch(
-    `http://${serverAddress}/api/wikilike/read/my`,
-    {
+    `http://${serverAddress}/api/postlike/read/my`,
+   {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -48,12 +27,15 @@ const response = await fetch(
 if(!response.ok) {
   alert("실패!")
 } else{
-  wikis.value = await response.json()
+  posts.value = await response.json()
 }
 }
 
+
 getPosts()
-getWikis()
+
+const changePostWiki = ref(true)
+
 </script>
 
 <template>
@@ -63,25 +45,44 @@ getWikis()
       md="8"
       class="mb-4"
     >
-    
-    <div v-for="(item, index) in posts" :key="index">
-      <!-- {{ item }}       -->
-      <Post :post="item.post" style="margin-bottom: 20px;"/>
-    </div>
-
-    <div v-for="(item, index) in wikis" :key="index">
-      <!-- {{ item }}       -->
-      <Wiki :wiki="item.wiki" style="margin-bottom: 20px;"/>
-    </div>
-
-
+    <VRow style="height: 30px; margin-bottom: 20px;">
+      <div class="selectPostWiki" @click="changePostWiki=true">POST</div>
+      <div class="bar"></div>
+      <div class="selectPostWiki" @click="changePostWiki=false">WIKI</div>
+    </VRow>
+      <div v-if="changePostWiki" v-for="(item, index) in posts" :key="index">
+        <Post :post="item.post" style="margin-bottom: 20px;"/>       
+      </div>
+      <div v-if="!changePostWiki">
+        <MyLikeWikiList/>
+      </div>
     </VCol>  
     <VCol
       cols="12"
       md="4"
     >
-        <AnalyticsAward />
+      <VCard title="추천순" style="margin-bottom: 20px">
+        <PostLikeSort style="margin-bottom: 20px" />
+      </VCard>
+      <ViewWikiLikeRank style="margin-bottom: 20px;"/>
+
     </VCol>  
 
   </VRow>
 </template>
+<style lang="scss">
+@use "@core/scss/pages/page-auth.scss";
+.selectPostWiki{
+  align-items: center;
+  width: 49%;
+  display: flex;
+  justify-content: center;
+  font-size: 20px; 
+//  font-weight: bold;
+}
+
+.bar {
+    width: 1px; /* 바의 너비 */
+    background-color: gray; /* 바의 배경색 */
+}
+</style>

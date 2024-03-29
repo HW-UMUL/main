@@ -1,14 +1,24 @@
 <script setup>
-const serverAddress = inject('serverAddress')
-const auth = inject('auth')
 import { useRouter } from "vue-router"
+import axios from 'axios'
+import avatar1 from '@images/avatars/avatar-1.png';
 
+const serverAddress = inject('serverAddress')
+const profileAddress = inject('profileAddress')
+
+const auth = inject('auth')
+
+// 토큰 브라우저에서 받아오기
+let authToken = 'Bearer '
+
+authToken = authToken + auth
 const router = useRouter()
 
 const info = ref({
   username: '',
   email: '',
-  password: ''
+  password: '',
+  storeFileName: ''
 })
 
 async function getInfo(){
@@ -31,7 +41,7 @@ async function getInfo(){
     const res = await response.json()
     info.value.username = res[0]
     info.value.email = res[1]
-    
+    info.value.storeFileName = res[2]
   }
 }
 
@@ -104,7 +114,32 @@ if(!response.ok) {
 
 }
 }
+///////////// update image
+function sendFile() {
+    var formData = new FormData();
 
+    // 모든 파일 입력란에 대해 반복하면서 선택된 파일을 FormData에 추가
+    var fileInputs = document.querySelectorAll('.file-input');
+    fileInputs.forEach(input => {
+    if (input.files.length > 0) {
+        formData.append('files', input.files[0]);
+    }
+    });
+
+    // FormData를 서버로 전송
+    axios.put(`http://${serverAddress}/api/update/image`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: authToken,
+        }
+    }).then(() => {
+        console.log('파일 전송 성공');
+    }).catch(() => {
+        console.error('파일 전송 실패');
+    });
+}
+
+///////////////
 
 async function deleteAccount(){
 
@@ -144,6 +179,10 @@ getInfo()
           <div >
             
             <p >My Info</p>
+            <img v-if="!info.storeFileName" class="follow-propile-img" :src="avatar1">
+            <img v-else class="follow-propile-img" :src="profileAddress + info.storeFileName">
+            <input type="file" id="file1" class="file-input">
+            <button @click="sendFile">프로필 바꾸기</button>
                 <VCol
                 >
                   <VTextField
@@ -219,3 +258,15 @@ getInfo()
 
   </VRow>
 </template>
+
+<style lang="scss">
+
+.follow-propile-img {
+  margin-top: 10px;
+  margin-left: 10px;
+   width: 100px;
+   height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+</style>

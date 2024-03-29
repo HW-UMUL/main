@@ -126,6 +126,12 @@ public class WikiService {
     	List<Long> tableIds = tableUserRepository.findTableIdAllByUserId(user.get().getId());
     	return wikiRepository.findAllByTableIdIn(tableIds);
     }
+    
+    @Transactional(readOnly = true)
+    public List<Wiki> readUserPublicWiki(Long userId, Optional<User> user) {
+    	
+		return wikiRepository.findAllByTableIsPublicTrueAndUserId(userId);
+    }
 
     
     @Transactional

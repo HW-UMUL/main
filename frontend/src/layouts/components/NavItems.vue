@@ -43,14 +43,14 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       <VerticalNavLink
       :item=" {
         title: 'Star',
-        to: '/mylikes',
+        to: '/mystars',
         icon: 'ri-star-line'      
       }"/>
 
       <VerticalNavLink
       :item=" {
         title: 'Like',
-        to: '/mystars',
+        to: '/mylikes',
         icon: 'ri-heart-line'      
       }"/>      
 

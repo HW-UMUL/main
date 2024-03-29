@@ -81,5 +81,14 @@ public class WikiController {
 	public ResponseEntity<List<Wiki>> readAllTableWiki(){
 		return ResponseEntity.ok(wikiService.readAllTableWiki(userService.getMyUserWithAuthorities()));
 	}
+	
+	/////////////////////////////////////////////////
+	// Other
+	/////////////////////////////////////////////////
+
+	@GetMapping("/read/user/{userId}")
+    public ResponseEntity<List<Wiki>> readUserPublicWiki(@PathVariable Long userId) {
+        return ResponseEntity.ok(wikiService.readUserPublicWiki(userId, userService.getMyUserWithAuthorities()));
+    }	
 
 }

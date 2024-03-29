@@ -1,17 +1,13 @@
 package com.ssg.kms.user;
 
-import java.util.HashSet;
-import java.util.Set;
+import com.ssg.kms.FileManager.FileManager;
 
-import com.ssg.kms.role.Role;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
@@ -46,6 +42,9 @@ public class User {
     @NotBlank
     @Size(max = 120)
     private String password;
+        
+    @OneToOne
+    private FileManager profile;
 
     @NotBlank
     @Column(unique = true)

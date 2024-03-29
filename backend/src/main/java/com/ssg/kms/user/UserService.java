@@ -7,7 +7,10 @@ import java.util.Optional;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ssg.kms.FileManager.FileManager;
+import com.ssg.kms.FileManager.FileManagerService;
 import com.ssg.kms.chat.Chat;
 import com.ssg.kms.chat.ChatRepository;
 import com.ssg.kms.chatroomuser.ChatRoomUserRepository;
@@ -49,6 +52,7 @@ public class UserService {
     private final ChatRepository chatRepository;
     
     private final PasswordEncoder passwordEncoder;
+    private final FileManagerService fileManagerService;
     
     @Transactional
     public Boolean delete(Optional<User> user) {
@@ -93,6 +97,10 @@ public class UserService {
     	List<String> info = new ArrayList<>();
     	info.add(user.get().getUsername());
     	info.add(user.get().getEmail());
+    	
+    	if(user.get().getProfile() != null) {    		
+        	info.add(user.get().getProfile().getStoreFileName());
+    	}
 
     	return info;
     }
@@ -127,6 +135,21 @@ public class UserService {
     	userRepository.save(user.get());
     	return true;
     }
+    
+    @Transactional
+    public Boolean updateImage(MultipartFile file, Optional<User> user) {
+    	MultipartFile[] multipartFiles = {file};
+    	FileManager fileManager;
+    	try {
+			fileManager = fileManagerService.createFile(multipartFiles, user).get(0);
+			user.get().setProfile(fileManager);
+			userRepository.save(user.get());
+		} catch (Exception e) {
+			return false;
+		}
+    	return true;
+    }
+    
     //////////////////////////////////////////////////////////////////////
     @Transactional
     public User signup(UserDto userDto) {
@@ -199,6 +222,11 @@ public class UserService {
     @Transactional
     public void deleteUser(User user) {
     	userRepository.delete(user);
+    }
+    
+    @Transactional(readOnly = true)
+    public User getOtherUserInfo(Long userId, Optional<User> user) {
+    	return userRepository.findById(userId).get();
     }
     
 }

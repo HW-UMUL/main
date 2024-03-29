@@ -27,9 +27,11 @@ app.use(VueCookies)
 app.provide("app", app)
 
 const serverAddress = "localhost:8080"
+const profileAddress = "http://" + serverAddress + "/profile/"
 //const serverAddress = "ec2-13-209-98-152.ap-northeast-2.compute.amazonaws.com:8080"
 
 app.provide('serverAddress', serverAddress)
+app.provide('profileAddress', profileAddress)
 registerPlugins(app)
 
 library.add(faUserSecret, farThumsUp, fasThumsUp, farStar, fasStar)

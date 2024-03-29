@@ -107,15 +107,17 @@ const createChatRoomDialog = ref(false)
       cols="12"
       md="4"
     >
-      <VCard title="Create Chat Room" @click="inviteUserDialog=true" style="margin-bottom: 20px;"/>
+      <VCard title="Create Chat Room" @click="createChatRoomDialog=true" style="margin-bottom: 20px;"/>
 
     </VCol>  
 
   </VRow>
 
 
-
+<!--
   <VDialog v-model="createChatRoomDialog" max-width="50%">
+-->
+            <VDialog v-model="createChatRoomDialog" max-width="50%">
               <VCard>
                 <VCardTitle>Create Chat Room</VCardTitle>
                 <form @submit.prevent="createChatRoom()">

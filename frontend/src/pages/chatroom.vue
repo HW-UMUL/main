@@ -6,6 +6,7 @@ import avatar1 from '@images/avatars/avatar-1.png';
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
+
 const myname = sessionStorage.getItem("myname")
 const check = ref(true)
 // websocket
@@ -194,19 +195,6 @@ function formatDateTime(dateTimeString) {
 </script>
 
 <template>
-  <table>
-    <tbody>
-      <tr>
-        <td>test1</td>
-        <td>test2</td>
-      </tr>
-      <tr>
-        <td>test3</td>
-        <td>test4</td>
-      </tr>
-    </tbody>
-
-  </table>
   <div style="display: none;">{{ check }}</div>
   <VRow>
     <VCol
@@ -214,10 +202,6 @@ function formatDateTime(dateTimeString) {
       md="8"
       class="mb-4"
     >
-<!--
-          {{ chat.user.username }} - {{ chat.content }} - {{ chat.date }}
-
--->    
     <div class="chat-board">
       <div v-for="(chat, index) in chats" :key="index">
         <div v-if="chat.user.username===myname" class="d-flex flex-row-reverse">
@@ -226,44 +210,37 @@ function formatDateTime(dateTimeString) {
           </div>     
           <div class="chat-date">{{ formatDateTime(chat.date) }}</div>
         </div>
-        <div v-else>
-          <table>
-            <tr>
-              <td>
-                <img class="other-propile-img" :src="avatar1">                
-              </td>
-              <td class="d-flex">
-                <div style="margin-left: 10px;">{{ chat.user.username }}</div>
-            <div class="ma-2 pa-2 other-chat-box">
-              {{ chat.content }}     
+        <div v-else>        
+          <div 
+          class="d-flex align-start"
+          >
+          <img class="other-propile-img" :src="avatar1"/>            
+          <div class="flex-column">
+            <div style="margin-left: 8px;">{{ chat.user.username }}</div>
+            <div class="d-flex">
+              <div class="other-chat-box ma-2 pa-2">{{ chat.content }}</div>        
+              <div class="align-self-end other-chat-date">{{ formatDateTime(chat.date) }}</div>        
+            </div>
           </div>
+        </div>
 
-
-              </td>
-            </tr>
-          </table>
-          <!--
-          <img class="other-propile-img" :src="avatar1">
-            <div style="margin-left: 10px;">{{ chat.user.username }}</div>
-            <div class="ma-2 pa-2 other-chat-box">
-              {{ chat.content }}     
-          </div>
-          <div class="other-chat-date">{{ formatDateTime(chat.date) }}</div>  
-
-          -->
         </div>       
       </div>
-      <VRow style="width:100%">
+    </div>
+    <div class="input-message">
+      <VRow class="align-self-end" style="max-width:100%;">
         <VCol style="min-width:77%">
-          <VTextField
+          <VTextarea
           id="message"
           placeholder="Message"
           label="Message"
           v-model="message"
+          rows=1
+          no-resize="true"
           style="margin-left: 10px;"
           />
        </VCol>
-       <VCol >
+       <VCol>
           <VBtn @click="sendMessage" style="margin-left: 10px; width:100%">Submit</VBtn>
         </VCol>
       </VRow>
@@ -310,13 +287,17 @@ function formatDateTime(dateTimeString) {
 
 </template>
 <style>
+
+#message::-webkit-scrollbar-thumb {
+  display: none;
+  background: #888; /* 스크롤바 색상 */
+}
+#message::-webkit-scrollbar-corner{
+  display: none;
+}
 /* 수직 스크롤바 스타일 */
 ::-webkit-scrollbar {
   width: 10px; /* 스크롤바의 너비 */
-}
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1; /* 스크롤바 트랙 배경색 */
 }
 
 ::-webkit-scrollbar-thumb {
@@ -330,10 +311,18 @@ function formatDateTime(dateTimeString) {
 */
 
 .chat-board {
-  height: 80dvh; 
+  height: 75dvh; 
   overflow-y:scroll; 
+  overflow-x: hidden;
   background-color: rgba(220, 145, 196, 0.393);
-  border-radius: 10px 10px 10px 10px; /* 오른쪽 상단 귀퉁이만 직각으로 만듦 */
+  border-radius: 10px 10px 0 0; /* 오른쪽 상단 귀퉁이만 직각으로 만듦 */
+  /* 좌상  우상 우하 좌하*/
+}
+
+.input-message{
+  margin-top: 12px;
+  background-color: rgba(220, 145, 196, 0.393);
+  border-radius: 0 0 10px 10px; /* 오른쪽 상단 귀퉁이만 직각으로 만듦 */
 
 }
 .my-chat-box {
@@ -346,7 +335,7 @@ function formatDateTime(dateTimeString) {
 }
 
 .other-chat-box {
-      max-width: 55%;
+  max-width: 55%;
       background-color: rgb(255, 255, 255);
       border: 2px solid #333;
       border-radius: 0 10px 10px 10px; /* 오른쪽 상단 귀퉁이만 직각으로 만듦 */
@@ -360,10 +349,11 @@ function formatDateTime(dateTimeString) {
   margin-bottom: 5px;
 }
 
+
 .other-chat-date {
-  background-color: green;
   display: flex;
   align-items: flex-end; 
+  margin-left: 5px;
   margin-bottom: 5px;
 }
 

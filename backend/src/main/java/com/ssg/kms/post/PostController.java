@@ -83,5 +83,15 @@ public class PostController {
 	public ResponseEntity<List<Post>> readAllTablePost(){
 		return ResponseEntity.ok(postService.readAllTablePost(userService.getMyUserWithAuthorities()));
 	}
+	
+	/////////////////////////////////////////////////
+	// Other
+	/////////////////////////////////////////////////
+
+	@GetMapping("/read/user/{userId}")
+    public ResponseEntity<List<Post>> readUserPublicPost(@PathVariable Long userId) {
+        return ResponseEntity.ok(postService.readUserPublicPost(userId, userService.getMyUserWithAuthorities()));
+    }
+
 
 }

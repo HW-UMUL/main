@@ -1,8 +1,13 @@
 <script setup>
-import AnalyticsAward from '@/views/dashboard/AnalyticsAward.vue';
+import avatar1 from '@images/avatars/avatar-1.png';
+import { useRouter } from "vue-router"
 
 const serverAddress = inject('serverAddress')
+const profileAddress = inject('profileAddress')
+
+
 const auth = inject('auth')
+const router = useRouter()
 
 const emailKeyword = ref('')
 const emails = ref([])
@@ -72,6 +77,7 @@ async function getFollowers(){
     alert("실패!")
   } else{
     followers.value = await response.json()
+    settingFollowerEmails(followers)
   }
 }
 
@@ -93,6 +99,7 @@ async function getFollowees(){
     alert("실패!")
   } else{
     followees.value = await response.json()
+    settingFolloweeEmails(followees)
   }
 }
 
@@ -100,8 +107,8 @@ const switchContent = ref(true)
 
 function isFollowed(email){
  
-  if(followers.value.includes(email)){
-    return 'Follow'
+  if(followerEmails.value.includes(email)){
+    return 'unFollow'
   }
   else{
     return 'Follow'
@@ -110,6 +117,35 @@ function isFollowed(email){
 
 getFollowees()
 getFollowers()
+
+//////////// 이메일 계산하기
+function settingFollowerEmails(followers){
+  followerEmails.value = []
+  followers.value.forEach(function(item){
+    followerEmails.value.push(item.follower.email)
+  })
+}
+function settingFolloweeEmails(followees){
+  followeeEmails.value = []
+  followees.value.forEach(function(item){
+    followeeEmails.value.push(item.followee.email)
+  })  
+}
+
+const followerEmails = ref([])
+const followeeEmails = ref([])
+
+////////////////////////////////////////////////////
+
+//////////// 다른 사람 페이지 
+
+function moveToOther(userId){
+  router.push({ path: `/user/${userId}` })
+}
+
+
+////////////////////////////////////////////////////
+
 </script>
 
 <template>
@@ -119,39 +155,67 @@ getFollowers()
       md="8"
       class="mb-4"
     >
+    <VRow style="height: 30px; margin-bottom: 20px;">
+      <div class="selectFollowerFollowee" @click="switchContent=true">FOLLOWER</div>
+      <div class="bar"></div>
+      <div class="selectFollowerFollowee" @click="switchContent=false">FOLOWEE</div>
+    </VRow>
 
-      <VBtn
-      @click="switchContent=true"
-      >
-        Follower
-      </VBtn>
-      <VBtn
-      @click="switchContent=false"
-      >
-        Followee
-      </VBtn>
+    <VCard class="position-relative">
+        <div v-if="switchContent" v-for="(item, index) in followers" :key="index">          
+          <div class="d-flex">
+            <div  @click="moveToOther(item.follower.id)">
+              <img v-if="!item.follower.profile" class="follow-propile-img" :src="avatar1">
+              <img v-else class="follow-propile-img" :src="profileAddress + item.follower.profile.storeFileName">
+            </div>
+            <div class="pa-2" style="margin-top:18px; vertical-align: center;">{{ item.follower.email }}</div>
+            <VBtn class="ml-auto" style="margin-top: 18px; margin-right: 10px;"
+            @click="checkFollow(item.follower.email)">
+              UnFollow
+            </VBtn>
+          </div>
+          <VDivider />
+        </div>
+        <div v-if="!switchContent" v-for="(item, index) in followees" :key="index">          
+          <div class="d-flex">
+            <div  @click="moveToOther(item.followee.id)">
+              <img v-if="!item.followee.profile" class="follow-propile-img" :src="avatar1">
+              <img v-else class="follow-propile-img" :src="profileAddress + item.followee.profile.storeFileName">
+            </div>
+            <div class="pa-2" style="margin-top:18px; vertical-align: center;">{{ item.followee.email }}</div>
+            <VBtn class="ml-auto" style="margin-top: 18px; margin-right: 10px;"
+            @click="checkFollow(item.followee.email)">
+              {{ isFollowed(item.followee.email) }}
+            </VBtn>
+          </div>
+          <VDivider />
+        </div>
+    </VCard>
 
+ 
+    </VCol>  
+    <VCol
+      cols="12"
+      md="4"
+    >
       <!-- 검색 -->
-      <VCard class="position-relative">
+      <VCard title="Search" class="position-relative">
         <VCardText>
-          <VCol class="mb-2">
-              <VCol
-                >
-                <form @submit.prevent="searchEmail()">
                   <VTextField
-                  id="title"
                   v-model="emailKeyword"
-                  placeholder="제목"
-                  label="제목"
-                  />
-                  <IconBtn
-                  type="submit"
+                  placeholder="email"
+                  label="email"
                   >
-                    <VIcon icon="ri-search-line" />
-                  </IconBtn>
-                </form>
-              </VCol>
-            <VDivider />
+                    <IconBtn style="position:absolute; right:0;"
+                    @click="searchEmail"
+                    >
+                      <VIcon icon="ri-search-line"/>
+                    </IconBtn>
+                </VTextField>
+          <VDivider />
+
+          <!-- 나중에 입력 출력 통일하고 하는게 좋을듯 함. -->
+          
             <div v-for="(item, index) in emails" :key="index">
               {{ item }}
               <VBtn
@@ -159,37 +223,35 @@ getFollowers()
                 {{ isFollowed(item) }}
               </VBtn>
             </div>
-          </VCol>
+
+
+
         </VCardText>
       </VCard>
- 
-      <!-- 내용 -->
-      <VCard class="position-relative">
-        <VCardText>
-          <VCol class="mb-2">
-            <div v-if="switchContent" v-for="(item, index) in followers" :key="index">
-              {{ item.follower.email }}
-              <VBtn
-              @click="checkFollow(item.follower.email)">
-                {{ isFollowed(item) }}
-              </VBtn>
-              <VDivider />
-            </div>
-            <div v-if="!switchContent" v-for="(item, index) in followees" :key="index">
-              {{ item.followee.email }}
-              <VDivider />
-            </div>
-            <VDivider />
-          </VCol>
-        </VCardText>
-      </VCard>
-    </VCol>  
-    <VCol
-      cols="12"
-      md="4"
-    >
-        <AnalyticsAward />
     </VCol>  
 
   </VRow>
 </template>
+<style lang="scss">
+.selectFollowerFollowee{
+  align-items: center;
+  width: 49%;
+  display: flex;
+  justify-content: center;
+  font-size: 20px; 
+}
+
+.bar {
+    width: 1px; /* 바의 너비 */
+    background-color: gray; /* 바의 배경색 */
+}
+
+.follow-propile-img {
+  margin-top: 10px;
+  margin-left: 10px;
+   width: 50px;
+   height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+</style>

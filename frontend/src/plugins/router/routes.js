@@ -1,9 +1,17 @@
 export const routes = [
   { path: '/', redirect: '/dashboard' },
+//  { path: '/', redirect: '/testsss' },
   {
     path: '/',
     component: () => import('@/layouts/default.vue'),
     children: [
+
+      // {
+      //   path: 'testsss',
+      //   component: () => import('@/pages/test.vue'),
+      // },
+
+
       {
         path: 'dashboard',
         component: () => import('@/pages/dashboard.vue'),
@@ -182,6 +190,16 @@ export const routes = [
         path: 'mystars',
         component: () => import('@/pages/mystars.vue'),
       },
+
+
+      ////////////////////// OTHER
+      {
+        path: 'user/:userId',
+        component: () => import('@/pages/other.vue'),
+        props: true
+      },
+
+
     ],
   },
   {

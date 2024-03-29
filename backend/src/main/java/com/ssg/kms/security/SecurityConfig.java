@@ -63,6 +63,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/login").permitAll() // 로그인 api
                 .requestMatchers("/ws").permitAll() // 로그인 api
                 .requestMatchers("/ws/**").permitAll() // 로그인 api
+                .requestMatchers("/profile/**").permitAll() // 로그인 api
                 
                 
 //                .requestMatchers("/favicon.ico").permitAll()
