@@ -1,5 +1,6 @@
 <script setup>
 import ReplyLike from '../like/ReplyLike.vue';
+import avatar1 from '@images/avatars/avatar-1.png';
 
 const formatDate = function(value) {
   const date = new Date(value);
@@ -22,18 +23,13 @@ const props = defineProps({
     getReply:Function,
 })
 
-// const emit = defineEmits()
-
 const isreplyoption=ref(false)
 const isUpdateReply = ref(false)
-const checkReplyId = ref(null)
-const isSameReplyId =ref(false)
+const isReplyContent = ref(true)
 
 function toggleReply() {
-    // checkReplyId.value = replyId
-    isUpdateReply.value=!isUpdateReply.value
-    // emit('update:isUpdateReply', !isUpdateReply.value)
-    // emit('update:isSameReplyId', isSameReplyId.value)
+  isReplyContent.value = !isReplyContent.value
+  isUpdateReply.value =! isUpdateReply.value
 }
 
 const editReply = ref({
@@ -62,6 +58,7 @@ async function updateReply(replyId){
     alert("실패!")
   } else{
     isUpdateReply.value=(false)
+    isReplyContent.value=(true)
     editReply.value.content=''
     props.getReply(props.post.id)
   }
@@ -128,42 +125,41 @@ props.getReply(props.post.id)
         </VIconBtn>
 
       </div>
-      <div class="mb-2">
+      <div class="mb-2" v-show="isReplyContent">
         {{ props.reply.content }}
+      </div>
+
+      <div v-show="isUpdateReply">
+        <div >
+          <VRow>
+            <VCol>
+              <VTextarea
+              input
+              id="updatereply"
+              v-model="editReply.content"
+              placeholder="수정"
+              label="수정"
+              rows="1"
+              >
+              </VTextarea>
+            </VCol>
+
+            <div>
+              <VCol class="mt-1">
+                <VBtn @click="updateReply(props.reply.id)"
+                    type="button"
+                    class="me-2"
+                  >
+                    수정
+                </VBtn>
+              </VCol>
+            </div>
+
+          </VRow>
+        </div>
       </div>
 
       <VRow class="justify-end">
         <ReplyLike :replyitem="props.reply"></ReplyLike>
       </VRow>
-
-        <VExpandTransition>
-          <div v-show="isUpdateReply">
-            <div >
-              <VRow>
-                <VCol>
-                  <VTextField
-                  input
-                  id="updatereply"
-                  v-model="editReply.content"
-                  placeholder="수정"
-                  label="수정"
-                  >
-                  </VTextField>
-                </VCol>
-
-                <div>
-                  <VCol class="mt-1">
-                    <VBtn @click="updateReply(props.reply.id)"
-                        type="button"
-                        class="me-2"
-                      >
-                        수정
-                    </VBtn>
-                  </VCol>
-                </div>
-
-              </VRow>
-            </div>
-          </div>
-        </VExpandTransition>
 </template>
