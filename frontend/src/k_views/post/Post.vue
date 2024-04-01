@@ -27,7 +27,8 @@ const isReplyDetails = ref(false)
 const ispostoption = ref(false)
 
 const props = defineProps({
-    post: Object
+    post: Object,
+    // getPosts: Function
 })
 
 async function checkLike(){
@@ -131,6 +132,7 @@ async function delPost(postId) {
       alert("삭제 실패")
     } else {
       alert("삭제되었습니다")
+      // props.getPosts()
       window.location.reload()
     }
   }

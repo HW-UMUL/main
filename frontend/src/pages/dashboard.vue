@@ -104,7 +104,7 @@ function handleModal(Modal) {
     
     <div v-for="(item, index) in posts.slice().reverse()" :key="index">
 
-      <Post :post="item" style="margin-bottom: 20px;"/>
+      <Post :post="item" :getPosts="getPosts" style="margin-bottom: 20px;"/>
     </div>
         <!-- <Post style="margin-bottom: 20px;"/>
         <Post style="margin-bottom: 20px;"/>

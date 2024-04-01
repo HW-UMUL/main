@@ -5,7 +5,6 @@ import PostDateSort from '@/k_views/list/PostDateSort.vue';
 import TiptapEditor from '@/k_components/TiptapEditor.vue';
 import { useRouter } from "vue-router"
 
-
 const router = useRouter()
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
@@ -13,7 +12,6 @@ const auth = inject('auth')
 const post = ref({
   title: '',
   content: '',
-  category: '',
   tag: ''
 })
 
@@ -22,7 +20,6 @@ async function writePost(){
   const formData = {
     title: post.value.title,
     content: post.value.content,
-    category: post.value.category,
     tag: post.value.tag
   }
 
@@ -46,6 +43,23 @@ async function writePost(){
   }
 }
 
+// const textareaRef = ref(null);
+// const isFocused = ref(false);
+
+// const handleInput = () => {
+//   console.log(textareaRef.value.innerText);
+// }
+
+// const handleClick = () => {
+//   isFocused.value = true;
+// }
+
+// // 클릭이 아닌 다른 곳을 클릭하면 포커스 상태를 false로 변경
+// window.addEventListener('click', (event) => {
+//   if (!textareaRef.value.contains(event.target)) {
+//     isFocused.value = false;
+//   }
+// });
 </script>
 
 <template>
@@ -74,11 +88,11 @@ async function writePost(){
           >
             <div>
             <TiptapEditor
+            class="tiptap"
             id="Tipcontent"
             v-model="post.content"
             />
             </div>
-
             <!-- <VTextarea
             id="content"
             v-model="post.content"
@@ -88,7 +102,7 @@ async function writePost(){
 
           </VCol>
 
-          <VCol
+          <!-- <VCol
           >
             <VTextField
             id="category"
@@ -96,7 +110,7 @@ async function writePost(){
             placeholder="카테고리"
             label="카테고리"
             />
-          </VCol>
+          </VCol> -->
 
           <VCol
           >
@@ -148,3 +162,20 @@ async function writePost(){
 
   </VRow>
 </template>
+<style lang="scss">
+.tiptap {
+  border: 1px solid #D1CFD4;
+  border-radius: 6px;
+  padding: 14px;
+  min-height: 300px;
+  max-height: 300px;
+  overflow-y: auto;
+  transition: border-color 0.3s ease;
+}
+.tiptap:focus {
+  border:2px solid #d50000;
+}
+.tiptap:not(:focus) {
+  border: 1px solid #ccc;
+}
+</style>

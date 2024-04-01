@@ -7,26 +7,43 @@ import { Color } from '@tiptap/extension-color';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import TextStyle from '@tiptap/extension-text-style';
+import Image from '@tiptap/extension-image';
 
 const props = defineProps ({
     modelValue: String
 })
 const emit = defineEmits(['update:modelValue'])
+const editor = ref(null)
 
-const editor = new Editor({
+editor = new Editor({
   extensions: [
     Document,
     Paragraph,
     StarterKit,
     Text,
     TextStyle,
-    Color
+    Color,
+    Image
+    
   ],
   content: props.modelValue,
   onUpdate: () => {
     emit('update:modelValue', editor.getHTML())
   }
 })
+
+const addImage = () => {
+  const url = window.prompt('URL')
+
+  if (url) {
+    editor.value.chain().focus().setImage({ src: url }).run()
+  }
+}
+
+// onBeforeUnmount(() => {
+//   editor.value.destroy()
+// })
+
 
 watch(() => props.modelValue, (value) => {
   if (editor && editor.getHTML() !== value) {
@@ -38,52 +55,11 @@ watch(() => props.modelValue, (value) => {
 
 <template>
     <div>
-      <button class="btn" @click="editor.chain().focus().toggleBold().run()" :disabled="!editor.can().chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
-        bold
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleItalic().run()" :disabled="!editor.can().chain().focus().toggleItalic().run()" :class="{ 'is-active': editor.isActive('italic') }">
-        italic
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleStrike().run()" :disabled="!editor.can().chain().focus().toggleStrike().run()" :class="{ 'is-active': editor.isActive('strike') }">
-        strike
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleCode().run()" :disabled="!editor.can().chain().focus().toggleCode().run()" :class="{ 'is-active': editor.isActive('code') }">
-        code
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 1 }) }">
-        h1
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 2 }) }">
-        h2
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleHeading({ level: 3 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 3 }) }">
-        h3
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleHeading({ level: 4 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 4 }) }">
-        h4
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleHeading({ level: 5 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 5 }) }">
-        h5
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleHeading({ level: 6 }).run()" :class="{ 'is-active': editor.isActive('heading', { level: 6 }) }">
-        h6
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ 'is-active': editor.isActive('codeBlock') }">
-        code block
-      </button>
-      <button class="btn" @click="editor.chain().focus().toggleBlockquote().run()" :class="{ 'is-active': editor.isActive('blockquote') }">
-        blockquote
-      </button>
-      <button class="btn" @click="editor.chain().focus().setHorizontalRule().run()">
-        horizontal rule
-      </button>
-    </div>
-
-    <div>
       <input
         type="color"
         @input="editor.chain().focus().setColor($event.target.value).run()"
         :value="editor.getAttributes('textStyle').color"
+        class="mb-2"
       >
       <button class="btn" @click="editor.chain().focus().setColor('#F98181').run()" :class="{ 'is-active': editor.isActive('textStyle', { color: '#F98181' })}"
         style="color: #F98181">
@@ -117,9 +93,10 @@ watch(() => props.modelValue, (value) => {
         unsetColor
       </button>
     </div>
-    
+
     <div>
-        here<editor-content :editor="editor" />
+      <button @click="addImage">Image</button>
+      <editor-content :editor="editor" />
     </div>
 </template>
 
