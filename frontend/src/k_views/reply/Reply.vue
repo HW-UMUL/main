@@ -79,14 +79,16 @@ getReply(props.postob.id)
 
   <VRow>
     <VCol>
-      <VTextField
+      <VTextarea
       input
       id="reply"
       v-model="reply.content"
       placeholder="댓글"
       label="댓글"
+      style="white-space: pre-line;"
+      rows="1"
       >
-      </VTextField>
+      </VTextarea>
     </VCol>
 
     <div>

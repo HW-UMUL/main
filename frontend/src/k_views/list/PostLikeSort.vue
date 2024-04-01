@@ -2,6 +2,7 @@
 import { ref, watch } from 'vue';
 import PostLike from '@/k_views/like/PostLike.vue';
 import PostModal from '@/k_views/post/PostModal.vue';
+import App from '@/App.vue';
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
@@ -87,6 +88,7 @@ async function checkLike(postId){
 function openpostmodal(post) {
   ispostmodal.value = !ispostmodal.value
   selectedPost.value = post
+  App.emit('PostLikeSortModal', true)
 }
 
 function closepostmodal() {

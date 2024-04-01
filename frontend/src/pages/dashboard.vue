@@ -70,7 +70,28 @@ async function searchPost(){
 
 if(props.keyword == null){
   getPosts()
-} 
+}
+
+const postLikeSortModal = ref(false)
+const postStarSortModal = ref(false)
+const postDateSortModal = ref(false)
+
+function handleModal(Modal) {
+  if(Modal === 'postLikeSort') {
+    postLikeSortModal.value = true
+    postStarSortModal.value = false
+    postDateSortModal.value = false
+  } else if(Modal === 'postStarSort') {
+    postLikeSortModal.value = false
+    postStarSortModal.value = true
+    postDateSortModal.value = false
+  } else if(Modal === 'postDateSort') {
+    postLikeSortModal.value = false
+    postStarSortModal.value = false
+    postDateSortModal.value = true
+  }
+}
+
 </script>
 
 <template>
@@ -88,30 +109,31 @@ if(props.keyword == null){
         <!-- <Post style="margin-bottom: 20px;"/>
         <Post style="margin-bottom: 20px;"/>
         <Post style="margin-bottom: 20px;"/> -->
-    </VCol>  
+    </VCol>
+
     <VCol
       cols="12"
       md="4"
+      style="position: relative; height: 100%;"
     >
       <VCard style="margin-bottom: 20px;">
         <template #title>
           <div>추천순</div>
         </template>
-        <PostLikeSort style="margin-bottom: 20px" />
+        <PostLikeSort style="margin-bottom: 20px" @open-modal="handleModal(PostLikeSort)" />
       </VCard>
-      <VCard style="margin-bottom: 20px">
+      <VCard style="margin-bottom: 20px;">
         <template #title>
           <div class="text-center">즐겨찾기순</div>
         </template>
-        <PostStarSort style="margin-bottom: 20px" />
+        <PostStarSort style="margin-bottom: 20px" @open="handleModal(PostStarSort)" />
       </VCard>
-      <VCard style="margin-bottom: 20px">
+      <VCard style="margin-bottom: 20px; z-index: 1;">
         <template #title>
           <div class="text-center">최신순</div>
         </template>
-        <PostDateSort style="margin-bottom: 20px" />
+        <PostDateSort style="margin-bottom: 20px" @open-modal="handleModal(PostDateSort)" />
       </VCard>
-      
     </VCol>
 
   </VRow>

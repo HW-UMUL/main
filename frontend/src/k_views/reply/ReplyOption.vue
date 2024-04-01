@@ -87,6 +87,8 @@ async function delReply(replyId) {
 }
 
 props.getReply(props.post.id)
+
+// const addNewLine = props.reply.content.replaceAll(/(\n|\r\n)/g, '<br>');
 </script>
 <template>
       <div class="mb-2" style="display: flex; align-items: center;
@@ -126,7 +128,7 @@ props.getReply(props.post.id)
 
       </div>
       <div class="mb-2" v-show="isReplyContent">
-        {{ props.reply.content }}
+        <div v-html="props.reply.content" style="white-space: pre-line;"></div>
       </div>
 
       <div v-show="isUpdateReply">
