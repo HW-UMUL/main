@@ -76,11 +76,14 @@ watch(
 </script>
 
 <template>
-  <div style="border: 1px solid">
+  <div
+    class="border-gray-400"
+    style="border: 1px solid; border-color: lightgray; border-radius: 7px"
+  >
     <div
       v-if="editor"
-      class="buttons text-gray-700 flex items-center flex-wrap gap-x-4 border border-l border-r border-gray-400 p-4"
-      style="display: flex"
+      class="buttons text-gray-700 flex items-center flex-wrap gap-x-4 border-b border-gray-400 p-4"
+      style="display: flex; padding-top: 5px; padding-left: 5px"
     >
       <button
         type="button"
@@ -238,7 +241,7 @@ watch(
     <EditorContent
       :editor="editor"
       content-type="html"
-      style="overflow-x: auto; width: 1010px; padding: 5px"
+      style="overflow-y: auto; padding: 10px"
     />
   </div>
 </template>
@@ -301,7 +304,6 @@ watch(
 }
 .ProseMirror {
   height: 550px;
-  width: 1000px;
   outline: none;
 }
 

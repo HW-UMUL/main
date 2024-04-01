@@ -85,28 +85,34 @@ const rankedItems = computed(() => {
   return sortedItems.slice(0, 5)
 })
 
-function readWiki(id){
+function readWiki(id) {
   router.push({
-    path: `/readwiki/${id}`
+    path: `/readwiki/${id}`,
   })
 }
-
 </script>
 
 <template>
-  <VCard>
-    <VCardTitle class="text-center">Wiki 즐겨찾기 순위</VCardTitle>
-    <VCardText>
-      <div
-        style="justify-content: space-between; display: flex; margin: 5px"
+  <VTable>
+    <thead>
+      <tr>
+        <th class="text-center">Title</th>
+        <th class="text-uppercase text-center">Star</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
         v-for="(item, idx) in rankedItems"
+        :key="idx"
       >
-        <div>{{ idx + 1 }}</div>
-        <div>
+        <td class="text-center">
           <a @click="readWiki(item.id)">{{ item.title }}</a>
-        </div>
-        <div>{{ likestar.star[item.id] }}</div>
-      </div>
-    </VCardText>
-  </VCard>
+        </td>
+        <td class="text-center">
+          {{ likestar.star[item.id] }}
+        </td>
+      </tr>
+    </tbody>
+  </VTable>
 </template>

@@ -6,7 +6,6 @@ import ViewRecentWiki from '@/d_dashboard/ViewRecentWiki.vue'
 import ViewWikiLikeRank from '@/d_dashboard/ViewWikiLikeRank.vue'
 import ViewWikiStarRank from '@/d_dashboard/ViewWikiStarRank.vue'
 
-
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 
@@ -19,9 +18,10 @@ authToken = authToken + jwtToken
 const router = useRouter()
 
 const list = ref([]) //보여지는 리스트
+const list2 = ref([]) // 카테고리 필터링 리스트
 const cache = ref([]) //리스트 전체
 
-const listCunt = ref('5') // 한 페이지에 노출될 게시글 개수
+const listCunt = ref('10') // 한 페이지에 노출될 게시글 개수
 
 let currentPage = ref(0) //현재 페이지
 let pageNum = 10 //페이징 갯수
@@ -58,6 +58,28 @@ const paging = () => {
   }
 }
 
+// 페이징
+const categoryPaging = () => {
+  //보여지는 페이지 리셋
+  pageList.value = []
+
+  //몇페이지 까지 있는지 확인
+  if (cache.value.length % listCunt.value == 0) {
+    totalPage.value = cache.value.length / listCunt.value - 1
+  } else {
+    totalPage.value = Math.ceil(list.value.length / listCunt.value) - 1
+  }
+
+  //현재페이지 기준으로 페이징 숫자 넣기
+  let pageListStart = currentPageListStart()
+  for (let i = 0; i < pageNum; i++) {
+    if (totalPage.value >= pageListStart) {
+      pageList.value.push(pageListStart)
+      pageListStart++
+    }
+  }
+}
+
 const getList = () => {
   axios
     .get(`http://${serverAddress}/api/wiki/read/public`, {
@@ -67,6 +89,7 @@ const getList = () => {
     })
     .then(res => {
       cache.value = res.data
+      list2.value = res.data
       list.value = [] //보여지는 게시물 리셋
 
       let listIdx = listCunt.value * currentPage.value // 보여질 게시물 index
@@ -133,148 +156,209 @@ const pageArrow = e => {
 function sendId(id) {
   router.push({ name: 'readwiki', params: { id } })
 }
+
+const selectedCategory = ref('')
+
+// 선택된 카테고리에 따라 게시글을 필터링하는 함수
+const filterByCategory = () => {
+  console.log('Selected Category ID:', selectedCategory.value) // 선택된 카테고리 ID 로그 출력
+
+  if (selectedCategory.value === '') {
+    // 카테고리가 선택되지 않은 경우 모든 게시글을 보여줍니다.
+    list.value = cache.value.slice(0, listCunt.value)
+  } else {
+    // 선택된 카테고리에 따라 게시글을 필터링합니다.
+    list.value = cache.value.filter(item => item.category.id === selectedCategory.value).slice(0, listCunt.value)
+  }
+
+  // 필터링된 결과에 따라 총 페이지 수를 업데이트합니다.
+  totalPage.value = Math.ceil(list.value.length / listCunt.value) - 1
+
+  // 페이지 번호를 초기화합니다.
+  currentPage.value = 0
+
+  // 필터링된 결과가 현재 페이지 범위를 벗어날 경우, 현재 페이지를 조정합니다.
+  if (currentPage.value > totalPage.value) {
+    currentPage.value = totalPage.value
+  }
+  categoryPaging()
+  pageBtnCheck()
+}
 </script>
 
 <template>
-    <VRow>
+  <VRow>
     <VCol
       cols="12"
       md="8"
       class="mb-4"
     >
-  <div style="margin-bottom: 20px"><VCardTitle color>Wiki List</VCardTitle></div>
+      <div style="margin-bottom: 20px"><VCardTitle color>Wiki List</VCardTitle></div>
 
-  <select v-model="listCunt">
-    <option
-      value="5"
-      selected
-    >
-      5개씩 보기
-    </option>
-    <option value="10">10개씩 보기</option>
-    <option value="20">20개씩 보기</option>
-  </select>
-  <br />
-  <br />
-  <hr />
-  <table
-    class="wikititle"
-    border="0"
-    style="border-spacing: 5px; width: 100%; height: 50%"
-  >
-    <template
-      v-for="(item, idx) in list"
-      :key="idx"
-    >
-      <tr>
-        <td width="80%">
-          <button
-            type="button"
-            @click="sendId(item.id)"
-            style="color: #905dff"
-          >
-            {{ item.title }}
-          </button>
-        </td>
-        <td
-          width="10%"
-          align="center"
+      <select v-model="listCunt">
+        <option
+          value="5"
+          selected
         >
-          {{ item.user.username }}
-        </td>
-        <td
-          width="10%"
-          align="center"
+          5개씩 보기
+        </option>
+        <option value="10">10개씩 보기</option>
+        <option value="20">20개씩 보기</option></select
+      >&nbsp;
+      <select
+        v-model="selectedCategory"
+        @change="filterByCategory"
+      >
+        <option
+          value=""
+          selected
         >
-          {{ item.date.substring(0, 10) }}
-        </td>
-      </tr>
-      <tr>
-        <td colspan="3"><hr /></td>
-      </tr>
-    </template>
-  </table>
-  <br />
+          카테고리 선택
+        </option>
+        <option
+          v-for="(item, idx) in list2"
+          :key="idx"
+          :value="item.category.id"
+        >
+          {{ item.category.name }}
+        </option>
+      </select>
+      <br />
+      <br />
+      <hr />
+      <table
+        class="wikititle"
+        border="0"
+        style="border-spacing: 5px; width: 100%; max-height: 300px; overflow-y: auto"
+      >
+        <template
+          v-for="(item, idx) in list"
+          :key="idx"
+        >
+          <tr height="40">
+            <td width="70%">
+              <button
+                type="button"
+                @click="sendId(item.id)"
+                style="color: #905dff"
+              >
+                {{ item.title }}
+              </button>
+            </td>
+            <td
+              width="15%"
+              align="center"
+            >
+              {{ item.user.username }}
+            </td>
+            <td
+              width="15%"
+              align="center"
+            >
+              {{ item.date.substring(0, 10) }}
+            </td>
+          </tr>
+          <tr>
+            <td colspan="3"><hr /></td>
+          </tr>
+        </template>
+      </table>
+      <br />
 
-  <div style="display: flex; gap: 5px; justify-content: center">
-    <ul class="pagination">
-      <li
-        class="page-item"
-        :class="{ disabled: isBtnFirst }"
-      >
-        <a
-          class="page-link"
-          href="#"
-          @click.prevent="pageArrow('first')"
-          >First</a
-        >
-      </li>
-      <li
-        class="page-item"
-        :class="{ disabled: isBtnPrev }"
-      >
-        <a
-          class="page-link"
-          href="#"
-          @click.prevent="pageArrow('prev')"
-          >Previous</a
-        >
-      </li>
-      <template
-        v-for="(item, index) in pageList"
-        :key="`list-${index}`"
-      >
-        <li
-          class="page-item"
-          :class="{ active: item == currentPage, bold: item == currentPage }"
-        >
-          <a
-            class="page-link"
-            href="#"
-            @click.prevent="page(item)"
-            >{{ item + 1 }}</a
+      <div style="display: flex; gap: 5px; justify-content: center">
+        <ul class="pagination">
+          <li
+            class="page-item"
+            :class="{ disabled: isBtnFirst }"
           >
-        </li>
-      </template>
-      <li
-        class="page-item"
-        :class="{ disabled: isBtnNext }"
-      >
-        <a
-          class="page-link"
-          href="#"
-          @click.prevent="pageArrow('next')"
-          >Next</a
-        >
-      </li>
-      <li
-        class="page-item"
-        :class="{ disabled: isBtnLast }"
-      >
-        <a
-          class="page-link"
-          href="#"
-          @click.prevent="pageArrow('last')"
-          >Last</a
-        >
-      </li>
-    </ul>
-  </div>
-  <!-- <Post style="margin-bottom: 20px;"/>
+            <a
+              class="page-link"
+              href="#"
+              @click.prevent="pageArrow('first')"
+              >처음</a
+            >
+          </li>
+          <li
+            class="page-item"
+            :class="{ disabled: isBtnPrev }"
+          >
+            <a
+              class="page-link"
+              href="#"
+              @click.prevent="pageArrow('prev')"
+            >
+              < 이전
+            </a>
+          </li>
+          <template
+            v-for="(item, index) in pageList"
+            :key="`list-${index}`"
+          >
+            <li
+              class="page-item"
+              :class="{ active: item == currentPage, bold: item == currentPage }"
+            >
+              <a
+                class="page-link"
+                href="#"
+                @click.prevent="page(item)"
+                >{{ item + 1 }}</a
+              >
+            </li>
+          </template>
+          <li
+            class="page-item"
+            :class="{ disabled: isBtnNext }"
+          >
+            <a
+              class="page-link"
+              href="#"
+              @click.prevent="pageArrow('next')"
+            >
+              다음 >
+            </a>
+          </li>
+          <li
+            class="page-item"
+            :class="{ disabled: isBtnLast }"
+          >
+            <a
+              class="page-link"
+              href="#"
+              @click.prevent="pageArrow('last')"
+              >마지막</a
+            >
+          </li>
+        </ul>
+      </div>
+      <!-- <Post style="margin-bottom: 20px;"/>
   <Post style="margin-bottom: 20px;"/>
   <Post style="margin-bottom: 20px;"/> -->
-</VCol>  
-<VCol
-cols="12"
-md="4"
->
-  <ViewRecentWiki style="margin-bottom: 20px;"/>
-  <ViewWikiLikeRank style="margin-bottom: 20px;"/>
-  <ViewWikiStarRank style="margin-bottom: 20px;"/>
-</VCol>  
-
-</VRow>
-
+    </VCol>
+    <VCol
+      cols="12"
+      md="4"
+    >
+      <VCard
+        title="추천순"
+        style="margin-bottom: 20px"
+      >
+        <ViewWikiLikeRank style="margin-bottom: 20px" />
+      </VCard>
+      <VCard
+        title="즐겨찾기순"
+        style="margin-bottom: 20px"
+      >
+        <ViewWikiStarRank style="margin-bottom: 20px" />
+      </VCard>
+      <VCard
+        title="최신순"
+        style="margin-bottom: 20px"
+      >
+        <ViewRecentWiki style="margin-bottom: 20px" />
+      </VCard>
+    </VCol>
+  </VRow>
 </template>
 
 <style scoped>

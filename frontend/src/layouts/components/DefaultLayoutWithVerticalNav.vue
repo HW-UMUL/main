@@ -6,49 +6,44 @@ import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
 import Search from '@/layouts/components/Search.vue'
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
 
 //import router from '@/plugins/router/routes.js'
 
-const router = useRouter();
+const router = useRouter()
 
 const posts = ref([])
 const searchKeyword = ref({
-  keyword: ''
+  keyword: '',
 })
-async function searchPost(){
-  if(searchKeyword.value.keyword.length != 0){
+async function searchPost() {
+  if (searchKeyword.value.keyword.length != 0) {
     router.push({
-      path: `/search/${searchKeyword.value.keyword}`
+      path: `/search/${searchKeyword.value.keyword}`,
     })
   } else {
     alert('검색어를 입력해주세요!')
   }
-
 }
 
-
 function openModal() {
-  document.getElementById('myModal').style.display = 'block';
+  document.getElementById('myModal').style.display = 'block'
 }
 
 // 모달 닫기
 function closeModal() {
-  document.getElementById('myModal').style.display = 'none';
+  document.getElementById('myModal').style.display = 'none'
 }
 
-
 onMounted(() => {
-
   // 닫기 버튼에 클릭 이벤트 추가
   if (document.querySelector('.close')) {
-      document.querySelector('.close').addEventListener('click', closeModal);
+    document.querySelector('.close').addEventListener('click', closeModal)
   }
-
 })
 
 const props = defineProps({
-  modelValue: Number
+  modelValue: Number,
 })
 </script>
 
@@ -66,24 +61,24 @@ const props = defineProps({
         </IconBtn>
 
         <!-- 👉 Search -->
-          <Search/>
+        <Search />
 
         <VSpacer />
 
         <IconBtn
-        size="height:20px;"
-        type="submit"
-        to="/writepost"
+          size="height:20px"
+          type="submit"
+          to="/writepost"
         >
-        Post+
+          Post+
         </IconBtn>
 
         <IconBtn
-        size="height:20px;"
-        type="submit"
-        to="/writewiki"
+          size="height:20px"
+          type="submit"
+          to="/writewiki"
         >
-        Wiki+
+          Wiki+
         </IconBtn>
         <!--
         <router-link to="/writepost">Post+</router-link>
@@ -100,7 +95,10 @@ const props = defineProps({
         </IconBtn>
 
         <IconBtn class="me-2">
-          <VIcon @click="openModal()" icon="ri-notification-line" />
+          <VIcon
+            @click="openModal()"
+            icon="ri-notification-line"
+          />
           <div class="notification-badge">{{ props.modelValue }}</div>
         </IconBtn>
 
@@ -120,9 +118,7 @@ const props = defineProps({
           v-html="logo"
         />
 
-        <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-          Materio
-        </h1>
+        <h1 class="font-weight-medium leading-normal text-xl text-uppercase">Materio</h1>
       </RouterLink>
 
       <IconBtn
@@ -169,5 +165,4 @@ const props = defineProps({
     text-transform: uppercase;
   }
 }
-
 </style>

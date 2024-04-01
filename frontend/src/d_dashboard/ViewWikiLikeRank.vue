@@ -112,7 +112,6 @@ async function getLikes(wikiId) {
   likestar.like[wikiId] = likes
 }
 
-
 const rankedItems = computed(() => {
   if (!wiki.value) return [] // wiki.value가 비어 있는 경우 빈 배열 반환
 
@@ -124,29 +123,34 @@ const rankedItems = computed(() => {
   return sortedItems.slice(0, 5)
 })
 
-
-function readWiki(id){
+function readWiki(id) {
   router.push({
-    path: `/readwiki/${id}`
+    path: `/readwiki/${id}`,
   })
 }
-
 </script>
 
 <template>
-  <VCard>
-    <VCardTitle class="text-center">Wiki 좋아요 순위</VCardTitle>
-    <VCardText>
-      <div
-        style="justify-content: space-between; display: flex; margin: 5px"
+  <VTable>
+    <thead>
+      <tr>
+        <th class="text-center">Title</th>
+        <th class="text-uppercase text-center">Like</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr
         v-for="(item, idx) in rankedItems"
+        :key="idx"
       >
-        <div>{{ idx + 1 }}</div>
-        <div>
+        <td class="text-center">
           <a @click="readWiki(item.id)">{{ item.title }}</a>
-        </div>
-        <div>{{ likestar.like[item.id] }}</div>
-      </div>
-    </VCardText>
-  </VCard>
+        </td>
+        <td class="text-center">
+          {{ likestar.like[item.id] }}
+        </td>
+      </tr>
+    </tbody>
+  </VTable>
 </template>

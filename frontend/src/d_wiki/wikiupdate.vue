@@ -2,6 +2,9 @@
 import MyEditor from '@/d_wiki/wikieditor.vue'
 import axios from 'axios'
 import { useRouter, useRoute } from 'vue-router'
+import ViewRecentWiki from '@/d_dashboard/ViewRecentWiki.vue'
+import ViewWikiLikeRank from '@/d_dashboard/ViewWikiLikeRank.vue'
+import ViewWikiStarRank from '@/d_dashboard/ViewWikiStarRank.vue'
 
 const router = useRouter()
 const route = useRoute()
@@ -76,48 +79,98 @@ const cancelForm = () => {
 
 <template>
   <div class="container mx-auto max-w-4xl my-8">
-    <form
-      @submit.prevent="submitForm"
-      class="space-y-8"
-    >
-      <div>
-        <input
-          type="text"
-          class="w-full border border-gray-400 p-2"
-          v-model="formData.title"
-          placeholder="title"
-          style="padding-left: 10px; width: 100%; height: 40px"
-        />
-      </div>
-      <br />
+    <VRow>
+      <VCol
+        cols="12"
+        md="8"
+        class="mb-4"
+      >
+        <VCard class="position-relative">
+          <VCardText>
+            <div>
+              <p>Wiki 수정</p>
+              <VCol>
+                <VTextField
+                  id="title"
+                  v-model="formData.title"
+                  placeholder="제목"
+                  label="제목"
+                >
+                </VTextField>
+              </VCol>
 
-      <div>
-        <MyEditor v-model="formData.content" />
-      </div>
-      <br />
-      <div>
-        <input
-          type="text"
-          class="w-full border border-gray-400 p-2"
-          v-model="formData.category"
-          placeholder="category"
-          style="padding-left: 10px; width: 100%; height: 40px"
-        />
-      </div>
-      <br />
-      <div>
-        <VBtn
-          type="submit"
-          style="margin-right: 10px"
+              <VCol>
+                <div>
+                  <MyEditor v-model="formData.content" />
+                </div>
+
+                <!-- <VTextarea
+            id="content"
+            v-model="post.content"
+            placeholder="본문"
+            label="본문"
+            /> -->
+              </VCol>
+
+              <VCol>
+                <VTextField
+                  id="category"
+                  v-model="formData.category"
+                  placeholder="카테고리"
+                  label="카테고리"
+                />
+              </VCol>
+
+              <VCol cols="12">
+                <VBtn
+                  @click="submitForm"
+                  type="submit"
+                  class="me-5"
+                >
+                  수정
+                </VBtn>
+                <VBtn
+                  @click="cancelForm"
+                  type="button"
+                  >취소</VBtn
+                >
+
+                <!-- <VBtn
+              color="secondary"
+              type="reset"
+              variant="outlined"
+            >
+              Reset
+            </VBtn> -->
+              </VCol>
+            </div>
+          </VCardText>
+        </VCard>
+      </VCol>
+
+      <VCol
+        cols="12"
+        md="4"
+      >
+        <VCard
+          title="추천순"
+          style="margin-bottom: 20px"
         >
-          Update
-        </VBtn>
-        <VBtn
-          type="button"
-          @click="cancelForm"
-          >Cancel</VBtn
+          <ViewWikiLikeRank style="margin-bottom: 20px" />
+        </VCard>
+        <VCard
+          title="즐겨찾기순"
+          style="margin-bottom: 20px"
         >
-      </div>
-    </form>
+          <ViewWikiStarRank style="margin-bottom: 20px" />
+        </VCard>
+        <VCard
+          title="최신순"
+          style="margin-bottom: 20px"
+        >
+          <ViewRecentWiki style="margin-bottom: 20px" />
+        </VCard>
+      </VCol>
+    </VRow>
   </div>
 </template>
