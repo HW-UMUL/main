@@ -1,20 +1,19 @@
 <script setup>
-import { onMounted, ref, watch } from 'vue';
+import { ref, watch } from 'vue';
 import PostLike from '@/k_views/like/PostLike.vue';
-import PostCom from '@/k_views/post/PostModal.vue';
+import PostModal from '@/k_views/post/PostModal.vue';
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 
 const posts = ref([])
-const ispostmodal = ref(false)
 const selectedPost = ref([])
-const replies = ref([])
+const ispostmodal = ref(false)
 
 async function getPosts() {
   try {
     const response = await fetch(
-      `http://${serverAddress}/api/post/read/public`,
+      `http://${serverAddress}/api/post/read`,
       {
         method: 'GET',
         headers: {
@@ -25,43 +24,42 @@ async function getPosts() {
       }
     );
     if (!response.ok) {
-      alert("실패!")
+      console.error(error)
     }
     const beforePosts = await response.json()
-
+    
     posts.value = await Promise.all(beforePosts.map(async (post) => {
       const likes = await getLikes(post.id)
       return { ...post, likes: likes }
     }))
 
     posts.value.sort((a, b) => b.likes - a.likes)
+
   } catch (error) {
     console.error(error)
-    alert("실패!")
   }
 }
 
-onMounted(getPosts)
+getPosts()
 
-async function getLikes(postId) {
-  try {
-    const response = await fetch(`http://${serverAddress}/api/postlike/read/${postId}`, {
-      method: 'GET',
-      headers: {
+async function getLikes(postId){
+  
+  const response = await fetch(
+    `http://localhost:8080/api/postlike/read/${postId}`,
+    {
+        method: 'GET',
+        headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${auth}`
-      },
-      credentials: 'include'
-    })
-
-    if (!response.ok) {
-      alert("실패!")
+        },
+        credentials: 'include'
     }
+  )
+
+  if(!response.ok) {
+    console.error(error)
+  } else{
     const likes = await response.json()
     return likes
-  } catch (error) {
-    console.error(error)
-    alert("실패!")
   }
 }
 
@@ -80,41 +78,20 @@ async function checkLike(postId){
   )
 
   if(!response.ok) {
-    alert("실패!")
+    console.error(error)
   } else{
-    getLikes(postId)
-  }
-}
-
-async function getReply(postId){
-
-const response = await fetch(
-  `http://${serverAddress}/api/reply/readpost/${postId}`,
-  {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${auth}`
-    },
-    credentials: 'include'
-  }
-)
-
-  if(!response.ok) {
-    // alert("실패!")
-  } else{
-    replies.value = await response.json()
+    // getLikes(postId)
   }
 }
 
 function openpostmodal(post) {
   ispostmodal.value = !ispostmodal.value
   selectedPost.value = post
-  getReply(selectedPost.value.id)
 }
+
 function closepostmodal() {
   ispostmodal.value = !ispostmodal.value
-  // selectedPost.value = null
+  console.log(ispostmodal.value)
 }
 
 watch(ispostmodal, (value) => {
@@ -142,29 +119,28 @@ watch(ispostmodal, (value) => {
 
     <tbody>
       <tr v-for="(item, index) in posts.slice(0,5)" :key="index">
-        <td class="text-center">
-          <VIconBtn style="cursor: pointer;">
+        <td class="left-aligned">
+          <VIconBtn @click="openpostmodal(item)" style="cursor: pointer;">
             {{ item.title }}
           </VIconBtn>
         </td>
-        <td class="text-center">
+
+        <td>
           <VIconBtn @click="checkLike(item.id)" style="cursor: pointer;">
             <PostLike :postlike="item" />
           </VIconBtn>
         </td>
-
-        <div class="modal-wrap" v-show="ispostmodal" @click="closepostmodal()">
-          <div class="modal-container" @click.stop="">
-            <div class="modal-body">
-              <PostCom :post="selectedPost" :replies="replies" :getLikes="getLikes"/>
-            </div>
-          </div>
-        </div>
-
       </tr>
     </tbody>
   </VTable>
 
+<div class="modal-wrap" v-if="ispostmodal" @click="closepostmodal">
+  <div class="modal-container" @click.stop="">
+    <div class="modal-body" v-if="selectedPost">
+      <PostModal :post="selectedPost" />
+    </div>
+  </div>
+</div>
 </template>
 
 <style lang="scss">

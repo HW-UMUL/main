@@ -29,12 +29,6 @@ const ispostoption = ref(false)
 const props = defineProps({
     post: Object
 })
-const reply = ref({
-  content: ''
-})
-const editReply = ref({
-  content: ''
-})
 
 async function checkLike(){
 

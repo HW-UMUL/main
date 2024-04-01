@@ -93,16 +93,26 @@ if(props.keyword == null){
       cols="12"
       md="4"
     >
-      <VCard title="추천순" style="margin-bottom: 20px">
-        <!-- <PostLikeSort style="margin-bottom: 20px" /> -->
+      <VCard style="margin-bottom: 20px;">
+        <template #title>
+          <div>추천순</div>
+        </template>
+        <PostLikeSort style="margin-bottom: 20px" />
       </VCard>
-      <VCard title="즐겨찾기순" style="margin-bottom: 20px">
+      <VCard style="margin-bottom: 20px">
+        <template #title>
+          <div class="text-center">즐겨찾기순</div>
+        </template>
         <PostStarSort style="margin-bottom: 20px" />
       </VCard>
-      <VCard title="최신순" style="margin-bottom: 20px">
+      <VCard style="margin-bottom: 20px">
+        <template #title>
+          <div class="text-center">최신순</div>
+        </template>
         <PostDateSort style="margin-bottom: 20px" />
       </VCard>
-    </VCol>  
+      
+    </VCol>
 
   </VRow>
 </template>

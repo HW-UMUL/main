@@ -13,7 +13,6 @@ const post = ref({
   tag: ''
 })
 
-
 const props = defineProps({
     id: String
 })
@@ -39,9 +38,6 @@ async function getPost(postId){
   }
 }
 
-const postId = props.id
-getPost(postId)
-
 async function getTag(postId){
   const response = await fetch(
       `http://${serverAddress}/api/tagpost/read/${postId}`,
@@ -58,12 +54,14 @@ async function getTag(postId){
   if(!response.ok) {
     alert("실패!")
   } else{
-    const tags = await response.json()
-    console.log(tags)
+    post.value.tag = await response.json()
+    // const tags = await response.json()
+    // console.log(tags)
   }
 }
 
-getTag(postId)
+getPost(props.id)
+getTag(props.id)
 
 async function updatePost(postId){
 
@@ -104,8 +102,8 @@ async function updatePost(postId){
     >
       <VCard class="position-relative">
         <VCardText>
-          <div>
-            <p >Post 수정</p>
+        <div>
+          <p >Post 수정</p>
               <VCol
               >
                 <VTextField
