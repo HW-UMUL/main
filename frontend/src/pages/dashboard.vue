@@ -94,7 +94,7 @@ if(props.keyword == null){
       md="4"
     >
       <VCard title="추천순" style="margin-bottom: 20px">
-        <PostLikeSort style="margin-bottom: 20px" />
+        <!-- <PostLikeSort style="margin-bottom: 20px" /> -->
       </VCard>
       <VCard title="즐겨찾기순" style="margin-bottom: 20px">
         <PostStarSort style="margin-bottom: 20px" />

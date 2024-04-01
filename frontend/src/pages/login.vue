@@ -7,6 +7,7 @@ import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
 import { useRouter } from "vue-router"
+import { VCard } from 'vuetify/lib/components/index.mjs'
 //import VueCookies from 'vue-cookies'
 
 

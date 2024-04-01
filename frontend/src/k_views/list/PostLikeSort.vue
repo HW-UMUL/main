@@ -143,7 +143,7 @@ watch(ispostmodal, (value) => {
     <tbody>
       <tr v-for="(item, index) in posts.slice(0,5)" :key="index">
         <td class="text-center">
-          <VIconBtn @click="openpostmodal(item)" style="cursor: pointer;">
+          <VIconBtn style="cursor: pointer;">
             {{ item.title }}
           </VIconBtn>
         </td>

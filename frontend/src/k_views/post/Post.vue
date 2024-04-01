@@ -28,6 +28,7 @@ const isDetails = ref(false)
 const isReplyDetails = ref(false)
 const isUpdateReply = ref(false)
 const checkReplyId = ref(null)
+const ispostoption = ref(false)
 
 const props = defineProps({
     post: Object
@@ -144,32 +145,6 @@ async function getStars(){
   }
 }
 
-async function writeReply(postId){
-  console.log(postId)
-  const formData = {
-    content: reply.value.content
-  }
-
-  const response = await fetch(
-      `http://${serverAddress}/api/reply/create/${postId}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${auth}`
-        },
-        body: JSON.stringify(formData),
-        credentials: 'include'
-      }
-  )
-
-  if(!response.ok) {
-    alert("실패!")
-  } else{
-    getReply(postId)
-  }
-}
-
 async function getReply(postId){
 
   const formData = {
@@ -255,28 +230,6 @@ async function delPost(postId) {
   }
 }
 
-async function delReply(replyId) {
-  if(confirm("삭제하시겠습니까?")) {
-    const response = await fetch(
-      `http://${serverAddress}/api/reply/delete/${replyId}`,
-      {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        'Authorization': `Bearer ${auth}`,
-        credentials: 'include'
-      }
-    )
-    if(!response.ok) {
-      alert("삭제 실패")
-    } else {
-      alert("삭제되었습니다")
-      getReply(props.post.id);
-    }
-  }
-}
-
 const router = useRouter();
 
 function gotoupdatepost(postId) {
@@ -295,19 +248,43 @@ getReply(props.post.id)
       <VCol class="mb-2">
         <VCol class="post-details">
           <div class="post-header">
-              <VCol class="post-header" >
-                <span>
+            <VCol class="post-header" >
+              <div style="font-weight: 500; font-size: small; display: flex; align-items: center;">
+                <span style="margin-right: 10px">
                   <img class="propile-img" :src="avatar1">
                 </span>
-                <span style="display: flex; justify-content: space-between;">
-                <span class="post-name" style="font-weight: 600; margin-right: auto;">
+                <span style="margin-right: 5px;">
                   {{ post.user.username }}
                 </span>
-                <span class="post-date" style="margin-left: auto;">
+                <span> • </span>
+                <span style="margin-left: 5px;">
                   {{ formatDate(post.date) }}
                 </span>
-                </span>
-              </VCol>
+                <VIconBtn style="margin-left: auto">
+                  <VIcon ref="postoptionactivator" icon="ri-more-2-line" style="cursor: pointer;" />
+                  <VMenu
+                    v-model="ispostoption"
+                    :activator="$refs.postoptionactivator"
+                    location="bottom end"
+                    width="auto"
+                    offset="5px"
+                    >
+                    <VList>
+                      <VListItem link>
+                        <VListItemTitle @click="gotoupdatepost(post.id)" style="font-size: small;">
+                          수정
+                        </VListItemTitle>
+                      </VListItem>
+                      <VListItem link>
+                        <VListItemTitle @click="delPost(post.id)" style="font-size: small;">
+                          삭제
+                        </VListItemTitle>
+                      </VListItem>
+                    </VList>
+                  </VMenu>
+                </VIconBtn>
+              </div>
+            </VCol>
           </div>
 
           <div class="post-title">
@@ -336,14 +313,12 @@ getReply(props.post.id)
 
           <VExpandTransition>
             <div v-show="isDetails">
-              <VDivider />
               <VCardText>
                 <div v-html="post.content"></div>
               </VCardText>
             </div>
           </VExpandTransition>
           
-          <VDivider />
           <VCol class="post-interactions">
             <IConBtn @click="checkLike"> 
               <VIcon icon="ri-heart-line"/>
@@ -356,7 +331,6 @@ getReply(props.post.id)
             <span class="post-interactions-item" style="margin-left: 10px; margin-right: 10px;">{{ star }}</span>
           </VCol>
 
-          <VDivider />
           <VCardActions>
             <VBtn @click="isReplyDetails = !isReplyDetails">
               Reply
@@ -373,9 +347,10 @@ getReply(props.post.id)
                 
           <VExpandTransition>
             <div v-show="isReplyDetails">
-              <VCardText v-for="(item, index) in replys" :key="index">
-                <ReplyVue :replyvue="item" :postob="props.post"></ReplyVue>
-                <VRow >
+              <!-- <VCardText v-for="(item, index) in replys" :key="index"> -->
+              <VCardText>
+                <ReplyVue :postob="props.post"></ReplyVue>
+                <!-- <VRow >
                   <VCol cols="auto">
                     <VIconBtn @click="toggleReply(item.id)" style="font-size: 10pt; cursor: pointer;">
                       수정
@@ -417,56 +392,12 @@ getReply(props.post.id)
                       </VRow>
                     </div>
                   </div>
-                </VExpandTransition>
+                </VExpandTransition> -->
 
               </VCardText>
             </div>
           </VExpandTransition>
 
-          <div>
-            <VRow>
-              <VCol>
-                <VTextField
-                input
-                id="reply"
-                v-model="reply.content"
-                placeholder="댓글"
-                label="댓글"
-                >
-                </VTextField>
-              </VCol>
-
-              <div>
-                <VCol class="mt-1">
-                  <VBtn @click="writeReply(post.id)"
-                      type="button"
-                      class="me-2"
-                    >
-                      작성
-                  </VBtn>
-                </VCol>
-              </div>
-            </VRow>
-            
-            <VRow>
-              <VCol style="display: flex; justify-content: space-between;">
-                <VBtn @click="gotoupdatepost(post.id)"
-                  type="button"
-                  style="margin-left: auto;"
-                  >
-                  수정
-                </VBtn>
-                
-                <VBtn @click="delPost(post.id)"
-                  type="button"
-                  style="margin-left: 10px;"
-                  >
-                  삭제
-                </VBtn>
-              </VCol>
-            </VRow>
-
-          </div>
         </VCol>
       </VCol>
     </VCardText>
@@ -474,26 +405,22 @@ getReply(props.post.id)
 </template>
 
 <style lang="scss">
-.v-card .trophy {
-  position: absolute;
-  inline-size: 5.188rem;
-  inset-block-end: 1.25rem;
-  inset-inline-end: 1.25rem;
-}
+// .v-card .trophy {
+//   position: absolute;
+//   inline-size: 5.188rem;
+//   inset-block-end: 1.25rem;
+//   inset-inline-end: 1.25rem;
+// }
 .post-image {
     width: 100px;
     height: 100px;
-    border-radius: 50%; /* 원형 이미지를 위한 border-radius */
+    border-radius: 50%;
     margin-bottom: 10px;
 }
 // .post-title {
 //     font-weight: bold;
 //     margin-bottom: 5px;
 // }
-.post-date {
-    color: #666;
-    margin-bottom: 10px;
-}
 .post-content {
     margin-bottom: 10px;
 }
@@ -507,17 +434,6 @@ getReply(props.post.id)
 }
 .post-comments {
     color: #333;
-}
-
-.circle {
-    width: 20px;
-    height: 20px;
-    background-color: red;
-    border-radius: 50%; /* 원 모양의 동그라미를 만들기 위해 반지름을 50%로 설정합니다. */
-
-    margin-bottom: 5px;
-
-    display: inline-block;
 }
 
 .propile-img {
