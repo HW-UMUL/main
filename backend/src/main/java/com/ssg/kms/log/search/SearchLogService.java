@@ -43,7 +43,7 @@ public class SearchLogService {
 	public Set<SearchLog> readSearchLog(Optional<User> user) {
 	    return searchLogRepository.findTop10ByUserIdOrderByDateDesc(user.get().getId());
 	}
-
+ 
 
 //	@Transactional
 //	public SearchLog deleteSearchLog(Long searchLogId, Optional<User> user) {
@@ -53,8 +53,8 @@ public class SearchLogService {
 //	}
 	
 	@Transactional // SearchLogIdAndUserId 두개의 조건을 부여해 삭제해야한다.
-	public SearchLog deleteSearchLog(Long searchLogId, Optional<User> user) {
-		searchLogRepository.deleteBySearchLogId(searchLogId);
+	public SearchLog deleteSearchLog(String content, Optional<User> user) {
+		searchLogRepository.deleteTop1ByContentAndUserIdOrderByDateDesc(content, user.get().getId());
 		SearchLog searchLog = new SearchLog();
 		return searchLog;
 	}

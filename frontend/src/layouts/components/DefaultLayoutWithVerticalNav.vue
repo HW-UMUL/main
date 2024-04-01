@@ -13,31 +13,54 @@ import axios from 'axios'
 // input 박스 클릭시 block 노출
 import { ref } from 'vue'
 const setFocus = ref(false);
+// filteredData를 ref로 정의 
+const filteredData = ref(null);
+
 function handleFocus(){
   // 클릭시 block 노출
   setFocus.value = true
-  console.log(setFocus.value)
+  // console.log(setFocus.value)
 
   // 검색 목록 출력
   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
   const searchTermRegex = makeRegexByCho(searchTerm);
-  let filteredData = null;
 
   if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
-    filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
-    if(filteredData.length > 0){
-      filterKeywords.value = filteredData
+    filteredData.value = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
+    if(filteredData.value.length > 0){
+      filterKeywords.value = filteredData.value
     } else {filterKeywords.value = ['검색 데이터가 없습니다']} // 어떤게 더 낫나 [searchKeyword.value.keyword]
   } else {
     filterKeywords.value = searchHistory.value
   }
 
 }
+// function handleFocus(){
+//   // 클릭시 block 노출
+//   setFocus.value = true
+//   console.log(setFocus.value)
+
+//   // 검색 목록 출력
+//   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
+//   const searchTermRegex = makeRegexByCho(searchTerm);
+//   let filteredData = null;
+
+//   if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
+//     filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
+//     if(filteredData.length > 0){
+//       filterKeywords.value = filteredData
+//     } else {filterKeywords.value = ['검색 데이터가 없습니다']} // 어떤게 더 낫나 [searchKeyword.value.keyword]
+//   } else {
+//     filterKeywords.value = searchHistory.value
+//   }
+
+// }
 
 // input 박스 외부 클릭시 block 사라짐
+
 function handleBlur(){
   setFocus.value = false
-  console.log(setFocus.value)
+  // console.log(setFocus.value)
 }
 
 // 키보드 입력에 따른 목록 변환
@@ -46,25 +69,43 @@ function keyHandle() {
   // 검색 목록 출력
   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
   const searchTermRegex = makeRegexByCho(searchTerm);
-  let filteredData = null;
 
   if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
-    filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
-    if(filteredData.length > 0){
-      filterKeywords.value = filteredData
+    filteredData.value = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
+    if(filteredData.value.length > 0){
+      filterKeywords.value = filteredData.value
     } else {
       filterKeywords.value =  [searchKeyword.value.keyword] // 어떤게 더 낫나 ['검색 데이터가 없습니다']
-    }
+    } // 검색 데이터가 없는 것은 클릭시 POST로 넘어갈 수 있도록 만들기
   } else {
     filterKeywords.value = searchHistory.value
   }
 
-  console.log(filterKeywords)
-
+  // console.log(filterKeywords)
 }
+// function keyHandle() {
+//   // 검색 목록 출력
+//   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
+//   const searchTermRegex = makeRegexByCho(searchTerm);
+//   let filteredData = null;
+//   if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
+//     filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
+//     if(filteredData.length > 0){
+//       filterKeywords.value = filteredData
+//       // console.log(filteredData)
+//     } else {
+//       filterKeywords.value =  [searchKeyword.value.keyword] // 어떤게 더 낫나 ['검색 데이터가 없습니다']
+//     }
+//   } else {
+//     filterKeywords.value = searchHistory.value
+//   }
+//   console.log(filterKeywords)
+// }
+
 
 
 // 한글 즉시 인식
+
 function changeKeyword(event) {
   searchKeyword.value.keyword = event.target.value
 }
@@ -111,20 +152,34 @@ function makeRegexByCho(search = "") {
 
 
 // 검색창 block 선택하기
-function selectKeyword(filterKeyword){
-  console.log(filterKeyword)
-  searchKeyword.value.keyword = filterKeyword
-  search()
+
+function selectKeyword(filterKeyword, event){
+  // 클릭된 요소가 <v-btn>인 경우에만 deleteSearchHistory 함수를 호출
+  console.log(event.target.tagName)
+  console.log(event.target.classList)
+  // if (event.target.tagName === 'SPAN' && event.target.classList.contains('v-btn__content')) {
+  //   event.preventDefault();
+  //   return;
+  // }
+
+  if (event.target.tagName != 'UL' && event.target.classList.contains('search-keyword') == false) {
+    event.preventDefault();
+    return;
+  }
+
+  console.log(filterKeyword);
+  searchKeyword.value.keyword = filterKeyword;
+  search();
 }
 
 // 검색창 block 요소 마우스 커서 하이라이트 
 const highlightedKeyword = ref(null);
 function mouseenterHandler(filterKeyword) {
-  console.log(filterKeyword)
+  // console.log(filterKeyword)
   highlightedKeyword.value = filterKeyword;
 }
-function mouseleaveHandler(filterKeyword) {
-  console.log(filterKeyword)
+function mouseleaveHandler() {
+  // console.log(filterKeyword)
   highlightedKeyword.value = null;
 }
 
@@ -203,7 +258,7 @@ async function getSearchHistory() { // 검색 기록 불러오기
   }
 }
 
-// 검색 기록 로그 보내기
+// axios 검색 기록 로그 보내기
 async function postSearchHistory() {
   try {
     if(searchKeyword.value.keyword == null || searchKeyword.value.keyword == ''){return}
@@ -222,9 +277,24 @@ async function postSearchHistory() {
   }
 }
 
+// axios 검색 기록 삭제하기
 async function deleteSearchHistory(filterKeyword) {
-  console.log('클릭하였음')
-  console.log(filterKeyword)
+  try {
+    // console.log(filterKeyword)
+    if(filterKeyword == null || filterKeyword == ''){return}
+    await axios.delete(`http://localhost:8080/api/searchlog/delete/${filterKeyword}`, 
+    {
+      headers: {
+        // 권한 풀고 상황에 맞게 넣어줘야 함.
+        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+      }
+    });
+    getSearchHistory();
+    console.log(searchHistory)
+    keyHandle();
+  } catch (error) {
+    console.error(error);
+  }
 }
 
 const router = useRouter();
@@ -261,7 +331,6 @@ async function search(){
     }
   }
 }
-
 
 </script>
 
@@ -305,9 +374,9 @@ async function search(){
                   <div class="wrapper" >
                     <div class="block" v-if="setFocus">
                       <ul v-for="filterKeyword in filterKeywords"
-                      @mousedown="selectKeyword(filterKeyword)"
+                      @mousedown="selectKeyword(filterKeyword, $event)"
                       @mouseenter="mouseenterHandler(filterKeyword)"
-                      @mouseleave="mouseleaveHandler(filterKeyword)"
+                      @mouseleave="mouseleaveHandler()"
                       :class="{ 'highlighted': highlightedKeyword === filterKeyword, 
                       'highlightedFilter': highlightedFilterKeyword === filterKeyword }"
                       style="position: relative;"
@@ -317,14 +386,17 @@ async function search(){
                         v-if="filterKeywords === searchHistory"/> 
                         <img class="searchlog-icons" 
                         src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\search-keyword.png"
-                        v-if="filterKeywords != searchHistory"/> 
+                        v-if="filterKeywords === filteredData"/> 
+                        <img class="searchlog-icons" 
+                        src="C:\Users\Playdata\Desktop\hwfinal\main\frontend\src\assets\images\logos\question-mark-purple.png"
+                        v-if="filterKeywords != searchHistory && filterKeywords != filteredData"/> 
                         <ul class="search-keyword">{{ filterKeyword }}</ul>
                         <v-btn icon="$vuetify" variant="text" class="search-delete"
-                        v-if="filterKeywords === searchHistory"
+                        v-if="filterKeywords === searchHistory && highlightedKeyword === filterKeyword || filterKeywords === searchHistory && highlightedFilterKeyword === filterKeyword"
                         @mousedown="deleteSearchHistory(filterKeyword)">
                           삭제
-                        </v-btn> 
-                      </ul> 
+                        </v-btn>
+                      </ul>
                     </div>
                   </div>
                 </section>

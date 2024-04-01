@@ -38,10 +38,10 @@ public class SearchLogController {
 	public ResponseEntity<Set<SearchLog>> readSearchLog(){
 		return ResponseEntity.ok(searchLogService.readSearchLog(userService.getMyUserWithAuthorities()));
 	}
-	
-	@DeleteMapping("/delete/{searchLogId}")
-	public ResponseEntity<SearchLog> deleteSearchLog(@PathVariable Long searchLogId){
-		return ResponseEntity.ok(searchLogService.deleteSearchLog(searchLogId, userService.getMyUserWithAuthorities()));	
+	 
+	@DeleteMapping("/delete/{content}")
+	public ResponseEntity<SearchLog> deleteSearchLog(@PathVariable String content){
+		return ResponseEntity.ok(searchLogService.deleteSearchLog(content, userService.getMyUserWithAuthorities()));	
 	}
 	
 //	@DeleteMapping("/delete")
