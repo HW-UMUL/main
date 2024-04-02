@@ -86,19 +86,19 @@ async function writePost(){
 
           <VCol
           >
-            <div>
+            <!-- <div>
             <TiptapEditor
             class="tiptap"
             id="Tipcontent"
             v-model="post.content"
             />
-            </div>
-            <!-- <VTextarea
+            </div> -->
+            <VTextarea
             id="content"
             v-model="post.content"
             placeholder="본문"
             label="본문"
-            /> -->
+            />
 
           </VCol>
 
@@ -156,8 +156,6 @@ async function writePost(){
       <VCard title="최신순" style="margin-bottom: 20px">
         <PostDateSort />
       </VCard>
-      <AnalyticsAward style="margin-bottom: 20px"/>
-      <AnalyticsAward style="margin-bottom: 20px"/>
     </VCol>
 
   </VRow>

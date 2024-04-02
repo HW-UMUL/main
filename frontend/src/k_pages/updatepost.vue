@@ -116,19 +116,19 @@ async function updatePost(postId){
 
               <VCol
               >
-              <div>
+              <!-- <div>
               <TiptapEditor
               id="Tipcontent"
               v-model="post.content"
               />
-              </div>
+              </div> -->
 
-                <!-- <VTextarea
+                <VTextarea
                 id="content"
                 v-model="post.content"
                 placeholder="본문"
                 label="본문"
-                /> -->
+                />
               </VCol>
 
               <VCol
