@@ -66,6 +66,7 @@ function handleBlur(){
 // 키보드 입력에 따른 목록 변환
 const filterKeywords = ref();
 function keyHandle() {
+
   // 검색 목록 출력
   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
   const searchTermRegex = makeRegexByCho(searchTerm);
@@ -152,22 +153,12 @@ function makeRegexByCho(search = "") {
 
 
 // 검색창 block 선택하기
-
 function selectKeyword(filterKeyword, event){
   // 클릭된 요소가 <v-btn>인 경우에만 deleteSearchHistory 함수를 호출
-  console.log(event.target.tagName)
-  console.log(event.target.classList)
-  // if (event.target.tagName === 'SPAN' && event.target.classList.contains('v-btn__content')) {
-  //   event.preventDefault();
-  //   return;
-  // }
-
   if (event.target.tagName != 'UL' && event.target.classList.contains('search-keyword') == false) {
     event.preventDefault();
     return;
   }
-
-  console.log(filterKeyword);
   searchKeyword.value.keyword = filterKeyword;
   search();
 }
@@ -188,19 +179,17 @@ const highlightedFilterKeyword = ref(null);
 const highlightedFilterKeywordIndex = ref(-1);
 function keyboardHandler(event){
   if (event.key === 'ArrowUp') {
-    console.log(event.key)
     highlightedFilterKeywordIndex.value--;
     if (highlightedFilterKeywordIndex.value < 0) {
       highlightedFilterKeywordIndex.value = filterKeywords.value.length - 1;
     }
-    console.log(filterKeywords.value[highlightedFilterKeywordIndex.value]);
     highlightedFilterKeyword.value = filterKeywords.value[highlightedFilterKeywordIndex.value]
     // searchKeyword.value.keyword = highlightedFilterKeyword.value
+    // changeKeyword(event)
+    // event.preventDefault();
   } else if (event.key === 'ArrowDown') {
     // 아래쪽 화살표 키를 눌렀을 때 수행할 동작
     highlightedFilterKeywordIndex.value++;
-    console.log(event.key)
-    console.log(searchKeyword.value.keyword)
     // 배열의 길이를 초과하는지 확인하고, 초과하는 경우 처음 요소로 돌아감.
     if (highlightedFilterKeywordIndex.value >= filterKeywords.value.length) {
       highlightedFilterKeywordIndex.value = 0;
@@ -210,10 +199,8 @@ function keyboardHandler(event){
     // searchKeyword.value.keyword = highlightedFilterKeyword.value
   } else if (event.key === 'ArrowLeft') {
     // 왼쪽 화살표 키를 눌렀을 때 수행할 동작
-    console.log(event.key)
   } else if (event.key === 'ArrowRight') {
     // 오른쪽 화살표 키를 눌렀을 때 수행할 동작
-    console.log(event.key)
   }
 }
 
@@ -285,17 +272,113 @@ async function deleteSearchHistory(filterKeyword) {
     await axios.delete(`http://localhost:8080/api/searchlog/delete/${filterKeyword}`, 
     {
       headers: {
-        // 권한 풀고 상황에 맞게 넣어줘야 함.
+        // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
       }
     });
-    getSearchHistory();
-    console.log(searchHistory)
-    keyHandle();
+
+    // 기록 삭제 후 즉각 반영하기
+    await getSearchHistory();
+    filterKeywords.value = searchHistory.value;
+
   } catch (error) {
     console.error(error);
   }
+
 }
+
+// async function deleteSearchHistory(filterKeyword) {
+//   try {
+//     // console.log(filterKeyword)
+//     if(filterKeyword == null || filterKeyword == ''){return}
+//     const encodedKeyword = encodeURIComponent(filterKeyword);
+//     await axios.delete(`http://localhost:8080/api/searchlog/delete/${encodedKeyword}`, 
+//     {
+//       headers: {
+//         // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
+//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+//       }
+//     });
+
+//     // 기록 삭제 후 즉각 반영하기
+//     await getSearchHistory();
+//     filterKeywords.value = searchHistory.value;
+
+//   } catch (error) {
+//     console.error(error);
+//   }
+// }
+
+// import qs from 'qs'
+// async function deleteSearchHistory(filterKeyword) {
+//   try {
+//     // console.log(filterKeyword)
+//     if(filterKeyword == null || filterKeyword == ''){return}
+//     const queryString = qs.stringify({ foo: filterKeyword })
+//     console.log(queryString)
+//     await axios.delete(`http://localhost:8080/api/searchlog/delete/${queryString}`, 
+//     {
+//       headers: {
+//         // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
+//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+//       }
+//     });
+//     console.log('완료')
+//     // 기록 삭제 후 즉각 반영하기
+//     await getSearchHistory();
+//     filterKeywords.value = searchHistory.value;
+
+//   } catch (error) {
+//     console.error(error);
+//   }
+
+// }
+
+// async function deleteSearchHistory(filterKeyword) {
+//   try {
+//     // console.log(filterKeyword)
+//     if(filterKeyword == null || filterKeyword == ''){return}
+//     await axios.delete(`http://localhost:8080/api/searchlog/delete/${filterKeyword}`, 
+//     {
+//       headers: {
+//         // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
+//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+//       }
+//     });
+
+//     // 기록 삭제 후 즉각 반영하기
+//     await getSearchHistory();
+//     filterKeywords.value = searchHistory.value;
+
+//   } catch (error) {
+//     console.error(error);
+//   }
+
+// }
+
+// async function deleteSearchHistory(filterKeyword) {
+//   try {
+//     if (filterKeyword == null || filterKeyword == '') { return; }
+
+//     // filterKeyword를 URI 인코딩하여 전달
+//     const encodedKeyword = encodeURIComponent(`http://localhost:8080/api/searchlog/delete/${filterKeyword}`);
+//     console.log(encodedKeyword)
+//     await axios.delete(encodedKeyword, {
+//       headers: {
+//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+//       }
+//     });
+
+//     // 기록 삭제 후 즉각 반영하기
+//     await getSearchHistory();
+//     filterKeywords.value = searchHistory.value;
+
+//   } catch (error) {
+//     console.error(error);
+//   }
+
+// }
+
 
 const router = useRouter();
 
