@@ -28,7 +28,7 @@ function handleFocus(){
   if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
     filteredData.value = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
     if(filteredData.value.length > 0){
-      filterKeywords.value = filteredData.value
+      filterKeywords.value = filteredData.value // . slice() 메소드 사용해서 데이터 개수 자르기
     } else {filterKeywords.value = ['검색 데이터가 없습니다']} // 어떤게 더 낫나 [searchKeyword.value.keyword]
   } else {
     filterKeywords.value = searchHistory.value
@@ -227,12 +227,15 @@ async function getData() { // Post 데이터 가져오기
   }
 }
 
-async function getSearchHistory() { // 검색 기록 불러오기
+// axios 검색 기록 불러오기
+async function getSearchHistory() {
   try {
+    const token = await getAuthToken();
+    console.log(token)
     const responseSearchHistory = await axios.get(`http://localhost:8080/api/searchlog/read`, {
       headers: {
         // 권한 풀고 상황에 맞게 넣어줘야 함.
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+        'Authorization': `Bearer ${token}`
       }
     });
     searchHistory.value = responseSearchHistory.data.map(item => item.content);
@@ -248,13 +251,15 @@ async function getSearchHistory() { // 검색 기록 불러오기
 // axios 검색 기록 로그 보내기
 async function postSearchHistory() {
   try {
+    const token = await getAuthToken();
+    console.log(token)
     if(searchKeyword.value.keyword == null || searchKeyword.value.keyword == ''){return}
     const responseHistory = await axios.post(`http://localhost:8080/api/searchlog/save`, {
       content: searchKeyword.value.keyword
     }, {
       headers: {
         // 권한 풀고 상황에 맞게 넣어줘야 함.
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+        'Authorization': `Bearer ${token}`
       }
     });
     console.log(responseHistory.data)
@@ -267,15 +272,17 @@ async function postSearchHistory() {
 // axios 검색 기록 삭제하기
 async function deleteSearchHistory(filterKeyword) {
   try {
-    // console.log(filterKeyword)
-    if(filterKeyword == null || filterKeyword == ''){return}
-    await axios.delete(`http://localhost:8080/api/searchlog/delete/${filterKeyword}`, 
-    {
-      headers: {
-        // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+    if(filterKeyword == null || filterKeyword == '') { return; }
+    await axios.post('http://localhost:8080/api/searchlog/delete', 
+      {
+        content: filterKeyword // filterKeyword를 직접 전달
+      },
+      {
+        headers: {
+          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+        }
       }
-    });
+    );
 
     // 기록 삭제 후 즉각 반영하기
     await getSearchHistory();
@@ -284,100 +291,7 @@ async function deleteSearchHistory(filterKeyword) {
   } catch (error) {
     console.error(error);
   }
-
 }
-
-// async function deleteSearchHistory(filterKeyword) {
-//   try {
-//     // console.log(filterKeyword)
-//     if(filterKeyword == null || filterKeyword == ''){return}
-//     const encodedKeyword = encodeURIComponent(filterKeyword);
-//     await axios.delete(`http://localhost:8080/api/searchlog/delete/${encodedKeyword}`, 
-//     {
-//       headers: {
-//         // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
-//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
-//       }
-//     });
-
-//     // 기록 삭제 후 즉각 반영하기
-//     await getSearchHistory();
-//     filterKeywords.value = searchHistory.value;
-
-//   } catch (error) {
-//     console.error(error);
-//   }
-// }
-
-// import qs from 'qs'
-// async function deleteSearchHistory(filterKeyword) {
-//   try {
-//     // console.log(filterKeyword)
-//     if(filterKeyword == null || filterKeyword == ''){return}
-//     const queryString = qs.stringify({ foo: filterKeyword })
-//     console.log(queryString)
-//     await axios.delete(`http://localhost:8080/api/searchlog/delete/${queryString}`, 
-//     {
-//       headers: {
-//         // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
-//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
-//       }
-//     });
-//     console.log('완료')
-//     // 기록 삭제 후 즉각 반영하기
-//     await getSearchHistory();
-//     filterKeywords.value = searchHistory.value;
-
-//   } catch (error) {
-//     console.error(error);
-//   }
-
-// }
-
-// async function deleteSearchHistory(filterKeyword) {
-//   try {
-//     // console.log(filterKeyword)
-//     if(filterKeyword == null || filterKeyword == ''){return}
-//     await axios.delete(`http://localhost:8080/api/searchlog/delete/${filterKeyword}`, 
-//     {
-//       headers: {
-//         // 정해진 권한이 아닌 로그인 계정에 맞게 작동하도록 바꿔야 함.
-//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
-//       }
-//     });
-
-//     // 기록 삭제 후 즉각 반영하기
-//     await getSearchHistory();
-//     filterKeywords.value = searchHistory.value;
-
-//   } catch (error) {
-//     console.error(error);
-//   }
-
-// }
-
-// async function deleteSearchHistory(filterKeyword) {
-//   try {
-//     if (filterKeyword == null || filterKeyword == '') { return; }
-
-//     // filterKeyword를 URI 인코딩하여 전달
-//     const encodedKeyword = encodeURIComponent(`http://localhost:8080/api/searchlog/delete/${filterKeyword}`);
-//     console.log(encodedKeyword)
-//     await axios.delete(encodedKeyword, {
-//       headers: {
-//         'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
-//       }
-//     });
-
-//     // 기록 삭제 후 즉각 반영하기
-//     await getSearchHistory();
-//     filterKeywords.value = searchHistory.value;
-
-//   } catch (error) {
-//     console.error(error);
-//   }
-
-// }
 
 
 const router = useRouter();

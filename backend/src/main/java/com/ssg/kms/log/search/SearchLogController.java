@@ -23,11 +23,6 @@ import lombok.RequiredArgsConstructor;
 public class SearchLogController {
 	private final SearchLogService searchLogService;
 	private final UserService userService;
-	
-//	@PostMapping("/send")
-//	public ResponseEntity<SearchLog> sendSearchLog(@RequestBody SearchLogDTO searchLogDTO){
-//		return ResponseEntity.ok(searchLogService.sendSearchLog(searchLogDTO, userService.getMyUserWithAuthorities()));
-//	}
 
 	@PostMapping("/save")
 	public ResponseEntity<SearchLog> saveSearchLog(@RequestBody SearchLog searchLog){
@@ -39,14 +34,16 @@ public class SearchLogController {
 		return ResponseEntity.ok(searchLogService.readSearchLog(userService.getMyUserWithAuthorities()));
 	}
 	 
-	@DeleteMapping("/delete/{content}")
-	public ResponseEntity<SearchLog> deleteSearchLog(@PathVariable String content){
-		return ResponseEntity.ok(searchLogService.deleteSearchLog(content, userService.getMyUserWithAuthorities()));	
-	}
+	@PostMapping("/delete")
+	public ResponseEntity<SearchLog> deleteSearchLog(@RequestBody SearchLog searchLog){
+		System.out.println(searchLog.getContent());
+		return ResponseEntity.ok(searchLogService.deleteSearchLog(searchLog.getContent(), userService.getMyUserWithAuthorities()));	
+	} 
 	
-//	@DeleteMapping("/delete")
-//	public ResponseEntity<SearchLog> deleteSearchLog(@RequestParam Long searchLogId){
-//		return ResponseEntity.ok(searchLogService.deleteSearchLog(searchLogId, userService.getMyUserWithAuthorities()));	
+//	@DeleteMapping("/delete/{content}")
+//	public ResponseEntity<SearchLog> deleteSearchLog(@PathVariable String content){
+//		return ResponseEntity.ok(searchLogService.deleteSearchLog(content, userService.getMyUserWithAuthorities()));	
 //	}
+
 	
 }

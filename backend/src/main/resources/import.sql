@@ -10,7 +10,8 @@ SELECT * FROM role;
 SELECT * FROM user;
 INSERT INTO user VALUES(1, 'gye@naver.com', '123', 'gye');
 
-SELECT * FROM search_log;
+SELECT * FROM search_log Order By Date DESC;
+DELETE FROM search_log WHERE content = '이건 2번입니다' AND user_id = 2 ORDER BY DATE DESC LIMIT 1;
 SELECT content, user_id, MAX(date) AS max_date FROM search_log WHERE user_id = 2 GROUP BY content ORDER BY MAX(date) DESC;
 SELECT * FROM search_log WHERE user_id = 2 GROUP BY content ORDER BY MAX(date) DESC;
 INSERT INTO search_log (content, DATE, user_id) VALUES('이건 2번입니다', NOW(), '2');

@@ -43,7 +43,7 @@ public class UserController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.add("Set-Cookie", "jwtToken=" + jwtToken.substring(7) + "; Path=/; Max-Age=3600"); //3600초
-
+        
 		return ResponseEntity.ok().headers(headers).body(loginDto.getUsername());
 	}
 

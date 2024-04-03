@@ -3,7 +3,9 @@ package com.ssg.kms.log.search;
 import java.util.Date;
 import java.util.Optional;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,18 +46,11 @@ public class SearchLogService {
 	    return searchLogRepository.findTop10ByUserIdOrderByDateDesc(user.get().getId());
 	}
  
-
-//	@Transactional
-//	public SearchLog deleteSearchLog(Long searchLogId, Optional<User> user) {
-//		searchLogRepository.deleteBySearchLogIdAndUserId(searchLogId, user.get().getId());
-//		SearchLog searchLog = new SearchLog();
-//		return searchLog;
-//	}
-	
 	@Transactional // SearchLogIdAndUserId 두개의 조건을 부여해 삭제해야한다.
 	public SearchLog deleteSearchLog(String content, Optional<User> user) {
 		searchLogRepository.deleteTop1ByContentAndUserIdOrderByDateDesc(content, user.get().getId());
 		SearchLog searchLog = new SearchLog();
+		
 		return searchLog;
 	}
 
