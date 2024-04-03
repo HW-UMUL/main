@@ -1,9 +1,5 @@
 <script setup>
 
-</script>
-
-<script>
-
 
 </script>
 

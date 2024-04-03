@@ -5,6 +5,7 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
+import login from '@/pages/login.vue'
 
 import { useRouter } from 'vue-router';
 
@@ -17,6 +18,7 @@ const setFocus = ref(false);
 const filteredData = ref(null);
 
 function handleFocus(){
+  console.log(login.jwtToken)
   // 클릭시 block 노출
   setFocus.value = true
   // console.log(setFocus.value)
@@ -230,12 +232,11 @@ async function getData() { // Post 데이터 가져오기
 // axios 검색 기록 불러오기
 async function getSearchHistory() {
   try {
-    const token = await getAuthToken();
-    console.log(token)
+    const jwtToken = $cookies.get("jwtToken")
     const responseSearchHistory = await axios.get(`http://localhost:8080/api/searchlog/read`, {
       headers: {
         // 권한 풀고 상황에 맞게 넣어줘야 함.
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${jwtToken}`
       }
     });
     searchHistory.value = responseSearchHistory.data.map(item => item.content);
@@ -251,15 +252,14 @@ async function getSearchHistory() {
 // axios 검색 기록 로그 보내기
 async function postSearchHistory() {
   try {
-    const token = await getAuthToken();
-    console.log(token)
+    const jwtToken = $cookies.get("jwtToken")
     if(searchKeyword.value.keyword == null || searchKeyword.value.keyword == ''){return}
     const responseHistory = await axios.post(`http://localhost:8080/api/searchlog/save`, {
       content: searchKeyword.value.keyword
     }, {
       headers: {
         // 권한 풀고 상황에 맞게 넣어줘야 함.
-        'Authorization': `Bearer ${token}`
+        'Authorization': `Bearer ${jwtToken}`
       }
     });
     console.log(responseHistory.data)
@@ -272,6 +272,7 @@ async function postSearchHistory() {
 // axios 검색 기록 삭제하기
 async function deleteSearchHistory(filterKeyword) {
   try {
+    const jwtToken = $cookies.get("jwtToken")
     if(filterKeyword == null || filterKeyword == '') { return; }
     await axios.post('http://localhost:8080/api/searchlog/delete', 
       {
@@ -279,7 +280,7 @@ async function deleteSearchHistory(filterKeyword) {
       },
       {
         headers: {
-          'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+          'Authorization': `Bearer ${jwtToken}`
         }
       }
     );

@@ -6,7 +6,12 @@ import authV1MaskLight from '@images/pages/auth-v1-mask-light.png'
 import authV1Tree2 from '@images/pages/auth-v1-tree-2.png'
 import authV1Tree from '@images/pages/auth-v1-tree.png'
 import { useTheme } from 'vuetify'
+import { useRouter } from "vue-router"
+// import Vue from 'vue';
+// import VueCookies from 'vue-cookies'
+// Vue.use(VueCookies)
 
+const router = useRouter()
 const form = ref({
   usernmae: '',
   password: '',
@@ -28,22 +33,40 @@ async function login() {
     password: form.value.password
   }
    
+  // const response = await fetch(
+  //     `http://localhost:8080/api/login`,
+  //     {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(formData),
+  //       credentials: 'include'
+  //     }
+  // )
+
   const response = await fetch(
-      `http://localhost:8080/api/login`,
+      `http://localhost:8080/api/auth`,
       {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
-        credentials: 'include'
+//        credentials: 'include'
       }
   )
+
 
   if(!response.ok) {
     alert("실패!")
   } else{
-    window.location.href = 'http://localhost:5173/'
+    const jwtToken = response.headers.get('Authorization').substr(7)
+    // console.log(jwtToken)
+    sessionStorage.setItem("myname", formData.username);
+    $cookies.set("jwtToken", jwtToken)
+    console.log($cookies.get("jwtToken"))
+    router.push({ path: '/' }); 
   }
 }
 
