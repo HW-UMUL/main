@@ -83,7 +83,51 @@ import VerticalNavLink from '@layouts/components/VerticalNavLink.vue';
       icon: 'ri-chat-1-line',
       to: '/follow',
     }"
-  /> 
+  />
 
+  <VerticalNavGroup
+  :item="{
+      title: 'Admin',
+      icon: 'ri-admin-line',
+      badgeContent: 'Admin',
+      badgeClass: 'bg-light-primary text-primary',
+    }"
+  >
+    <VerticalNavLink
+      :item="{
+        title: 'Post/Wiki',
+        icon: 'ri-admin-line',
+        to: '/admin',
+      }"
+    />
+    <VerticalNavLink
+      :item="{
+        title: 'Post',
+        icon: 'ri-home-line',
+        to: '/adminpost',
+      }"
+    /> 
+    <VerticalNavLink
+      :item="{
+        title: 'Wiki',
+        icon: 'ri-book-line',
+        to: '/adminwiki',
+      }"
+    />
+    <VerticalNavLink
+      :item="{
+        title: 'User',
+        icon: 'ri-user-line',
+        to: '/adminuser',
+      }"
+    />
+    <VerticalNavLink
+      :item="{
+        title: 'Table',
+        icon: 'ri-team-line',
+        to: '/admintable',
+      }"
+    />
+  </VerticalNavGroup>
 
 </template>

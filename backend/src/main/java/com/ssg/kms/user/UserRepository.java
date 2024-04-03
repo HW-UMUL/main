@@ -23,5 +23,4 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	List<String> findAllByEmailContaining(String searchKeyword, Long myId);
 
 	List<User> findAllByIdIn(List<Long> tableUserIds);
-
 }

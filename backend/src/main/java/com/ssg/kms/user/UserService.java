@@ -97,6 +97,20 @@ public class UserService {
     	return info;
     }
     
+    //////////
+    @Transactional(readOnly = true)
+    public List<User> getUserinfo(Optional<User> user) {
+    	List<User> userinfo = userRepository.findAll();
+    	return userinfo;
+    }
+    
+    @Transactional(readOnly = true)
+    public List<UserRole> getRoleByUserId(Long userId, Optional<User> user) {
+    	List<UserRole> userrole = userRoleRepository.findAllByUserId(userId);
+    	return userrole;
+    }
+    //////////
+    
     @Transactional(readOnly = true)
     public List<String> searchEmails(String searchKeyword, Optional<User> user) {
     	List<String> userEmails = userRepository.findAllByEmailContaining(searchKeyword, user.get().getId());

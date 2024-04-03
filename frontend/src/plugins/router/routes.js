@@ -69,6 +69,29 @@ export const routes = [
         component: () => import('@/k_pages/writepost.vue')
       },
 
+      ////////// adimn
+      {
+        path: 'admin',
+        component: () => import('@/k_views/admin/Admin.vue')
+      },
+      {
+        path: 'adminpost',
+        component: () => import('@/k_views/admin/AdminPost.vue')
+      },
+      {
+        path: 'adminwiki',
+        component: () => import('@/k_views/admin/AdminWiki.vue')
+      },
+      {
+        path: 'adminuser',
+        component: () => import('@/k_views/admin/AdminUser.vue')
+      },
+      {
+        path: 'admintable',
+        component: () => import('@/k_views/admin/AdminTable.vue')
+      },
+      //////////
+
       /*
       {
         path: 'writepost',

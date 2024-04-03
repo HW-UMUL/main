@@ -1,6 +1,7 @@
 package com.ssg.kms.user;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssg.kms.auth.AuthService;
+import com.ssg.kms.role.Role;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -91,6 +93,20 @@ public class UserController {
 	public ResponseEntity<User> getMyUserInfo() {
 		return ResponseEntity.ok(userService.getMyUserWithAuthorities().get());
 	}
+	
+	/////
+	@GetMapping("/userinfo")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	public ResponseEntity<List<User>> getUserInfo() {
+		return ResponseEntity.ok(userService.getUserinfo(userService.getMyUserWithAuthorities()));
+	}
+	
+	@GetMapping("/userrole/{userid}")
+	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+	public ResponseEntity<List<UserRole>> getUserRole(@PathVariable Long userid) {
+		return ResponseEntity.ok(userService.getRoleByUserId(userid, userService.getMyUserWithAuthorities()));
+	}
+	/////
 
 	@GetMapping("/user/{username}")
 	@PreAuthorize("hasAnyRole('ROLE_ADMIN')")

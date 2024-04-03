@@ -138,6 +138,30 @@ async function delPost(postId) {
   }
 }
 
+const tags = ref([])
+async function gettags(){
+  
+  const response = await fetch(
+      `http://${serverAddress}/api/tagpost/read/${props.post.id}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    const tagsPost = await response.json()
+    tags.value = tagsPost.map(tagsPost => tagsPost.tag.name);
+  }
+}
+
+
 const router = useRouter();
 
 function gotoupdatepost(postId) {
@@ -146,6 +170,7 @@ function gotoupdatepost(postId) {
 
 getLikes()
 getStars()
+gettags()
 </script>
 
 <template>
@@ -200,6 +225,9 @@ getStars()
           <VDivider />
             <VCol class="post-content, mt-2" style="margin-left: 5px;">
               <div v-html="post.content.length  > 100 ? post.content.slice(0,100) + '...' :post.content"></div>
+              <div v-for="(tag, index) in tags" :key="index">
+                {{ tag }}
+              </div>
             </VCol>
           <VCardActions>
             <VBtn @click="isDetails = !isDetails">
@@ -221,6 +249,9 @@ getStars()
             <div v-show="isDetails">
               <VCardText>
                 <div v-html="post.content"></div>
+                <div v-for="(tag, index) in tags" :key="index">
+                {{ tag }}
+                </div>
               </VCardText>
             </div>
           </VExpandTransition>

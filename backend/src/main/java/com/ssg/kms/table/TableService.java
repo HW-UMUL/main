@@ -1,6 +1,7 @@
 package com.ssg.kms.table;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -48,6 +49,12 @@ public class TableService {
     @Transactional(readOnly = true)
     public Tables readTable(Long tableId, Optional<User> user) {
     	return tableRepository.findById(tableId).get();
+    }
+    
+    // readAll
+    @Transactional(readOnly = true)
+    public List<Tables> readAllTable(Optional<User> user) {
+    	return tableRepository.findAll();
     }
 
     @Transactional

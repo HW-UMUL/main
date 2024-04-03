@@ -2,7 +2,7 @@
 import { VCol, VRow, VTextField, VTextarea } from 'vuetify/lib/components/index.mjs';
 import PostLikeSort from '@/k_views/list/PostLikeSort.vue';
 import PostDateSort from '@/k_views/list/PostDateSort.vue';
-import TiptapEditor from '@/k_components/TiptapEditor.vue';
+// import TiptapEditor from '@/k_components/TiptapEditor.vue';
 import { useRouter } from "vue-router"
 
 const router = useRouter()

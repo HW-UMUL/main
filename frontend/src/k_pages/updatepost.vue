@@ -1,6 +1,6 @@
 <script setup>
 import { VCol, VRow, VTextField } from 'vuetify/lib/components/index.mjs';
-import TiptapEditor from '@/k_components/TiptapEditor.vue';
+// import TiptapEditor from '@/k_components/TiptapEditor.vue';
 import { useRouter } from "vue-router"
 
 const router = useRouter()

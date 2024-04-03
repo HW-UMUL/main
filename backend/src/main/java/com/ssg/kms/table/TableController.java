@@ -1,5 +1,7 @@
 package com.ssg.kms.table;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.ResponseEntity.BodyBuilder;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,6 +34,12 @@ public class TableController {
     public ResponseEntity<Tables> readTable(@PathVariable Long tableId) {
         return ResponseEntity.ok(tableService.readTable(tableId, userService.getMyUserWithAuthorities()));
     }
+	
+	// readAll
+	@GetMapping("/readtables")
+	public ResponseEntity<List<Tables>> readAllTables() {
+		return ResponseEntity.ok(tableService.readAllTable(userService.getMyUserWithAuthorities()));
+	}
 
 	@PutMapping("/update/{tableId}")
     public ResponseEntity<Boolean> updateTable(@PathVariable Long tableId, @Valid @RequestBody TableDTO tableDto) {
