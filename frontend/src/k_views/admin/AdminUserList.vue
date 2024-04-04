@@ -93,10 +93,20 @@ getuserInfo()
 </script>
 
 <template>
-<div
-  style="font-size: small;
-  margin: 10px;">
-  total : {{ userinfo.length }}
+<div style="margin: 10px;
+  display: flex;
+  justify-content: space-between">
+  <span
+    style="font-size: small;
+    margin-left: 10px;">
+    total : {{ userinfo.length }}
+  </span>
+  <VIconBtn
+    style="margin-right: 10px;
+    cursor: pointer"
+    >
+    삭제
+  </VIconBtn>
 </div>
 <VTable
 density="comfortable"

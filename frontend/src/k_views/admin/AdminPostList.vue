@@ -23,7 +23,7 @@ function togglesort(sortType) {
     sortBy.value = sortType;
     sortDirection.value = 'asc';
   }
-  issort();
+  issort()
 }
 
 function issort() {
@@ -31,7 +31,8 @@ function issort() {
   sortBy.value === 'like';
   sortBy.value === 'star';
   sortBy.value === 'date';
-
+  // 체크박스 확인
+  const checkedPostIds = checkedPosts.value.map((checked, index) => checked ? sortedPosts.value[index].id : null);
   sortedPosts.value.sort((a, b) => {
     const compareResult = sortDirection.value === 'asc' ? -1 : 1;
     switch (sortBy.value) {
@@ -51,6 +52,8 @@ function issort() {
         return 0;
     }
   })
+  // 체크박스 확인
+  checkedPosts.value = sortedPosts.value.map(post => checkedPostIds.includes(post.id));
 }
 
 const serverAddress = inject('serverAddress')
@@ -144,13 +147,85 @@ function closepostmodal() {
   ispostmodal.value = !ispostmodal.value
 }
 
+async function delPost(postId) {
+  const response = await fetch(
+    `http://${serverAddress}/api/post/delete/${postId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      'Authorization': `Bearer ${auth}`,
+      credentials: 'include'
+    }
+  )
+  if(!response.ok) {
+    alert(postId+"삭제 실패")
+    console.error(error)
+  } else {
+    // alert("삭제되었습니다")
+    getPosts()
+    // window.location.reload()
+  }
+}
+
+const checkedPosts = ref([])
+async function delcheckedposts() {
+  const delPostList = [];
+
+  checkedPosts.value.forEach((checked, index) => {
+    if (checked) {
+      delPostList.push(sortedPosts.value[index].id);
+    }
+  })
+  if(delPostList.length === 0) {
+    alert("삭제할 게시물을 선택하십시오.");
+    return;
+  }
+  const confirmdel = confirm("삭제하시겠습니까?");
+  if(!confirmdel) return;
+
+  try {
+    for(const postId of delPostList) {
+    await delPost(postId);
+  }
+  checkedPosts.value = [];
+  alert("삭제되었습니다");
+  } catch(error) {
+    console.error(error);
+    alert("삭제 실패");
+  }
+}
+
+const allChecked = ref(false);
+
+// 전체 체크박스 클릭 시 개별 체크박스 상태 업데이트
+function selectAllCheckboxes() {
+  checkedPosts.value = sortedPosts.value.map(() => allChecked.value);
+}
+
+// 개별 체크박스 클릭 시 전체 선택 체크박스 상태 업데이트
+function selectIndividualCheckbox(index) {
+  checkedPosts.value[index] = !checkedPosts.value[index];
+  allChecked.value = checkedPosts.value.every(checked => checked);
+}
 </script>
 
 <template>
-<div
-  style="font-size: small;
-  margin: 10px;">
-  total : {{ posts.length }}
+<div style="margin: 10px;
+  display: flex;
+  justify-content: space-between">
+  <span
+    style="font-size: small;
+    margin-left: 10px;">
+    total : {{ posts.length }}
+  </span>
+  <VIconBtn
+    style="margin-right: 10px;
+    cursor: pointer"
+    @click="delcheckedposts">
+    삭제
+  </VIconBtn>
 </div>
 <VTable
 density="comfortable"
@@ -198,6 +273,12 @@ height="440"
          :icon="sortBy === 'date' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
          @click="togglesort('date')" />
       </th>
+      <th class="text-center">
+        <input 
+          type="checkbox"
+          v-model="allChecked"
+          @change="selectAllCheckboxes">
+      </th>
     </tr>
   </thead>
 
@@ -225,6 +306,13 @@ height="440"
       </td>
       <td class="text-center" style="width: 150pt">
       {{ formatDate(item.date) }}
+      </td>
+      <td class="text-center" style="width: 50px;">
+        <input 
+          type="checkbox"
+          :checked="checkedPosts[index]"
+          @change.stop="selectIndividualCheckbox(index)"
+          >
       </td>
     </tr>
   </tbody>

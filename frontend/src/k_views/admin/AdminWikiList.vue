@@ -30,7 +30,7 @@ function issort() {
   sortBy.value === 'like';
   sortBy.value === 'star';
   sortBy.value === 'date';
-
+  const checkedWikiIds = checkedwiki.value.map((checked, index) => checked ? sortedWiki.value[index].id : null);
   sortedWiki.value.sort((a, b) => {
     const compareResult = sortDirection.value === 'asc' ? -1 : 1;
     switch (sortBy.value) {
@@ -50,6 +50,7 @@ function issort() {
             return 0;
     }
   })
+  checkedwiki.value = sortedWiki.value.map(wiki => checkedWikiIds.includes(wiki.id));
 }
 
 const serverAddress = inject('serverAddress')
@@ -138,14 +139,87 @@ function readWiki(id){
   })
 }
 
+// 삭제
+async function delWiki(wikiId) {
+  const response = await fetch(
+    `http://${serverAddress}/api/wiki/delete/${wikiId}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      'Authorization': `Bearer ${auth}`,
+      credentials: 'include'
+    }
+  )
+  if(!response.ok) {
+    alert(wikiId + "삭제 실패")
+    console.error(error)
+  } else {
+    // alert("삭제되었습니다")
+    // getWiki()
+    // window.location.reload()
+  }
+}
+
+const checkedwiki = ref([])
+async function delcheckedwiki() {
+  const delwikiList = [];
+
+  checkedwiki.value.forEach((checked, index) => {
+    if (checked) {
+      delwikiList.push(sortedWiki.value[index].id);
+    }
+  })
+  if(delwikiList.length === 0) {
+    alert("삭제할 위키를 선택하십시오.");
+    return;
+  }
+  const confirmdel = confirm("삭제하시겠습니까?");
+  if(!confirmdel) return;
+
+  try {
+    for(const wikiId of delwikiList) {
+    await delWiki(wikiId);
+  }
+  checkedwiki.value = [];
+  alert("삭제되었습니다");
+  getWiki()
+  } catch(error) {
+    console.error(error);
+    alert("삭제 실패");
+  }
+}
+
+const allChecked = ref(false);
+
+function selectAllCheckboxes() {
+  checkedwiki.value = sortedWiki.value.map(() => allChecked.value)
+}
+
+function selectIndividualCheckbox(index) {
+  checkedwiki.value[index] = !checkedwiki.value[index];
+  allChecked.value = checkedwiki.value.every(checked => checked);
+}
 
 </script>
 
 <template>
-<div
-  style="font-size: small;
-  margin: 10px;">
-  total : {{ wiki.length }}
+<div style="margin: 10px;
+  display: flex;
+  justify-content: space-between">
+  <span
+    style="font-size: small;
+    margin-left: 10px;">
+    total : {{ wiki.length }}
+  </span>
+  <VIconBtn
+    style="margin-right: 10px;
+    cursor: pointer"
+    @click="delcheckedwiki"
+    >
+    삭제
+  </VIconBtn>
 </div>
 <VTable
 density="comfortable"
@@ -195,6 +269,12 @@ height="440"
          :icon="sortBy === 'date' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
          @click="togglesort('date')" />
       </th>
+      <th class="text-center">
+        <input 
+          type="checkbox"
+          v-model="allChecked"
+          @change="selectAllCheckboxes">
+      </th>
     </tr>
   </thead>
 
@@ -222,6 +302,13 @@ height="440"
       </td>
       <td class="text-center" style="width: 150pt">
       {{ formatDate(item.date) }}
+      </td>
+      <td class="text-center" style="width: 50px;">
+        <input 
+          type="checkbox"
+          :checked="checkedwiki[index]"
+          @change="selectIndividualCheckbox(index)"
+          >
       </td>
     </tr>
   </tbody>
