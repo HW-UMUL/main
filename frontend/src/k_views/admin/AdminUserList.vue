@@ -1,12 +1,11 @@
 <script setup>
 import { ref } from 'vue';
-import AdminUserRole from './AdminUserRole.vue';
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 
 const userinfo = ref([])
-  async function getuserInfo(){
+async function getuserInfo(){
 
   const response = await fetch(
       `http://${serverAddress}/api/userinfo`,
@@ -24,7 +23,31 @@ const userinfo = ref([])
     console.error(error)
   } else{
     userinfo.value = await response.json()
-    console.log(userinfo.value)
+    await Promise.all(userinfo.value.map(async (user) => {
+      user.roles = await getuserrole(user.id)
+    }))
+  }
+}
+
+async function getuserrole(userId){
+
+  const response = await fetch(
+      `http://${serverAddress}/api/userrole/${userId}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${auth}`,          
+        },
+        credentials: 'include'
+      }
+  )
+
+  if(!response.ok) {
+    console.error(error)
+  } else{
+    const roles = await response.json()
+    return roles.map(item => item.role.role.substring(5))
   }
 }
 
@@ -65,7 +88,7 @@ height="440"
   </thead>
 
   <tbody>
-    <tr v-for="(item, index) in userinfo.slice(0,20)" :key="index">
+    <tr v-for="(item, index) in userinfo" :key="index">
       <td class="text-center" style="width: 60pt">
         {{ index+1 }}
       </td>
@@ -76,7 +99,7 @@ height="440"
         {{ item.email }}  
       </td>
       <td class="text-center">
-        <AdminUserRole :user="item" />
+        {{ item.roles.join(', ').replace(/"/g, '') }}
       </td>
     </tr>
   </tbody>

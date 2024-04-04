@@ -68,7 +68,7 @@ function readWiki(id){
 >
   <thead>
     <tr>
-      <th class="text-center">
+      <th class="text-center" style="width: 60pt;">
         No
       </th>
       <th class="text-center" >
@@ -87,7 +87,7 @@ function readWiki(id){
     <tr
       v-for="(item, idx) in rankedItems.slice(0, 20)" :key="idx"
     >
-      <td class="text-center" style="width: 50pt">
+      <td class="text-center" style="width: 60pt">
         {{ idx + 1 }}
       </td>
       <td @click="readWiki(item.id)" style="cursor: pointer; color: #8C57FF;">

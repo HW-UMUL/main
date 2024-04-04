@@ -128,7 +128,7 @@ height="300"
 >
   <thead>
     <tr>
-      <th class="text-center">
+      <th class="text-center" style="width: 60pt;">
         No
       </th>
       <th class="text-center" >
@@ -151,7 +151,7 @@ height="300"
 
   <tbody>
     <tr v-for="(item, index) in posts.slice(0,20)" :key="index">
-      <td class="text-center">
+      <td class="text-center" style="width: 60pt;">
         {{ index+1 }}
       </td>
       <td>

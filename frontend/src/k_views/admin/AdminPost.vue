@@ -1,5 +1,5 @@
 <script setup>
-import AdminPostLike from '@/k_views/admin/AdminPostList.vue';
+import AdminPostList from '@/k_views/admin/AdminPostList.vue';
 </script>
 
 <template>
@@ -11,7 +11,7 @@ import AdminPostLike from '@/k_views/admin/AdminPostList.vue';
     <VCard>
       <VCardTitle style="margin:10px">Post</VCardTitle>
       <div>
-        <AdminPostLike />
+        <AdminPostList />
       </div>
     </VCard>
   </VCol>

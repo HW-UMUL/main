@@ -1,9 +1,7 @@
 <script setup>
 import { ref } from 'vue';
-import PostLike from '@/k_views/like/PostLike.vue';
 import PostModal from '@/k_views/post/PostModal.vue';
 import App from '@/App.vue';
-import PostStar from '@/k_views/star/PostStar.vue';
 
 // 년-월-일
 const formatDate = function(value) {
@@ -15,38 +13,46 @@ const formatDate = function(value) {
     return `${year}-${month}-${day}`;
 }
 
-const isnumsort = ref(true)
-const islikesort = ref(false)
-const isstarsort = ref(false)
-const isdatesort = ref(false)
-function numsort() {
-  isnumsort.value = !isnumsort.value
-  islikesort.value = false
-  isstarsort.value = false
-  isdatesort.value = false
+const sortDirection = ref('desc')
+const sortBy = ref('id')
+
+function togglesort(sortType) {
+  if (sortBy.value === sortType) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc';
+  } else {
+    sortBy.value = sortType;
+    sortDirection.value = 'asc';
+  }
+  issort();
 }
-function likesort() {
-  islikesort.value = !islikesort.value
-  isnumsort.value = false
-  isstarsort.value = false
-  isdatesort.value = false
-}
-function starsort() {
-  isstarsort.value = !isstarsort.value
-  isnumsort.value = false
-  islikesort.value = false
-  isdatesort.value = false
-}
-function datesort() {
-  isdatesort.value = !isdatesort.value
-  isnumsort.value = false
-  islikesort.value = false
-  isstarsort.value = false
+
+function issort() {
+  sortBy.value === 'id';
+  sortBy.value === 'like';
+  sortBy.value === 'star';
+  sortBy.value === 'date';
+
+  sortedPosts.value.sort((a, b) => {
+    const compareResult = sortDirection.value === 'asc' ? -1 : 1;
+    switch (sortBy.value) {
+      case 'id':
+        return compareResult * (a.id - b.id);
+      case 'like':
+        return compareResult * (a.likes - b.likes);
+      case 'star':
+        return compareResult * (a.stars - b.stars);
+      case 'date':
+        return compareResult * (new Date(a.date) - new Date(b.date));
+      default:
+        return 0;
+    }
+  })
 }
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 
+const sortedPosts = ref([])
 const posts = ref([])
 const selectedPost = ref([])
 const ispostmodal = ref(false)
@@ -71,11 +77,12 @@ async function getPosts() {
     
     posts.value = await Promise.all(beforePosts.map(async (post) => {
       const likes = await getLikes(post.id)
-      return { ...post, likes: likes }
+      const stars = await getStars(post.id)
+      return { ...post, likes: likes, stars: stars }
     }))
 
-    posts.value.sort((a, b) => b.likes - a.likes)
-
+    sortedPosts.value = [...posts.value]; // 정렬된 배열 생성
+    issort()
   } catch (error) {
     console.error(error)
   }
@@ -104,6 +111,26 @@ async function getLikes(postId){
   }
 }
 
+async function getStars(postId) {
+  
+    const response = await fetch(`http://${serverAddress}/api/poststar/read/${postId}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`
+      },
+      credentials: 'include'
+    })
+
+    if (!response.ok) {
+      console.error(error)
+    } else{
+    const stars = await response.json()
+    return stars
+  }
+}
+
+
 function openpostmodal(post) {
   ispostmodal.value = !ispostmodal.value
   selectedPost.value = post
@@ -112,12 +139,16 @@ function openpostmodal(post) {
 
 function closepostmodal() {
   ispostmodal.value = !ispostmodal.value
-  console.log(ispostmodal.value)
 }
 
 </script>
 
 <template>
+  <div
+   style="font-size: small;
+   margin: 10px;">
+      total : {{ posts.length }}
+    </div>
 <VTable
 density="comfortable"
 fixed-header
@@ -127,7 +158,9 @@ height="440"
     <tr>
       <th class="text-center">
         No
-        <VIcon size="12pt" :icon="isnumsort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" @click="numsort" />
+        <VIcon size="12pt"
+          :icon="sortBy === 'id' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('id')" />
       </th>
       <th class="text-center" >
         Title
@@ -139,30 +172,30 @@ height="440"
         Like
         <VIcon
          size="12pt"
-         :icon="islikesort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-         @click="likesort" />
+         :icon="sortBy === 'like' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+         @click="togglesort('like')" />
       </th>
       <th class="text-center">
         Star
         <VIcon
           size="12pt"
-          :icon="isstarsort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-          @click="starsort" />
+          :icon="sortBy === 'star' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('star')" />
       </th>
       <th class="text-center">
         Date
         <VIcon
          size="12pt" 
-         :icon="isdatesort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'" 
-         @click="datesort" />
+         :icon="sortBy === 'date' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+         @click="togglesort('date')" />
       </th>
     </tr>
   </thead>
 
   <tbody>
-    <tr v-for="(item, index) in posts.slice(0,20)" :key="index">
+    <tr v-for="(item, index) in sortedPosts" :key="index">
       <td class="text-center" style="width: 60pt">
-        {{ index+1 }}
+        {{ item.id }}
       </td>
       <td>
         <VIconBtn 
@@ -176,10 +209,10 @@ height="440"
         {{ item.user.username }}
       </td>
       <td class="text-center" style="width: 100pt">
-        <PostLike :postlike="item" />
+        {{ item.likes }}
       </td>
       <td class="text-center" style="width: 100pt">
-        <PostStar :poststar="item" />
+        {{ item.stars }}
       </td>
       <td class="text-center" style="width: 150pt">
       {{ formatDate(item.date) }}
