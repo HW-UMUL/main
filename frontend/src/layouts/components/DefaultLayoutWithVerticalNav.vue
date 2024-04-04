@@ -5,7 +5,6 @@ import NavbarThemeSwitcher from '@/layouts/components/NavbarThemeSwitcher.vue'
 import UserProfile from '@/layouts/components/UserProfile.vue'
 import logo from '@images/logo.svg?raw'
 import VerticalNavLayout from '@layouts/components/VerticalNavLayout.vue'
-import login from '@/pages/login.vue'
 
 import { useRouter } from 'vue-router';
 
@@ -17,8 +16,11 @@ const setFocus = ref(false);
 // filteredData를 ref로 정의 
 const filteredData = ref(null);
 
-function handleFocus(){
-  console.log(login.jwtToken)
+function handleFocus(){ // event
+  // console.log(111111)
+  // // 키보드 작업시 이동하지 않도록 설정
+  // if (event.key === 'ArrowUp'){return}
+  // if (event.key === 'ArrowDown'){return}
   // 클릭시 block 노출
   setFocus.value = true
   // console.log(setFocus.value)
@@ -31,35 +33,15 @@ function handleFocus(){
     filteredData.value = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
     if(filteredData.value.length > 0){
       filterKeywords.value = filteredData.value // . slice() 메소드 사용해서 데이터 개수 자르기
-    } else {filterKeywords.value = ['검색 데이터가 없습니다']} // 어떤게 더 낫나 [searchKeyword.value.keyword]
+    } else {filterKeywords.value = [searchKeyword.value.keyword]} // 어떤게 더 낫나 [searchKeyword.value.keyword]
   } else {
     filterKeywords.value = searchHistory.value
   }
 
 }
-// function handleFocus(){
-//   // 클릭시 block 노출
-//   setFocus.value = true
-//   console.log(setFocus.value)
 
-//   // 검색 목록 출력
-//   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
-//   const searchTermRegex = makeRegexByCho(searchTerm);
-//   let filteredData = null;
 
-//   if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
-//     filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
-//     if(filteredData.length > 0){
-//       filterKeywords.value = filteredData
-//     } else {filterKeywords.value = ['검색 데이터가 없습니다']} // 어떤게 더 낫나 [searchKeyword.value.keyword]
-//   } else {
-//     filterKeywords.value = searchHistory.value
-//   }
-
-// }
-
-// input 박스 외부 클릭시 block 사라짐
-
+// input 박스 외부 클릭시 block 사라짐 기능
 function handleBlur(){
   setFocus.value = false
   // console.log(setFocus.value)
@@ -67,7 +49,13 @@ function handleBlur(){
 
 // 키보드 입력에 따른 목록 변환
 const filterKeywords = ref();
-function keyHandle() {
+function keyHandle(event) {
+
+  // 키보드 방향키 작업시 input 창에 글자 나오도록 설정
+  // console.log(event.isComposing)
+  // console.log(event.key)
+  if (event.key === 'ArrowUp' || event.key === 'ArrowDown' || event.key === 'ArrowLeft' || event.key === 'ArrowRight'){return} 
+  if(event.key === 'Process'){return}
 
   // 검색 목록 출력
   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
@@ -84,32 +72,11 @@ function keyHandle() {
     filterKeywords.value = searchHistory.value
   }
 
-  // console.log(filterKeywords)
 }
-// function keyHandle() {
-//   // 검색 목록 출력
-//   const searchTerm = searchKeyword.value.keyword.replace(/\s/g, '').toLowerCase(); // 검색 키워드를 소문자로 변환
-//   const searchTermRegex = makeRegexByCho(searchTerm);
-//   let filteredData = null;
-//   if(searchKeyword.value.keyword != null && searchKeyword.value.keyword != '' && searchKeyword.value.keyword.trim() !== ''){
-//     filteredData = responseData.value.filter(item => item.replace(/\s/g, '').toLowerCase().match(searchTermRegex)); // 걸러진 데이터 필터링
-//     if(filteredData.length > 0){
-//       filterKeywords.value = filteredData
-//       // console.log(filteredData)
-//     } else {
-//       filterKeywords.value =  [searchKeyword.value.keyword] // 어떤게 더 낫나 ['검색 데이터가 없습니다']
-//     }
-//   } else {
-//     filterKeywords.value = searchHistory.value
-//   }
-//   console.log(filterKeywords)
-// }
-
-
 
 // 한글 즉시 인식
-
 function changeKeyword(event) {
+  // if(!event.isComposing){return}
   searchKeyword.value.keyword = event.target.value
 }
 
@@ -150,13 +117,14 @@ function makeRegexByCho(search = "") {
   return new RegExp(`(${regex})`, "g");
 }
 
-// 변수와 일치하는 단어 강조하기(하이라이트)
+// 변수와 일치하는 단어 강조하기(하이라이트) - 도전과제
 
 
 
 // 검색창 block 선택하기
 function selectKeyword(filterKeyword, event){
   // 클릭된 요소가 <v-btn>인 경우에만 deleteSearchHistory 함수를 호출
+  
   if (event.target.tagName != 'UL' && event.target.classList.contains('search-keyword') == false) {
     event.preventDefault();
     return;
@@ -181,24 +149,28 @@ const highlightedFilterKeyword = ref(null);
 const highlightedFilterKeywordIndex = ref(-1);
 function keyboardHandler(event){
   if (event.key === 'ArrowUp') {
+    event.preventDefault();
     highlightedFilterKeywordIndex.value--;
     if (highlightedFilterKeywordIndex.value < 0) {
       highlightedFilterKeywordIndex.value = filterKeywords.value.length - 1;
     }
     highlightedFilterKeyword.value = filterKeywords.value[highlightedFilterKeywordIndex.value]
-    // searchKeyword.value.keyword = highlightedFilterKeyword.value
+    searchKeyword.value.keyword = highlightedFilterKeyword.value
+    // event.stopPropagation()
     // changeKeyword(event)
     // event.preventDefault();
   } else if (event.key === 'ArrowDown') {
+    event.preventDefault();
     // 아래쪽 화살표 키를 눌렀을 때 수행할 동작
     highlightedFilterKeywordIndex.value++;
     // 배열의 길이를 초과하는지 확인하고, 초과하는 경우 처음 요소로 돌아감.
     if (highlightedFilterKeywordIndex.value >= filterKeywords.value.length) {
       highlightedFilterKeywordIndex.value = 0;
     }
-    console.log(filterKeywords.value[highlightedFilterKeywordIndex.value]);
+    // console.log(filterKeywords.value[highlightedFilterKeywordIndex.value]);
     highlightedFilterKeyword.value = filterKeywords.value[highlightedFilterKeywordIndex.value]
-    // searchKeyword.value.keyword = highlightedFilterKeyword.value
+    searchKeyword.value.keyword = highlightedFilterKeyword.value
+    // event.stopPropagation()
   } else if (event.key === 'ArrowLeft') {
     // 왼쪽 화살표 키를 눌렀을 때 수행할 동작
   } else if (event.key === 'ArrowRight') {
@@ -206,7 +178,13 @@ function keyboardHandler(event){
   }
 }
 
-//////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
 
 // axios
 const responseData = ref(null); // responseData를 ref()로 래핑
@@ -218,9 +196,10 @@ onMounted(() => {
 
 async function getData() { // Post 데이터 가져오기
   try {
+    const jwtToken = $cookies.get("jwtToken")
     const response = await axios.get(`http://localhost:8080/api/post/search/all`, {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0IiwiYXV0aCI6IlJPTEVfQURNSU4sUk9MRV9VU0VSIiwiZXhwIjoxNzk2MTgyOTE4fQ.ef_Rm9mtylWcmJk3h-FqB2r4pXDOa17D4xidKsyQmHMZe8cik9X8zLro9rZI-7HjjNAZ3Lb3XcQyGidfaphO6A'
+        'Authorization': `Bearer ${jwtToken}`
       }
     });
     responseData.value = response.data;
@@ -235,7 +214,6 @@ async function getSearchHistory() {
     const jwtToken = $cookies.get("jwtToken")
     const responseSearchHistory = await axios.get(`http://localhost:8080/api/searchlog/read`, {
       headers: {
-        // 권한 풀고 상황에 맞게 넣어줘야 함.
         'Authorization': `Bearer ${jwtToken}`
       }
     });
@@ -258,7 +236,6 @@ async function postSearchHistory() {
       content: searchKeyword.value.keyword
     }, {
       headers: {
-        // 권한 풀고 상황에 맞게 넣어줘야 함.
         'Authorization': `Bearer ${jwtToken}`
       }
     });
@@ -362,8 +339,8 @@ async function search(){
                 <section>
                   <input type="text" @input="changeKeyword" placeholder="Search"
                     style="display:flex; height:20px; width:450px;" class="search-bar"
-                    @focus="handleFocus()" @blur="handleBlur()"
-                    @keyup="keyHandle()"
+                    @focus="handleFocus" @blur="handleBlur()"
+                    @keyup="keyHandle"
                     @keyup.enter="postSearchHistory()"
                     @keydown="keyboardHandler"
                     v-model="searchKeyword.keyword">
