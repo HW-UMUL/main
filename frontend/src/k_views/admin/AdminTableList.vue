@@ -16,6 +16,40 @@ const formatDate = function(value) {
 const auth = inject('auth')
 const serverAddress = inject('serverAddress')
 
+const sortDirection = ref('desc')
+const sortBy = ref('id')
+
+function togglesort(sortType) {
+  if (sortBy.value === sortType) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortBy.value = sortType
+    sortDirection.value = 'asc'
+  }
+  issort();
+}
+
+function issort() {
+  sortBy.value === 'id'
+  sortBy.value === 'name'
+  sortBy.value === 'date'
+
+  sortedTables.value.sort((a, b) => {
+    const compareResult = sortDirection.value === 'asc' ? -1 : 1
+    switch (sortBy.value) {
+      case 'id':
+        return compareResult * (a.id - b.id);
+      case 'name':
+        return compareResult * (a.name.localeCompare(b.name))
+      case 'date':
+        return compareResult * (new Date(a.date) - new Date(b.date))
+      default:
+        return 0;
+    }
+  })
+}
+
+const sortedTables = ref([])
 const tables = ref([])
 
   async function getTables(){
@@ -37,12 +71,19 @@ const tables = ref([])
   } else{
     tables.value = await response.json()
   }
+  sortedTables.value = [...tables.value];
+  issort()
 }
 
 getTables()
 </script>
 
 <template>
+<div
+  style="font-size: small;
+  margin: 10px;">
+  total : {{ tables.length }}
+</div>
 <VTable
 density="comfortable"
 fixed-header
@@ -53,14 +94,14 @@ height="440"
       <th class="text-center">
         No
         <VIcon size="12pt"
-         :icon="isnumsort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-          @click="numsort" />
+        :icon="sortBy === 'id' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('id')" />
       </th>
       <th class="text-center" >
         Name
         <VIcon size="12pt"
-         :icon="isnamesort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-          @click="namesort" />
+        :icon="sortBy === 'name' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('name')" />
       </th>
       <th class="text-center">
         Description
@@ -68,8 +109,8 @@ height="440"
       <th class="text-center">
         date
         <VIcon size="12pt"
-         :icon="isrolesort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-          @click="rolesort" />
+        :icon="sortBy === 'date' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('date')" />
       </th>
       <th class="text-center">
         
@@ -78,9 +119,9 @@ height="440"
   </thead>
 
   <tbody>
-    <tr v-for="(item, index) in tables" :key="index">
+    <tr v-for="(item, index) in sortedTables" :key="index">
       <td class="text-center" style="width: 60pt">
-        {{ index+1 }}
+        {{ item.id }}
       </td>
       <td class="text-center">
         {{ item.name }}

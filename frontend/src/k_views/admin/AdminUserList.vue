@@ -4,6 +4,42 @@ import { ref } from 'vue';
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
 
+const sortDirection = ref('desc')
+const sortBy = ref('id')
+
+function togglesort(sortType) {
+  if (sortBy.value === sortType) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+  } else {
+    sortBy.value = sortType
+    sortDirection.value = 'asc'
+  }
+  issort();
+}
+
+function issort() {
+  sortBy.value === 'id'
+  sortBy.value === 'username'
+  sortBy.value === 'role'
+
+  sortedUserinfo.value.sort((a, b) => {
+    const compareResult = sortDirection.value === 'asc' ? -1 : 1
+    switch (sortBy.value) {
+      case 'id':
+        return compareResult * (a.id - b.id);
+      case 'username':
+        return compareResult * (a.username.localeCompare(b.username))
+      case 'email':
+        return compareResult * (a.email.localeCompare(b.email))
+      case 'role':
+        return compareResult * (a.roles[0].localeCompare(b.roles[0]))
+      default:
+        return 0;
+    }
+  })
+}
+const sortedUserinfo = ref([])
+
 const userinfo = ref([])
 async function getuserInfo(){
 
@@ -26,6 +62,8 @@ async function getuserInfo(){
     await Promise.all(userinfo.value.map(async (user) => {
       user.roles = await getuserrole(user.id)
     }))
+    sortedUserinfo.value = [...userinfo.value];
+    issort()
   }
 }
 
@@ -52,10 +90,14 @@ async function getuserrole(userId){
 }
 
 getuserInfo()
-
 </script>
 
 <template>
+<div
+  style="font-size: small;
+  margin: 10px;">
+  total : {{ userinfo.length }}
+</div>
 <VTable
 density="comfortable"
 fixed-header
@@ -66,31 +108,34 @@ height="440"
       <th class="text-center">
         No
         <VIcon size="12pt"
-         :icon="isnumsort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-          @click="numsort" />
+          :icon="sortBy === 'id' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('id')" />
       </th>
       <th class="text-center" >
         username
         <VIcon size="12pt"
-         :icon="isnamesort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-          @click="namesort" />
+          :icon="sortBy === 'username' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('username')" />
       </th>
       <th class="text-center">
         E-mail
+        <VIcon size="12pt"
+          :icon="sortBy === 'email' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('email')" />
       </th>
       <th class="text-center">
         role
         <VIcon size="12pt"
-         :icon="isrolesort ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line'"
-          @click="rolesort" />
+          :icon="sortBy === 'role' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
+          @click="togglesort('role')" />
       </th>
     </tr>
   </thead>
 
   <tbody>
-    <tr v-for="(item, index) in userinfo" :key="index">
+    <tr v-for="(item, index) in sortedUserinfo" :key="index">
       <td class="text-center" style="width: 60pt">
-        {{ index+1 }}
+        {{ item.id }}
       </td>
       <td class="text-center">
         {{ item.username }}
@@ -100,6 +145,7 @@ height="440"
       </td>
       <td class="text-center">
         {{ item.roles.join(', ').replace(/"/g, '') }}
+        <!-- {{ item.roles }} -->
       </td>
     </tr>
   </tbody>
