@@ -14,19 +14,25 @@ import com.ssg.kms.chatroomuser.ChatRoomUserRepository;
 import com.ssg.kms.follow.FollowRepository;
 import com.ssg.kms.like.post.PostLikeRepository;
 import com.ssg.kms.like.wiki.WikiLikeRepository;
+import com.ssg.kms.mapping.GetTableMapping;
 import com.ssg.kms.post.Post;
 import com.ssg.kms.post.PostRepository;
+import com.ssg.kms.post.PostService;
 import com.ssg.kms.reply.Reply;
 import com.ssg.kms.reply.ReplyRepository;
+import com.ssg.kms.reply.ReplyService;
 import com.ssg.kms.role.ERole;
 import com.ssg.kms.role.Role;
 import com.ssg.kms.role.RoleRepository;
 import com.ssg.kms.security.SecurityUtil;
 import com.ssg.kms.star.post.PostStarRepository;
 import com.ssg.kms.star.wiki.WikiStarRepository;
+import com.ssg.kms.tableuser.TableUser;
 import com.ssg.kms.tableuser.TableUserRepository;
+import com.ssg.kms.tableuser.TableUserService;
 import com.ssg.kms.wiki.Wiki;
 import com.ssg.kms.wiki.WikiRepository;
+import com.ssg.kms.wiki.WikiService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -35,7 +41,7 @@ import lombok.RequiredArgsConstructor;
 public class UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
-    private final UserRoleRepository userRoleRepository;    
+    private final UserRoleRepository userRoleRepository;
     private final TableUserRepository tableUserRepository;
     private final FollowRepository followRepository;
     private final PostLikeRepository postLikeRepository;
@@ -48,6 +54,10 @@ public class UserService {
     private final ReplyRepository replyRepository;
     private final ChatRepository chatRepository;
     
+    private final PostService postService;
+    private final WikiService wikiService;
+    private final ReplyService replyService;
+    
     private final PasswordEncoder passwordEncoder;
     
     @Transactional
@@ -56,18 +66,29 @@ public class UserService {
     	List<Post> posts = postRepository.findAllByUserId(user.get().getId());
     	for(Post post : posts) {
     		post.setUser(null);
+    		postService.deletePost(post.getId(), user);
     	}
 
     	List<Wiki> wikis = wikiRepository.findAllByUserId(user.get().getId());
     	for(Wiki wiki : wikis) {
     		wiki.setUser(null);
+    		wikiService.deleteWiki(wiki.getId(), user);
     	}
     	
     	List<Reply> replys = replyRepository.findAllByUserId(user.get().getId());
     	for(Reply reply : replys) {
     		reply.setUser(null);
+    		replyService.deleteReply(reply.getId(), user);
     	}
-
+    	
+    	//
+    	List<TableUser> tables = tableUserRepository.findAllTableUserByUserId(user.get().getId());
+    	for(TableUser table : tables) {
+    		table.setUser(null);
+    		
+    	}
+    	//
+    	
     	List<Chat> chats = chatRepository.findAllByUserId(user.get().getId());
     	for(Chat chat : chats) {
     		chat.setUser(null);
@@ -77,10 +98,10 @@ public class UserService {
     	tableUserRepository.deleteAllByUserId(user.get().getId());
     	followRepository.deleteAllByFollowerId(user.get().getId());
     	followRepository.deleteAllByFolloweeId(user.get().getId());
-    	postLikeRepository.deleteAllByUserId(user.get().getId());
-    	postStarRepository.deleteAllByUserId(user.get().getId());
-    	wikiLikeRepository.deleteAllByUserId(user.get().getId());
-    	wikiStarRepository.deleteAllByUserId(user.get().getId());
+//    	postLikeRepository.deleteAllByUserId(user.get().getId());
+//    	postStarRepository.deleteAllByUserId(user.get().getId());
+//    	wikiLikeRepository.deleteAllByUserId(user.get().getId());
+//    	wikiStarRepository.deleteAllByUserId(user.get().getId());
     	chatRoomUserRepository.deleteAllByUserId(user.get().getId());
     	
         userRepository.delete(user.get());
@@ -97,7 +118,7 @@ public class UserService {
     	return info;
     }
     
-    //////////
+    ////////// user role info
     @Transactional(readOnly = true)
     public List<User> getUserinfo(Optional<User> user) {
     	List<User> userinfo = userRepository.findAll();

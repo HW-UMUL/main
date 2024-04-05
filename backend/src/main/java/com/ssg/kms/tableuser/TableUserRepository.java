@@ -44,4 +44,5 @@ public interface TableUserRepository extends JpaRepository<TableUser, Long> {
 	
 	void deleteAllById(Long tableuserId);
 	
+	List<TableUser> findAllTableUserByUserId(Long userId);
 }
