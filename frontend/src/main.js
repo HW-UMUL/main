@@ -26,9 +26,6 @@ app.use(VueCookies)
 
 app.provide("app", app)
 
-//const serverAddress = "localhost:8080"
-//const serverAddress = "118.36.173.120:11216"
-//const serverAddress = "118.36.173.120:11216"
 const serverAddress = "minicrane.store:8080"
 const profileAddress = "http://" + serverAddress + "/profile/"
 
