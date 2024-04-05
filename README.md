@@ -40,6 +40,10 @@ $cd backend
 $java -jar {APP_NAME}
 ```
 
+### SWAGGER
+
+- 참조 : swagger/index.html
+
 # DEPLOY
 
 ## FRONTEND
