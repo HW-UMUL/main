@@ -109,6 +109,59 @@ public class UserService {
 		return true;
     }
     
+    ////////// deleteByUserId
+    @Transactional
+    public Boolean deleteByUserName(String username) {
+    	
+    	Optional<User> user = userRepository.findByUsername(username);
+    	
+    	List<Post> posts = postRepository.findAllByUserId(user.get().getId());
+    	for(Post post : posts) {
+    		post.setUser(null);
+    		postService.deletePost(post.getId(), user);
+    	}
+
+    	List<Wiki> wikis = wikiRepository.findAllByUserId(user.get().getId());
+    	for(Wiki wiki : wikis) {
+    		wiki.setUser(null);
+    		wikiService.deleteWiki(wiki.getId(), user);
+    	}
+    	
+    	List<Reply> replys = replyRepository.findAllByUserId(user.get().getId());
+    	for(Reply reply : replys) {
+    		reply.setUser(null);
+    		replyService.deleteReply(reply.getId(), user);
+    	}
+    	
+    	//
+    	List<TableUser> tables = tableUserRepository.findAllTableUserByUserId(user.get().getId());
+    	for(TableUser table : tables) {
+    		table.setUser(null);
+    		
+    	}
+    	//
+    	
+    	List<Chat> chats = chatRepository.findAllByUserId(user.get().getId());
+    	for(Chat chat : chats) {
+    		chat.setUser(null);
+    	}
+
+    	userRoleRepository.deleteAllByUserId(user.get().getId());
+    	tableUserRepository.deleteAllByUserId(user.get().getId());
+    	followRepository.deleteAllByFollowerId(user.get().getId());
+    	followRepository.deleteAllByFolloweeId(user.get().getId());
+//    	postLikeRepository.deleteAllByUserId(user.get().getId());
+//    	postStarRepository.deleteAllByUserId(user.get().getId());
+//    	wikiLikeRepository.deleteAllByUserId(user.get().getId());
+//    	wikiStarRepository.deleteAllByUserId(user.get().getId());
+    	chatRoomUserRepository.deleteAllByUserId(user.get().getId());
+    	
+        userRepository.delete(user.get());
+        
+		return true;
+    }
+    //////////
+    
     @Transactional(readOnly = true)
     public List<String> getInfo(Optional<User> user) {
     	List<String> info = new ArrayList<>();

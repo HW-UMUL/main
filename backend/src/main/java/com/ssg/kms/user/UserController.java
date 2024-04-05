@@ -88,6 +88,13 @@ public class UserController {
 		return ResponseEntity.ok(userService.delete(userService.getMyUserWithAuthorities()));
 	}
 	
+	////////// deleteByUserId
+	@DeleteMapping("/delete/{username}")
+	public ResponseEntity<Boolean> deleteByUserId(@PathVariable String username) {
+		return ResponseEntity.ok(userService.deleteByUserName(username));
+	}
+	////////////
+	
 	@GetMapping("/user")
 	@PreAuthorize("hasAnyRole('ROLE_USER','ROLE_ADMIN')")
 	public ResponseEntity<User> getMyUserInfo() {

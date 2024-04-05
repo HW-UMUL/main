@@ -21,7 +21,7 @@ function issort() {
   sortBy.value === 'id'
   sortBy.value === 'username'
   sortBy.value === 'role'
-
+  const checkedUserIds = checkedUsers.value.map((checked, index) => checked ? sortedUserinfo.value[index].id : null);
   sortedUserinfo.value.sort((a, b) => {
     const compareResult = sortDirection.value === 'asc' ? -1 : 1
     switch (sortBy.value) {
@@ -37,10 +37,12 @@ function issort() {
         return 0;
     }
   })
+  checkedUsers.value = sortedUserinfo.value.map(user => checkedUserIds.includes(user.id));
 }
-const sortedUserinfo = ref([])
 
+const sortedUserinfo = ref([])
 const userinfo = ref([])
+
 async function getuserInfo(){
 
   const response = await fetch(
@@ -90,6 +92,108 @@ async function getuserrole(userId){
 }
 
 getuserInfo()
+
+// 현재 유저
+const currentUser = ref({
+  username: '',
+  email: '',
+  password: ''
+})
+
+async function getinfo(){
+
+  const response = await fetch(
+    `http://${serverAddress}/api/getinfo`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include'
+    }  
+  )
+
+  if(!response.ok) {
+    console.error()
+  } else{
+    const res = await response.json()
+    currentUser.value.username = res[0]
+    currentUser.value.email = res[1]
+  }
+}
+getinfo()
+
+// 삭제
+async function delUser(username) {
+
+  const response = await fetch(
+    `http://${serverAddress}/api/delete/${username}`,
+    {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
+      },
+      credentials: 'include'
+    }
+  )
+  if(!response.ok) {
+    console.error()
+  } else {
+    // alert("삭제되었습니다")
+    // window.location.reload()
+  }
+}
+
+const checkedUsers = ref([])
+async function delcheckedUsers() {
+  const delUserList = [];
+  let includeCurrentInfo = (0);
+
+  checkedUsers.value.forEach((checked, index) => {
+    if(sortedUserinfo.value[index].username == currentUser.value.username) {
+        alert("자신은 삭제할 수 없습니다.");
+        includeCurrentInfo = 1;
+        checkedUsers.value = [];
+        allChecked.value = !allChecked.value;
+        return;
+    }
+    if (checked) {
+      delUserList.push(sortedUserinfo.value[index].username);
+    }
+  })
+  if(includeCurrentInfo == 1) { return; }
+  if(delUserList.length === 0) {
+    alert("삭제할 게시물을 선택하십시오.");
+    return;
+  }
+  const confirmdel = confirm("삭제하시겠습니까?");
+  if(!confirmdel) return;
+
+  try {
+    for(const username of delUserList) {
+      await delUser(username);
+    }
+    checkedUsers.value = [];
+    alert("삭제되었습니다");
+  } catch(error) {
+    console.error(error);
+    alert("삭제 실패");
+  }
+}
+
+// 체크
+const allChecked = ref(false);
+
+function selectAllCheckboxes() {
+  checkedUsers.value = sortedUserinfo.value.map(() => allChecked.value);
+}
+
+function selectIndividualCheckbox(index) {
+  checkedUsers.value[index] = !checkedUsers.value[index];
+  allChecked.value = checkedUsers.value.every(checked => checked);
+}
 </script>
 
 <template>
@@ -104,6 +208,7 @@ getuserInfo()
   <VIconBtn
     style="margin-right: 10px;
     cursor: pointer"
+    @click="delcheckedUsers"
     >
     삭제
   </VIconBtn>
@@ -139,6 +244,12 @@ height="440"
           :icon="sortBy === 'role' ? (sortDirection === 'asc' ? 'ri-arrow-up-s-line' : 'ri-arrow-down-s-line') : 'ri-subtract-line'"
           @click="togglesort('role')" />
       </th>
+      <th class="text-center">
+        <input 
+          type="checkbox"
+          v-model="allChecked"
+          @change="selectAllCheckboxes">
+      </th>
     </tr>
   </thead>
 
@@ -157,44 +268,15 @@ height="440"
         {{ item.roles.join(', ').replace(/"/g, '') }}
         <!-- {{ item.roles }} -->
       </td>
+      <td class="text-center" style="width: 50px;">
+        <input 
+          type="checkbox"
+          :checked="checkedUsers[index]"
+          @change.stop="selectIndividualCheckbox(index)"
+          >
+      </td>
     </tr>
   </tbody>
 </VTable>
 
-<div class="modal-wrap" v-if="ispostmodal" @click="closepostmodal">
-  <div class="modal-container" @click.stop="">
-    <div class="modal-body" v-if="selectedPost">
-
-    </div>
-  </div>
-</div>
 </template>
-
-<style lang="scss">
-/* dimmed */
-.modal-wrap {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.2);
-  z-index: 100;
-}
-/* modal or popup */
-.modal-container {
-  position: relative;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 550px;
-  // background: #fff;
-  border-radius: 10px;
-  padding: 20px;
-  box-sizing: border-box;
-}
-.modal-body {
-  max-height: calc(100vh - 200px);
-  overflow-y: auto;
-}
-</style>
