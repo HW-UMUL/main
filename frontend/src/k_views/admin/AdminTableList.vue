@@ -1,4 +1,5 @@
 <script setup>
+import { useRouter } from 'vue-router'
 
 // 년-월-일
 const formatDate = function(value) {
@@ -48,7 +49,7 @@ function issort() {
         return 0;
     }
   })
-  checkedTableIds.value = sortedTables.value.map(table => checkedTableIds.includes(table.id));
+  checkedTables.value = sortedTables.value.map(table => checkedTableIds.includes(table.id));
 }
 
 const sortedTables = ref([])
@@ -86,17 +87,14 @@ async function delTable(tableId) {
     {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
-      'Authorization': `Bearer ${auth}`,
       credentials: 'include'
     }
   )
   if(!response.ok) {
-    alert(postId+"삭제 실패")
-    console.error(error)
-  } else {
-    getTables()
+    console.error()
   }
 }
 
@@ -126,6 +124,7 @@ async function delcheckedtables() {
     console.error(error);
     alert("삭제 실패");
   }
+  getTables()
 }
 
 const allChecked = ref(false);
@@ -137,6 +136,14 @@ function selectAllCheckboxes() {
 function selectIndividualCheckbox(index) {
   checkedTables.value[index] = !checkedTables.value[index];
   allChecked.value = checkedTables.value.every(checked => checked);
+}
+
+// 이동
+const router = useRouter()
+function gotoTable(tableId){
+  router.push({
+    path: `/mytables/${tableId}`
+  })
 }
 </script>
 
@@ -200,7 +207,12 @@ height="440"
         {{ item.id }}
       </td>
       <td class="text-center">
-        {{ item.name }}
+        <VIconBtn 
+          class="text-center"
+          style="cursor: pointer; color: #8C57FF;"
+          @click="gotoTable(item.id)">
+          {{ item.name }}
+        </VIconBtn>
       </td>
       <td class="text-center">
         {{ item.description }}

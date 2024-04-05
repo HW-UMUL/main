@@ -7,11 +7,15 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.post.Post;
 import com.ssg.kms.post.PostRepository;
+import com.ssg.kms.post.PostService;
 import com.ssg.kms.tableuser.TableUser;
 import com.ssg.kms.tableuser.TableUserRepository;
 import com.ssg.kms.user.User;
+import com.ssg.kms.wiki.Wiki;
 import com.ssg.kms.wiki.WikiRepository;
+import com.ssg.kms.wiki.WikiService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -22,6 +26,9 @@ public class TableService {
     private final PostRepository postRepository;
     private final WikiRepository wikiRepository;
     private final TableUserRepository tableUserRepository;
+    
+    private final PostService postService;
+    private final WikiService wikiService;
     
     @Transactional
     public Tables createTable(TableDTO tableDto, Optional<User> user) {
@@ -76,8 +83,20 @@ public class TableService {
 
     @Transactional
     public void deleteTable(Long tableId, Optional<User> user) {
-    	postRepository.deleteAllByTableId(tableId);
-    	wikiRepository.deleteAllByTableId(tableId);
-    	tableRepository.deleteById(tableId);    	    	
+    	List<TableUser> tableuser = tableUserRepository.findAllByTableId(tableId);
+    	List<Post> post = postRepository.findAllByTableId(tableId);
+    	List<Wiki> wiki = wikiRepository.findAllByTableId(tableId);
+    	for(TableUser item:tableuser) {
+    		tableUserRepository.deleteAllById(item.getId());
+    	}
+    	for(Post item:post) {
+    		postService.deletePost(item.getId(), user);
+    	}
+    	for(Wiki item:wiki) {
+    		wikiService.deleteWiki(item.getId(), user);
+    	}
+//    	postRepository.deleteAllByTableId(tableId);
+//    	wikiRepository.deleteAllByTableId(tableId);
+    	tableRepository.deleteById(tableId);
     }
 }

@@ -39,7 +39,9 @@ public interface TableUserRepository extends JpaRepository<TableUser, Long> {
 	// 알람
 	@Query(value = "SELECT tu.user_id FROM table_user tu WHERE tu.table_id = :tableId", nativeQuery = true)
 	List<Long> findAllUserAllByTableId(Long tableId);
-
-
+	
+	List<TableUser> findAllByTableId(Long tableId);
+	
+	void deleteAllById(Long tableuserId);
 	
 }

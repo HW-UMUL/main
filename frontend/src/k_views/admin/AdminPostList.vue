@@ -153,9 +153,9 @@ async function delPost(postId) {
     {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,
       },
-      'Authorization': `Bearer ${auth}`,
       credentials: 'include'
     }
   )
