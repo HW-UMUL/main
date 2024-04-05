@@ -20,25 +20,36 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/postlike")
 public class PostLikeController {
-	private final PostLikeService postService;
+	private final PostLikeService postLikeService;
 	private final UserService userService;
 	
 	@PostMapping("/check/{postId}")
 	public ResponseEntity checkPostLike(@PathVariable Long postId) {
 		Optional<User> user = userService.getMyUserWithAuthorities();
-		postService.checkPost(postId, user);
+		postLikeService.checkPost(postId, user);
 		
-		return ResponseEntity.ok(postService.readLike(postId, user));
+		return ResponseEntity.ok(postLikeService.readLike(postId, user));
 	}
 	
 	@GetMapping("/read/{postId}")
     public ResponseEntity readPostLike(@PathVariable Long postId) {
-		return ResponseEntity.ok(postService.readLike(postId, userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(postLikeService.readLike(postId, userService.getMyUserWithAuthorities()));
     }
 	
 	@GetMapping("/read/my")
     public ResponseEntity<List<GetPostMapping>> readMyPostLike() {
-		return ResponseEntity.ok(postService.readMyLike(userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(postLikeService.readMyLike(userService.getMyUserWithAuthorities()));
     }
+	
+	@GetMapping("/ischeck/{postId}")
+    public ResponseEntity isCheck(@PathVariable Long postId) {
+		return ResponseEntity.ok(postLikeService.isCheck(postId, userService.getMyUserWithAuthorities()));
+    }
+
+	////////////////////////
+	@GetMapping("/readLikePersonal/{postId}")
+	public ResponseEntity readLikePersonal(@PathVariable Long postId) {
+		return ResponseEntity.ok(postLikeService.readLikePersonal(postId, userService.getMyUserWithAuthorities()));
+	}
 
 }

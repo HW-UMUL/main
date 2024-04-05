@@ -1,6 +1,7 @@
 package com.ssg.kms.post;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
@@ -189,10 +190,11 @@ public class PostService {
     public void createTags(PostDTO postDto, Post post){
     	
     	String[] strTags = splitTag(postDto.getTag());
+    	HashSet<String> strTagsSet = new HashSet<>(Arrays.asList(strTags));
     	List<Tag> tags = new ArrayList<>();
     	Set<TagPost> tagPosts = new HashSet<>();
     	
-    	for(String str : strTags) {
+    	for(String str : strTagsSet) {
     		    		
     		Optional<Tag> foundTag = tagRepository.findByName(str);
     		Tag tag;

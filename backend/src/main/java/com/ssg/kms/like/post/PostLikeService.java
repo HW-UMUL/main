@@ -6,10 +6,12 @@ import java.util.Optional;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.ssg.kms.like.wiki.WikiLike;
 import com.ssg.kms.mapping.GetPostMapping;
 import com.ssg.kms.post.Post;
 import com.ssg.kms.post.PostRepository;
 import com.ssg.kms.user.User;
+import com.ssg.kms.wiki.Wiki;
 
 import lombok.RequiredArgsConstructor;
 
@@ -51,5 +53,29 @@ public class PostLikeService {
     @Transactional(readOnly = true)
     public List<GetPostMapping> readMyLike(Optional<User> user) {
     	return postLikeRepository.findPostAllByUserId(user.get().getId());
+    }
+    
+    @Transactional(readOnly = true)
+    public Boolean isCheck(Long postId, Optional<User> user) {
+    	Post post = postRepository.findById(postId).get();
+    	if(postLikeRepository.findByPostIdAndUserId(post.getId(), user.get().getId()) != null){
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
+    ////////////////////////////////
+    
+	@Transactional(readOnly = true)
+    public PostLike readLikePersonal(Long postId, Optional<User> user) {
+		Post post = postRepository.findById(postId).get();
+    	PostLike postLike = postLikeRepository.findByPostAndUser(post, user.get()).orElse(null);
+		
+		if(postLike != null) {
+    		return postLike;
+    	}
+    	    	
+		return null;
     }
 }

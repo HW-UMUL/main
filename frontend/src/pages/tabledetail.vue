@@ -4,11 +4,19 @@ import TableWikiList from '@/views/wiki/TableWikiList.vue'
 import { useRouter } from "vue-router"
 import avatar1 from '@images/avatars/avatar-1.png';
 import { useDisplay } from 'vuetify'
+import axios from 'axios'
+
+
+const profileAddress = inject('profileAddress')
 
 const { mdAndUp, mdAndDown } = useDisplay()
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
+let authToken = 'Bearer '
+
+authToken = authToken + auth
+
 const router = useRouter()
 
 const props = defineProps({
@@ -334,72 +342,91 @@ getTables()
 
 const changePostWiki = ref(true)
 
+////////////////// 파일 전송 //////////////////////////
+const tableImageDialog = ref(false)
+function sendFile() {
+    var formData = new FormData();
+
+    // 모든 파일 입력란에 대해 반복하면서 선택된 파일을 FormData에 추가
+    var fileInputs = document.querySelectorAll('#table-image-input');
+    fileInputs.forEach(input => {
+    if (input.files.length > 0) {
+        formData.append('files', input.files[0]);
+    }
+    });
+
+    // FormData를 서버로 전송
+    axios.put(`http://${serverAddress}/api/table/update/${props.tableId}/image`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: authToken,
+        }
+    }).then(() => {
+        console.log('파일 전송 성공');
+        getTable()
+        tableImageDialog.value=false
+
+    }).catch(() => {
+        console.error('파일 전송 실패');
+    });
+}
+//////////////////////////////////////////////////////
 </script>
 
 <template>
-
   <VRow>
     <VCol
       cols="12"
       md="8"
       class="mb-4"
     >
-    <VRow>
-      <div
-      class="table-image"
-      >
-      <img class="table-propile-img" :src="avatar1">
-    </div>
-      <div
-      class="table-info"
-      >
-      <div
-      style="
-      margin-left: 5%;
-      font-size:40px;
-      font-weight: 700;
-      ">
-      {{ oriTable.name }}
-      </div>
-      <div
-      style="
-      margin-bottom: 5%;
-      ">
-      </div>
-      <div
-      style="
-      margin-left: 5%;
-      font-size:18px;
-      word-wrap: break-word;
-      white-space: pre-line;
-      ">
-      {{ oriTable.description }}
-      </div>
-      <div 
-      style="
-      margin-left: 5%;
-      margin-top: 5%;
-      margin-bottom: 5%;
-      ">
-        <VBtn
-        style="
-        margin-right:5%;
-        "
-        @click="tableDialog=true"
-        >
-          Table Edit
-        </VBtn>
-        <VBtn
-        @click="handleUserManageDialog"
-        >
-          User Manage
-        </VBtn>
-      </div>
-      
 
-  </div>
-    </VRow>
-    <VRow style="height: 30px; margin-bottom: 20px;">
+      <div class="d-flex">
+        <div class="table-image">
+          <img @click="tableImageDialog=true" v-if="!table.profile" class="table-propile-img" :src="avatar1"/>
+          <img @click="tableImageDialog=true" v-if="table.profile" class="table-propile-img" :src="profileAddress + table.profile.storeFileName"/>          
+        </div>
+        <div class="d-flex flex-column" >
+          <div
+          style="
+          margin-left: 5%;
+          font-size:40px;
+          font-weight: 700;
+          ">
+          {{ oriTable.name }}
+          </div>
+          <div
+          style="
+          margin-bottom: 5%;
+          ">
+          </div>
+          <div
+          style="
+          margin-left: 7%;
+          font-size:18px;
+          word-wrap: break-word;
+          white-space: pre-line;
+          ">
+          {{ oriTable.description }}
+          </div>
+          <div class="d-flex mt-auto" style="margin-left:6%">
+            <VBtn
+            style="
+            margin-right:5%;
+            "
+            @click="tableDialog=true"
+            >
+              Table Edit
+            </VBtn>
+            <VBtn
+            @click="handleUserManageDialog"
+            >
+              User Manage
+            </VBtn>
+          </div>
+        </div>
+      </div>
+    <VRow style="height: 30px; margin-top:20px; margin-bottom: 20px;">
       <div class="selectPostWiki" @click="changePostWiki=true">POST</div>
       <div class="bar"></div>
       <div class="selectPostWiki" @click="changePostWiki=false">WIKI</div>
@@ -451,17 +478,16 @@ const changePostWiki = ref(true)
       <VCard v-if="tables.length && mdAndUp" title="My Table" style="margin-bottom: 20px;">
         <div v-for="(item, index) in tables" :key="index">
           <VDivider/>
-          <VListItem>
-            <VRow>
-              <VCol
-              cols="12"
-              md="12"
-              class="mb-4"
-              @click="moveTable(item.table.id)">
+            <div
+              @click="moveTable(item.table.id)" class="d-flex">
+                <div>
+                <img v-if="!item.table.profile" class="my-table-img" :src="avatar1"/>
+                <img v-if="item.table.profile"  class="my-table-img" :src="profileAddress + item.table.profile.storeFileName"/>          
+                </div>
+                <div class="my-table-name">
                 {{ item.table.name }}
-              </VCol>
-            </VRow>
-        </VListItem>
+                </div>
+            </div>
         </div>
       </VCard>
     </VCol>  
@@ -471,6 +497,35 @@ const changePostWiki = ref(true)
 
 
   <!-- Dialog -->
+            <VDialog v-model="tableImageDialog" max-width="50%">
+              <VCard>
+                <VCardTitle>Table Edit</VCardTitle>
+                <VCardText>
+                  <VCol>
+                    <VFileInput
+                      id="table-image-input"
+                      placeholder="이름"
+                      label="이름"
+                    />
+                  </VCol>
+                  <VRow>
+                    <VBtn
+                    @click="sendFile"
+                    class="me-5"
+                    style="margin-top:10px;"
+                    >
+                    Submit
+                    </VBtn>
+                  </VRow>
+                </VCardText>
+                <VCardActions>
+                  <!-- 팝업을 닫는 버튼 -->
+                  <VBtn color="primary" @click="tableImageDialog = false">Close</VBtn>
+                </VCardActions>
+              </VCard>
+            </VDialog>                    
+
+
             <VDialog v-model="tableDialog" max-width="50%">
               <VCard>
                 <VCardTitle>Table Edit</VCardTitle>
@@ -493,7 +548,9 @@ const changePostWiki = ref(true)
                       placeholder="설명"
                       label="설명"
                       />
+
                     </VCol>
+
                     <VRow>
                     <VRadioGroup
                     v-model="table.isPublic" 
@@ -580,6 +637,9 @@ const changePostWiki = ref(true)
               </VCard>
             </VDialog>
 
+
+
+
 </template>
 
 <style lang="scss">
@@ -608,10 +668,26 @@ const changePostWiki = ref(true)
 
 .table-propile-img {
   margin-left: 5%;
-   width: 100%;
-   height: 100%;
+   width: 26dvh;
+   height: 26dvh;
   border-radius: 50%;
   object-fit: cover;
 }
 
+.my-table-img{
+  margin-top:10%;
+  margin-left: 10%;
+   width: 50px;
+   height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.my-table-name{
+  display: flex; 
+  align-items: center;
+  margin-left: 5%;
+  font-size: 20px;
+  color: black;
+}
 </style>

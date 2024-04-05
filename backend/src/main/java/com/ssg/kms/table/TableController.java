@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ssg.kms.user.UserService;
 
@@ -37,6 +39,12 @@ public class TableController {
     public ResponseEntity<Boolean> updateTable(@PathVariable Long tableId, @Valid @RequestBody TableDTO tableDto) {
         return ResponseEntity.ok(tableService.updateTable(tableId, tableDto, userService.getMyUserWithAuthorities()));
     }
+	
+	@PutMapping("/update/{tableId}/image")
+	public ResponseEntity<Boolean> updateTableImage(@PathVariable Long tableId, @RequestPart(value = "files", required = false) MultipartFile file) {
+		return ResponseEntity.ok(tableService.updateTableImage(tableId, file, userService.getMyUserWithAuthorities()));
+	}
+
 	
 	@DeleteMapping("/delete/{tableId}")
     public BodyBuilder deleteTable(@PathVariable Long tableId) {

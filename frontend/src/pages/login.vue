@@ -75,8 +75,13 @@ async function login() {
           </div>
         </template>
 
+<!--
         <VCardTitle class="font-weight-semibold text-2xl text-uppercase">
           Materio
+        </VCardTitle>
+-->
+        <VCardTitle class="my-logo-font">
+          우 물
         </VCardTitle>
       </VCardItem>
 
@@ -199,4 +204,11 @@ async function login() {
 
 <style lang="scss">
 @use "@core/scss/pages/page-auth.scss";
+
+.my-logo-font{
+  font-family: 'Sunflower', sans-serif;
+  font-weight: 500;
+  line-height: 4rem;
+  font-size: 30px;
+}
 </style>

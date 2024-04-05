@@ -3,8 +3,11 @@ import Post from '@/k_views/post/Post.vue';
 import WikiList from '@/views/wiki/WikiList.vue'
 
 import { useRouter } from "vue-router"
+import avatar1 from '@images/avatars/avatar-1.png';
 
 const serverAddress = inject('serverAddress')
+const profileAddress = inject('profileAddress')
+
 const auth = inject('auth')
 const router = useRouter()
 
@@ -210,17 +213,16 @@ const changePostWiki = ref(true)
       <VCard v-if=tables.length title="My Table" style="margin-bottom: 20px;">
         <div v-for="(item, index) in tables" :key="index">
           <VDivider/>
-          <VListItem>
-            <VRow>
-              <VCol
-              cols="12"
-              md="12"
-              class="mb-4"
-              @click="moveTable(item.table.id)">
+            <div
+              @click="moveTable(item.table.id)" class="d-flex">
+                <div>
+                <img v-if="!item.table.profile" class="my-table-img" :src="avatar1"/>
+                <img v-if="item.table.profile"  class="my-table-img" :src="profileAddress + item.table.profile.storeFileName"/>          
+                </div>
+                <div class="my-table-name">
                 {{ item.table.name }}
-              </VCol>
-            </VRow>
-        </VListItem>
+                </div>
+            </div>
         </div>
       </VCard>
 
@@ -242,5 +244,22 @@ const changePostWiki = ref(true)
 .bar {
     width: 1px; /* 바의 너비 */
     background-color: gray; /* 바의 배경색 */
+}
+
+.my-table-img{
+  margin-left: 10%;
+  margin-top:10%;
+   width: 50px;
+   height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.my-table-name{
+  display: flex; 
+  align-items: center;
+  margin-left: 5%;
+  font-size: 20px;
+  color: black;
 }
 </style>

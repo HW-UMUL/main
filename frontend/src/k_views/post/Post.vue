@@ -6,6 +6,7 @@ import avatar1 from '@images/avatars/avatar-1.png';
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
+const profileAddress = inject('profileAddress')
 
 // 날짜
 const formatDate = function(value) {
@@ -297,7 +298,8 @@ getReply(props.post.id)
           <div class="post-header">
               <VCol class="post-header" >
                 <span>
-                  <img class="propile-img" :src="avatar1">
+                  <img v-if="!post.user.profile" class="propile-img" :src="avatar1"/>
+                  <img v-if="post.user.profile" class="propile-img" :src="profileAddress + post.user.profile.storeFileName"/>
                 </span>
                 <span style="display: flex; justify-content: space-between;">
                 <span class="post-name" style="font-weight: 600; margin-right: auto;">

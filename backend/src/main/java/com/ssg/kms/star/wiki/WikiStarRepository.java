@@ -22,4 +22,6 @@ public interface WikiStarRepository extends JpaRepository<WikiStar, Long> {
 
 	List<GetWikiMapping> findWikiAllByUserId(Long id);
 
+	WikiStar findByWikiIdAndUserId(Long wikiId, Long userId);
+
 }

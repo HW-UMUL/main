@@ -5,7 +5,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ssg.kms.FileManager.FileManager;
+import com.ssg.kms.FileManager.FileManagerService;
 import com.ssg.kms.post.PostRepository;
 import com.ssg.kms.tableuser.TableUser;
 import com.ssg.kms.tableuser.TableUserRepository;
@@ -21,6 +24,8 @@ public class TableService {
     private final PostRepository postRepository;
     private final WikiRepository wikiRepository;
     private final TableUserRepository tableUserRepository;
+    
+    private final FileManagerService fileManagerService;
     
     @Transactional
     public Tables createTable(TableDTO tableDto, Optional<User> user) {
@@ -65,6 +70,26 @@ public class TableService {
     	tableRepository.save(table);
     	
 		return true;
+    }
+    
+    @Transactional
+    public Boolean updateTableImage(Long tableId, MultipartFile file, Optional<User> user) {
+    	if(!tableUserRepository.findByUserIdAndTableId(user.get().getId(), tableId).getIsAdmin()) {
+    		return false;
+    	}
+    	
+    	Tables table = tableRepository.findById(tableId).get();
+    	
+    	MultipartFile[] multipartFiles = {file};
+    	FileManager fileManager;
+    	try {
+			fileManager = fileManagerService.createFile(multipartFiles, user).get(0);
+			table.setProfile(fileManager);
+			tableRepository.save(table);
+		} catch (Exception e) {
+			return false;
+		}
+    	return true;
     }
 
     @Transactional

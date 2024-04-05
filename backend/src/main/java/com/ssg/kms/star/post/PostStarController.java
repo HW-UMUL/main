@@ -20,25 +20,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/poststar")
 public class PostStarController {
-	private final PostStarService postService;
+	private final PostStarService postStarService;
 	private final UserService userService;
 	
 	@PostMapping("/check/{postId}")
 	public ResponseEntity checkPostStar(@PathVariable Long postId) {
 		Optional<User> user = userService.getMyUserWithAuthorities();
-		postService.checkPost(postId, user);
+		postStarService.checkPost(postId, user);
 		
-		return ResponseEntity.ok(postService.readStar(postId, user));
+		return ResponseEntity.ok(postStarService.readStar(postId, user));
 	}
 	
 	@GetMapping("/read/{postId}")
     public ResponseEntity readPostStar(@PathVariable Long postId) {
-		return ResponseEntity.ok(postService.readStar(postId, userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(postStarService.readStar(postId, userService.getMyUserWithAuthorities()));
     }
 	
 	@GetMapping("/read/my")
     public ResponseEntity<List<GetPostMapping>> readMyPostStar() {
-		return ResponseEntity.ok(postService.readMyStar(userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(postStarService.readMyStar(userService.getMyUserWithAuthorities()));
+    }
+	
+	@GetMapping("/ischeck/{postId}")
+    public ResponseEntity isCheck(@PathVariable Long postId) {
+		return ResponseEntity.ok(postStarService.isCheck(postId, userService.getMyUserWithAuthorities()));
     }
 
 }

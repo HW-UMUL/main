@@ -53,4 +53,13 @@ public class PostStarService {
     	return postStarRepository.findPostAllByUserId(user.get().getId());
     }
 
+    @Transactional(readOnly = true)
+    public Boolean isCheck(Long postId, Optional<User> user) {
+    	Post post = postRepository.findById(postId).get();
+    	if(postStarRepository.findByPostIdAndUserId(post.getId(), user.get().getId()) != null){
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
 }

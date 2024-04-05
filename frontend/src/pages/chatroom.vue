@@ -3,6 +3,7 @@ import { onMounted, onUpdated } from 'vue';
 import socketModule from '/test/index.js'
 import avatar1 from '@images/avatars/avatar-1.png';
 
+const profileAddress = inject('profileAddress')
 
 const serverAddress = inject('serverAddress')
 const auth = inject('auth')
@@ -190,8 +191,6 @@ function formatDateTime(dateTimeString) {
 
   return formattedTime;
 }
-
-
 </script>
 
 <template>
@@ -205,24 +204,23 @@ function formatDateTime(dateTimeString) {
     <div class="chat-board">
       <div v-for="(chat, index) in chats" :key="index">
         <div v-if="chat.user.username===myname" class="d-flex flex-row-reverse">
-          <div class="ma-2 pa-2 my-chat-box">
+          <div id="my-chat" class="ma-2 pa-2 my-chat-box">
               {{ chat.content }}
           </div>     
           <div class="chat-date">{{ formatDateTime(chat.date) }}</div>
         </div>
         <div v-else>        
-          <div 
-          class="d-flex align-start"
-          >
-          <img class="other-propile-img" :src="avatar1"/>            
-          <div class="flex-column">
-            <div style="margin-left: 8px;">{{ chat.user.username }}</div>
-            <div class="d-flex">
-              <div class="other-chat-box ma-2 pa-2">{{ chat.content }}</div>        
-              <div class="align-self-end other-chat-date">{{ formatDateTime(chat.date) }}</div>        
+          <div class="d-flex">
+            <img v-if="!chat.user.profile" class="other-propile-img" :src="avatar1"/>
+            <img v-if="chat.user.profile" class="other-propile-img" :src="profileAddress + chat.user.profile.storeFileName"/>          
+            <div class="flex-column" style="width:100%">
+              <div style="margin-left: 8px;">{{ chat.user.username }}</div>
+              <div class="d-flex">
+                <div id="other-chat" class="other-chat-box ma-2 pa-2">{{ chat.content }}</div>        
+                <div class="align-self-end other-chat-date">{{ formatDateTime(chat.date) }}</div>        
+              </div>
             </div>
           </div>
-        </div>
 
         </div>       
       </div>
@@ -326,22 +324,26 @@ function formatDateTime(dateTimeString) {
 
 }
 .my-chat-box {
-      max-width: 55%;
+      max-width: 54%;
       background-color: rgb(255, 255, 255);
       border: 2px solid #333;
       border-radius: 10px 0 10px 10px; /* 오른쪽 상단 귀퉁이만 직각으로 만듦 */
       word-wrap: break-word;
       white-space: pre-line;
+      color: black;
 }
 
 .other-chat-box {
-  max-width: 55%;
+      max-width: 55%;
+      box-sizing:initial;
       background-color: rgb(255, 255, 255);
       border: 2px solid #333;
-      border-radius: 0 10px 10px 10px; /* 오른쪽 상단 귀퉁이만 직각으로 만듦 */
+      border-radius: 0 10px 10px 10px; /* 왼쪽 상단 귀퉁이만 직각으로 만듦 */
       word-wrap: break-word;
       white-space: pre-line;
+      color: black;
 }
+
 
 .chat-date {
   display: flex;

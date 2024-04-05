@@ -16,5 +16,7 @@ public interface ReplyLikeRepository extends JpaRepository<ReplyLike, Long> {
 
 	Set<ReplyLike> findAllByReplyId(Long replyId);
 
+	ReplyLike findByReplyIdAndUserId(Long replyId, Long id);
+
 //	List<GetPostMapping> findPostAllByUserId(Long id);
 }

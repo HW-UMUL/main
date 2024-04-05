@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssg.kms.mapping.GetPostMapping;
+import com.ssg.kms.post.Post;
 import com.ssg.kms.reply.Reply;
 import com.ssg.kms.reply.ReplyRepository;
 import com.ssg.kms.user.User;
@@ -47,6 +48,18 @@ public class ReplyLikeService {
     public int readLike(Long replyId, Optional<User> user) {
     	return replyLikeRepository.findAllByReplyId(replyId).size();
     }
+    
+    @Transactional(readOnly = true)
+    public Boolean isCheck(Long replyId, Optional<User> user) {
+    	Reply reply = replyRepository.findById(replyId).get();
+
+    	if(replyLikeRepository.findByReplyIdAndUserId(replyId, user.get().getId()) != null){
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
 
 //    @Transactional(readOnly = true)
 //    public List<GetPostMapping> readMyLike(Optional<User> user) {

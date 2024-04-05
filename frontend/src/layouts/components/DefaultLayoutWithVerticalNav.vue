@@ -120,9 +120,14 @@ const props = defineProps({
           v-html="logo"
         />
 
-        <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
-          Materio
+        <h1 class="my-logo-font">
+          우 물
         </h1>
+        <!--
+        <h1 class="font-weight-medium leading-normal text-xl text-uppercase">
+          MATERIO
+        </h1>
+        -->
       </RouterLink>
 
       <IconBtn
@@ -168,6 +173,12 @@ const props = defineProps({
     line-height: 1.75rem;
     text-transform: uppercase;
   }
+}
+
+.my-logo-font{
+  font-family: 'Sunflower', sans-serif;
+  font-weight: 500;
+  line-height: 4rem;
 }
 
 </style>

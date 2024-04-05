@@ -53,6 +53,17 @@ public class WikiStarService {
     	return wikiStarRepository.findWikiAllByUserId(user.get().getId());
     }
     
+    @Transactional(readOnly = true)
+    public Boolean isCheck(Long wikiId, Optional<User> user) {
+    	Wiki wiki = wikiRepository.findById(wikiId).get();
+
+    	if(wikiStarRepository.findByWikiIdAndUserId(wiki.getId(), user.get().getId()) != null){
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
+    
     //////////////////////
     
 	@Transactional(readOnly = true)

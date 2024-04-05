@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ssg.kms.mapping.GetWikiMapping;
+import com.ssg.kms.reply.Reply;
 import com.ssg.kms.user.User;
 import com.ssg.kms.wiki.Wiki;
 import com.ssg.kms.wiki.WikiRepository;
@@ -53,6 +54,16 @@ public class WikiLikeService {
     	return wikiLikeRepository.findWikiAllByUserId(user.get().getId());
     }
     
+    @Transactional(readOnly = true)
+    public Boolean isCheck(Long wikiId, Optional<User> user) {
+    	Wiki wiki = wikiRepository.findById(wikiId).get();
+
+    	if(wikiLikeRepository.findByWikiIdAndUserId(wiki.getId(), user.get().getId()) != null){
+    		return true;
+    	} else {
+    		return false;
+    	}
+    }
     ////////////////////////////
     
 	@Transactional(readOnly = true)

@@ -1,6 +1,7 @@
 package com.ssg.kms.security;
 
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.context.annotation.Bean;
@@ -17,9 +18,9 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         config.setAllowCredentials(true);
-        //ec2-13-209-20-133.ap-northeast-2.compute.amazonaws.com
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-//        config.setAllowedOrigins(List.of("http://ec2-13-125-164-232.ap-northeast-2.compute.amazonaws.com"));
+
+        List<String> allowedOrigins = Arrays.asList("https://umul.site/");
+        config.setAllowedOrigins(allowedOrigins);
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setExposedHeaders(List.of("Authorization", "Authorization-refresh"));

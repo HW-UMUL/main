@@ -22,4 +22,6 @@ public interface WikiLikeRepository extends JpaRepository<WikiLike, Long> {
 
 	List<GetWikiMapping> findWikiAllByUserId(Long id);
 
+	WikiLike findByWikiIdAndUserId(Long wikiId, Long userId);
+
 }

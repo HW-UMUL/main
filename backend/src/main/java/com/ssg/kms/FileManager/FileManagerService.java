@@ -36,11 +36,11 @@ public class FileManagerService {
 		 * 
 		 * 		String realPath = "/Users/hvvany/Desktop/OISO_BE/last_pjt/trip/src/main/resources/static/imgs";  // 스프링 부트에서 파일 저장 시 상대경로로 하면 경로 못찾음
 				String today = new SimpleDateFormat("yyMMdd").format(new Date());
-				File folder = new File(realPath);
-				if (!folder.exists()) {
-					folder.mkdirs();
-				}
 		 * */
+				File folder = new File(fileDir);
+		if (!folder.exists()) {
+			folder.mkdirs();
+		}
 		List<FileManager> fileManagers = new ArrayList<>();
 		for(MultipartFile mfile : files) {
 			

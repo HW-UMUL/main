@@ -20,31 +20,35 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/wikilike")
 public class WikiLikeController {
-	private final WikiLikeService wikiService;
+	private final WikiLikeService wikiLikeService;
 	private final UserService userService;
 	
 	@PostMapping("/check/{wikiId}")
 	public ResponseEntity checkwikiLike(@PathVariable Long wikiId) {
 		Optional<User> user = userService.getMyUserWithAuthorities();
-		wikiService.checkwiki(wikiId, user);
+		wikiLikeService.checkwiki(wikiId, user);
 		
-		return ResponseEntity.ok(wikiService.readLike(wikiId, user));
+		return ResponseEntity.ok(wikiLikeService.readLike(wikiId, user));
 	}
 	
 	@GetMapping("/read/{wikiId}")
     public ResponseEntity readwikiLike(@PathVariable Long wikiId) {
-		return ResponseEntity.ok(wikiService.readLike(wikiId, userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(wikiLikeService.readLike(wikiId, userService.getMyUserWithAuthorities()));
     }
 	
 	@GetMapping("/read/my")
     public ResponseEntity<List<GetWikiMapping>> readMywikiLike() {
-		return ResponseEntity.ok(wikiService.readMyLike(userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(wikiLikeService.readMyLike(userService.getMyUserWithAuthorities()));
     }
 	
+	@GetMapping("/ischeck/{wikiId}")
+    public ResponseEntity isCheck(@PathVariable Long wikiId) {
+		return ResponseEntity.ok(wikiLikeService.isCheck(wikiId, userService.getMyUserWithAuthorities()));
+    }
 	///////////////////////
 	
 	@GetMapping("/readLikePersonal/{wikiId}")
 	public ResponseEntity readLikePersonal(@PathVariable Long wikiId) {
-		return ResponseEntity.ok(wikiService.readLikePersonal(wikiId, userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(wikiLikeService.readLikePersonal(wikiId, userService.getMyUserWithAuthorities()));
 	}
 }

@@ -22,4 +22,6 @@ public interface PostStarRepository extends JpaRepository<PostStar, Long> {
 
 	List<GetPostMapping> findPostAllByUserId(Long id);
 
+	PostStar findByPostIdAndUserId(Long postId, Long userId);
+
 }

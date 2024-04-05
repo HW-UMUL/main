@@ -36,6 +36,11 @@ public class ReplyLikeController {
 		return ResponseEntity.ok(replyLikeService.readLike(replyId, userService.getMyUserWithAuthorities()));
     }
 	
+	@GetMapping("/ischeck/{replyId}")
+    public ResponseEntity isCheck(@PathVariable Long replyId) {
+		return ResponseEntity.ok(replyLikeService.isCheck(replyId, userService.getMyUserWithAuthorities()));
+    }
+	
 	// 되려나 모르겠당 안되넹 
 //	@GetMapping("/read/my")
 //    public ResponseEntity<List<GetPostMapping>> readMyPostLike() {

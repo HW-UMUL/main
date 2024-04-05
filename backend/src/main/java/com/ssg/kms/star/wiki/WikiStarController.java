@@ -20,33 +20,37 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RequestMapping("/api/wikistar")
 public class WikiStarController {
-	private final WikiStarService wikiService;
+	private final WikiStarService wikiStarService;
 	private final UserService userService;
 	
 	@PostMapping("/check/{wikiId}")
 	public ResponseEntity checkWikiStar(@PathVariable Long wikiId) {
 		Optional<User> user = userService.getMyUserWithAuthorities();
-		wikiService.checkWiki(wikiId, user);
+		wikiStarService.checkWiki(wikiId, user);
 		
-		return ResponseEntity.ok(wikiService.readStar(wikiId, user));
+		return ResponseEntity.ok(wikiStarService.readStar(wikiId, user));
 	}
 	
 	@GetMapping("/read/{wikiId}")
     public ResponseEntity readWikiStar(@PathVariable Long wikiId) {
-		return ResponseEntity.ok(wikiService.readStar(wikiId, userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(wikiStarService.readStar(wikiId, userService.getMyUserWithAuthorities()));
     }
 	
 	@GetMapping("/read/my")
     public ResponseEntity<List<GetWikiMapping>> readMyWikiStar() {
-		return ResponseEntity.ok(wikiService.readMyStar(userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(wikiStarService.readMyStar(userService.getMyUserWithAuthorities()));
     }
 	
+	@GetMapping("/ischeck/{wikiId}")
+    public ResponseEntity isCheck(@PathVariable Long wikiId) {
+		return ResponseEntity.ok(wikiStarService.isCheck(wikiId, userService.getMyUserWithAuthorities()));
+    }
 	
 	////////////////////
 	
 	@GetMapping("/readStarPersonal/{wikiId}")
 	public ResponseEntity readStarPersonal(@PathVariable Long wikiId) {
-		return ResponseEntity.ok(wikiService.readStarPersonal(wikiId, userService.getMyUserWithAuthorities()));
+		return ResponseEntity.ok(wikiStarService.readStarPersonal(wikiId, userService.getMyUserWithAuthorities()));
 	}
 	
 	

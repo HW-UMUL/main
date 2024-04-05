@@ -63,6 +63,9 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 	@Override
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 
+		if(message.getPayload().equals("ping")) {
+			return;
+		}
 		JSONObject jsonObj = (JSONObject) jsonParser.parse(message.getPayload());
 		String username;
 		String auth;
@@ -71,8 +74,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
 			username = getUserNameByMessageWithJwt(auth);
 			sessionUsername.replace(session, username);
 			usernameSession.put(username, session);
+
 			return;
 		} catch (Exception e) {
+
 		}
 
 		/*

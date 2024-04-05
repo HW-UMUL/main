@@ -133,7 +133,7 @@ function sendFile() {
             Authorization: authToken,
         }
     }).then(() => {
-        console.log('파일 전송 성공');
+         getInfo()
     }).catch(() => {
         console.error('파일 전송 실패');
     });

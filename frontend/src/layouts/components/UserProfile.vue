@@ -1,5 +1,49 @@
 <script setup>
 import avatar1 from '@images/avatars/avatar-1.png'
+
+const serverAddress = inject('serverAddress')
+const profileAddress = inject('profileAddress')
+
+const auth = inject('auth')
+
+// 토큰 브라우저에서 받아오기
+let authToken = 'Bearer '
+
+authToken = authToken + auth
+const router = useRouter()
+
+const info = ref({
+  username: '',
+  email: '',
+  storeFileName: ''
+})
+
+async function getInfo(){
+
+  const response = await fetch(
+    `http://${serverAddress}/api/getinfo`,
+    {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${auth}`,          
+      },
+      credentials: 'include'
+    }  
+  )
+
+  if(!response.ok) {
+    alert("실패!")
+  } else{
+    const res = await response.json()
+    info.value.username = res[0]
+    info.value.email = res[1]
+    info.value.storeFileName = res[2]
+  }
+}
+
+getInfo()
+
 </script>
 
 <template>
@@ -16,8 +60,8 @@ import avatar1 from '@images/avatars/avatar-1.png'
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
-
+      <VImg v-if="!info.storeFileName" class="follow-propile-img" :src="avatar1"/>
+      <VImg v-if="info.storeFileName" class="follow-propile-img" :src="profileAddress + info.storeFileName"/>
       <!-- SECTION Menu -->
       <VMenu
         activator="parent"
@@ -41,16 +85,17 @@ import avatar1 from '@images/avatars/avatar-1.png'
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg v-if="!info.storeFileName" class="follow-propile-img" :src="avatar1"/>
+                    <VImg v-if="info.storeFileName" class="follow-propile-img" :src="profileAddress + info.storeFileName"/>
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              {{ info.username }}
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle>{{ info.email }}</VListItemSubtitle>
           </VListItem>
           <VDivider class="my-2" />
 
