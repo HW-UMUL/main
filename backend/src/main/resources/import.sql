@@ -10,6 +10,14 @@ SELECT * FROM role;
 SELECT * FROM user;
 INSERT INTO user VALUES(1, 'gye@naver.com', '123', 'gye');
 
+SELECT * FROM post;
+SELECT * FROM reply;
+SELECT *, COUNT(post_id) AS post_like_count FROM post_like GROUP BY post_id;
+SELECT * FROM post_like;
+INSERT INTO post_like (post_id, user_id) VALUES(2, 1);
+
+SELECT * FROM post_like WHERE user_id = 1 ORDER BY id DESC LIMIT 1;
+
 SELECT * FROM search_log Order By Date DESC;
 DELETE FROM search_log WHERE content = '이건 2번입니다' AND user_id = 2 ORDER BY DATE DESC LIMIT 1;
 SELECT content, user_id, MAX(date) AS max_date FROM search_log WHERE user_id = 2 GROUP BY content ORDER BY MAX(date) DESC;
