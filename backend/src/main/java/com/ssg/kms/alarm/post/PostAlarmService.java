@@ -59,7 +59,7 @@ public class PostAlarmService {
 	 * @throws NullPointerException `id` 또는 `meID`가 null인 경우
 	 */
 	protected static boolean isNotSameId(Long id, Long meID) {
-		return id != meID;
+		return !id.equals(meID);
 	}
 
 	// 접속 중인 사람들에게 실시간으로 알람을 보냄.
