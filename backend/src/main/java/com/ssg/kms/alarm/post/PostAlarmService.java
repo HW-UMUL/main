@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.ssg.kms.common.CommonUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
@@ -31,7 +32,7 @@ public class PostAlarmService {
 		List<PostAlarm> postAlarms = new ArrayList<>();
 		
 		for(User user : users) {
-			if(isNotSameId(user.getId(), me.getId())) {
+			if(CommonUtils.isNotSameId(user.getId(), me.getId())) {
 				PostAlarm postAlarm = PostAlarm.builder()
 						.user(user)
 						.post(post)
@@ -48,18 +49,6 @@ public class PostAlarmService {
 		}
 		
 		postAlarmRepository.saveAll(postAlarms);
-	}
-
-	/**
-	 * 두 ID를 비교하여 동일하지 않은지 확인합니다.
-	 *
-	 * @param id 비교할 첫 번째 ID
-	 * @param meID 비교할 두 번째 ID
-	 * @return 두 ID가 동일하지 않은 경우 `true`, 동일한 경우 `false`
-	 * @throws NullPointerException `id` 또는 `meID`가 null인 경우
-	 */
-	protected static boolean isNotSameId(Long id, Long meID) {
-		return !id.equals(meID);
 	}
 
 	// 접속 중인 사람들에게 실시간으로 알람을 보냄.

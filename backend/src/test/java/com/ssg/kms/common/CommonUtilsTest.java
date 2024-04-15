@@ -1,12 +1,11 @@
-package com.ssg.kms.alarm.post;
+package com.ssg.kms.common;
 
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertFalse;
 
-import static com.ssg.kms.alarm.post.PostAlarmService.isNotSameId;
+import static com.ssg.kms.common.CommonUtils.isNotSameId;
+import static org.junit.jupiter.api.Assertions.*;
 
-class PostAlarmServiceTest {
+class CommonUtilsTest {
 
   @Test
   void isNotSameId127BelowTest() {
