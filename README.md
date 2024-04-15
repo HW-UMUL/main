@@ -238,12 +238,21 @@
 |![Followee](https://github.com/final-kms/main/assets/150432433/040ec2a7-183e-48d5-89fe-efee479b52bb)|
 
 ### [Chat] 
-- 
--
-
+- 채팅방 생성
+     - 채팅방 생성이 가능합니다.
+     - null 값이 아닌 이름으로 채팅방을 생성해야 합니다.
+| ChatRoom |
+|----------|
+|![Create Chat Room](https://github.com/final-kms/main/assets/150432433/a9124d86-fd64-4188-81ed-0303e48b2108)|
+- 채팅하기
+     - 사용자를 이메일로 초대할 수 있습니다.
+     - 글 작성시 Enter 클릭은 줄 바꿈입니다.
+     - 긴 글 작성 후 제출 시, 길이에 맞춰 줄이 자동으로 넘어 갑니다.
+     - 작성 시간과 작성자를 확인할 수 있습니다.
 | Chat |
 |----------|
-||
+|![Chatting](https://github.com/final-kms/main/assets/150432433/3f303602-bfc7-4b93-84c5-f2253b0e56d6)|
+
 
 <br>
 
