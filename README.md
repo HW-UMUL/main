@@ -2,7 +2,7 @@
 
 ![20240306232331_d45caee97f9b95d9d00cc14d02ce00e3_wo9p](https://github.com/final-kms/main/assets/150432433/9d27f79d-5ed2-4364-8779-df9c8cb10ff3)
 
-(변경될 이미지 입니다)
+~~(변경될 이미지 입니다)~~
 
 - 배포 접속 주소 : https://umul.site/
 - UMUL Wiki : https://github.com/final-kms/main/wiki
@@ -113,7 +113,7 @@
 
 ### [로그인]
 - 로그인은 회원의 아이디와 비밀번호가 요구됩니다.
-- 로그인과 비밀번호가 틀리면 '실패'라는 창이 띄워집니다. (실패 대신 이유 설명 가능?) (로그인 materio 없애기, dashboard 깃헙 없애기기)
+- 로그인과 비밀번호가 틀리면 '실패'라는 창이 띄워집니다. ~~(실패 대신 이유 설명 가능?) (로그인 materio 없애기, dashboard 깃헙 없애기기)~~
 
 | 로그인 |
 |----------|
@@ -157,10 +157,57 @@
 |----------|
 |![Post 좋아요 즐겨찾기 최신순 정렬](https://github.com/final-kms/main/assets/150432433/0489fef0-5e7c-489e-8e76-6cd859c3e49c)|
 
-### []
+### [마이페이지 My Info]
+- 마이페이지 My Info 에서는 개인 정보를 수정할 수 있습니다. ~~(Account Setting 이름 변경하기)~~
+     - 원하는 이미지(파일)를 선택해 프로필을 변경할 수 있습니다.~~(프로필 변경시 화면이 꺼지는 현상 있음)~~
+     - 회원 아이디, 이메일, 비밀번호 모두 수정 가능합니다.
+     - 해당 수정에 대한 조건은 회원가입 조건과 동일합니다.
+
+| 마이페이지 My Info |
+|----------|
+|![마이페이지 My Info](https://github.com/final-kms/main/assets/150432433/8f20a6c5-c992-42c8-8274-d092399b1651)|
+
+### [마이페이지 My Post]
+- 마이페이지 My Post 에서는 '내가' 작성한 Post를 확인할 수 있습니다.
+- My Post의 내용은 기본 Post 페이지 내용과 동일합니다.
+
+| 마이페이지 My Post |
+|----------|
+|![마이페이지 My Post](https://github.com/final-kms/main/assets/150432433/f5c8587a-92aa-4538-b703-035f6f979dd4)|
 
 
+### [마이페이지 My Wiki]
+- 마이페이지 My Wiki 에서는 '내가' 작성한 Wiki를 확인할 수 있습니다.
+- My Wiki의 내용은 기본 Wiki 페이지 내용과 동일합니다.
 
+| 마이페이지 My Wiki |
+|----------|
+|![마이페이지 My Wiki](https://github.com/final-kms/main/assets/150432433/9faaeff9-a1b3-4a23-87c6-c96a764d6310)|
+
+
+### [마이페이지 My Reply]
+- 마이페이지 My Reply 에서는 '내가' 작성한 Reply를 확인할 수 있습니다.
+- 댓글을 Post에 달리기 때문에 My Reply 에서는 Post가 보여집니다. 
+- My Reply의 내용은 내가 작성한 댓글이 포함된 기본 Post 페이지 값과 동일합니다.
+
+| 마이페이지 My Reply |
+|----------|
+|![My Reply](https://github.com/final-kms/main/assets/150432433/875e223b-e580-4ff1-8066-d0f2b40413fe)|
+
+
+### [마이페이지 Like]
+- 마이페이지 My Like 에서는 '내가' 추천한 Post와 Wiki를 확인할 수 있습니다.~~(위키는 작동 안됨)~~
+
+| 마이페이지 My Like |
+|----------|
+||
+
+### [마이페이지 Star]
+- 마이페이지 My Star 에서는 '내가' 즐겨찾기한 Post와 Wiki를 확인할 수 있습니다.~~(위키는 작동 안됨)~~
+
+| 마이페이지 My Star |
+|----------|
+||
 
 
 
