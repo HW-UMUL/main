@@ -1,4 +1,4 @@
-![Follow](https://github.com/final-kms/main/assets/150432433/e6b78799-8788-4039-a7dc-1b23ced0abff)# <img src="https://github.com/final-kms/main/assets/150432433/b85e9a6c-267c-4788-9aeb-dea171711574" width="28" height="28"> 우리들의 물음표, UMUL
+# <img src="https://github.com/final-kms/main/assets/150432433/b85e9a6c-267c-4788-9aeb-dea171711574" width="28" height="28"> 우리들의 물음표, UMUL
 
 ![20240306232331_d45caee97f9b95d9d00cc14d02ce00e3_wo9p](https://github.com/final-kms/main/assets/150432433/9d27f79d-5ed2-4364-8779-df9c8cb10ff3)
 
@@ -252,7 +252,6 @@
 | Chat |
 |----------|
 |![Chatting](https://github.com/final-kms/main/assets/150432433/3f303602-bfc7-4b93-84c5-f2253b0e56d6)|
-
 
 <br>
 
