@@ -1,4 +1,4 @@
-# <img src="https://github.com/final-kms/main/assets/150432433/b85e9a6c-267c-4788-9aeb-dea171711574" width="28" height="28"> 우리들의 물음표, UMUL
+![Follow](https://github.com/final-kms/main/assets/150432433/e6b78799-8788-4039-a7dc-1b23ced0abff)# <img src="https://github.com/final-kms/main/assets/150432433/b85e9a6c-267c-4788-9aeb-dea171711574" width="28" height="28"> 우리들의 물음표, UMUL
 
 ![20240306232331_d45caee97f9b95d9d00cc14d02ce00e3_wo9p](https://github.com/final-kms/main/assets/150432433/9d27f79d-5ed2-4364-8779-df9c8cb10ff3)
 
@@ -119,6 +119,16 @@
 |----------|
 |![로그인](https://github.com/final-kms/main/assets/150432433/289172c1-294e-48f1-b747-2d4b357a0a35)|
 
+### [로그아웃]
+- 로그아웃은 로그아웃 버튼 클릭시 즉시 적용됩니다.
+     - 첫번째 버튼 : 왼쪽 Nav Logout 버튼
+     - 두번째 버튼 : 오른쪽 상단 프로필의 Logout 버튼
+
+| 로그아웃 |
+|----------|
+|![로그아웃](https://github.com/final-kms/main/assets/150432433/c52e6bb6-2e69-4f9d-a02b-4ad0cfae8b3b)|
+
+
 ### [Post 작성]
 - Post는 '페이스북', '네이버 지식인'과 같이 자유롭게 질문을 올리고 댓글을 달 수 있는 기능입니다.
 - 오른쪽 상단 Post+를 클릭해 작성할 수 있습니다.
@@ -159,7 +169,7 @@
 
 ### [마이페이지 My Info]
 - 마이페이지 My Info 에서는 개인 정보를 수정할 수 있습니다. ~~(Account Setting 이름 변경하기)~~
-     - 원하는 이미지(파일)를 선택해 프로필을 변경할 수 있습니다.~~(프로필 변경시 화면이 꺼지는 현상 있음)~~
+     - 원하는 이미지(파일)를 선택해 프로필을 변경할 수 있습니다.~~(프로필 변경시 화면이 꺼지는 현상 있음)(프로필 밀림 현상 있음음)~~
      - 회원 아이디, 이메일, 비밀번호 모두 수정 가능합니다.
      - 해당 수정에 대한 조건은 회원가입 조건과 동일합니다.
 
@@ -196,20 +206,44 @@
 
 
 ### [마이페이지 Like]
-- 마이페이지 My Like 에서는 '내가' 추천한 Post와 Wiki를 확인할 수 있습니다.~~(위키는 작동 안됨)~~
+- 마이페이지 Like 에서는 '내가' 추천한 Post와 Wiki를 확인할 수 있습니다.~~(위키는 작동 안됨)~~
 
-| 마이페이지 My Like |
+| 마이페이지 Like |
 |----------|
-||
+|![마이페이지 Like](https://github.com/final-kms/main/assets/150432433/c8f8e0d1-4b2f-4e39-aaf4-7466c865d5c5)|
+
 
 ### [마이페이지 Star]
-- 마이페이지 My Star 에서는 '내가' 즐겨찾기한 Post와 Wiki를 확인할 수 있습니다.~~(위키는 작동 안됨)~~
+- 마이페이지 Star 에서는 '내가' 즐겨찾기한 Post와 Wiki를 확인할 수 있습니다.~~(위키는 작동 안됨)~~
 
-| 마이페이지 My Star |
+| 마이페이지 Star |
+|----------|
+|![마이페이지 Star](https://github.com/final-kms/main/assets/150432433/9764cc0b-c6e5-435a-8a9b-69034821550d)|
+
+### [Follow]
+- 원하는 사용자를 Follow, UnFollow할 수 있습니다.
+- 사용자의 email을 검색해 Follow 기능을 이용할 수 있습니다.
+- 사용자 email의 일부만 입력해도 검색이 가능합니다. ~~(Follow 검색시 해당 사용자 프로필 이미지 출력 안됨. 기본 이미지 나옴)~~
+
+| Follow |
+|----------|
+|![Follow](https://github.com/final-kms/main/assets/150432433/6aae6318-b9a0-4cfa-bffc-bb1636c36bec)|
+
+
+### [Followee] 
+- Followee 기능을 통해 나를 follow한 사용자를 확인할 수 있습니다. ~~(folowee 오타있음)~~
+
+| Followee |
+|----------|
+|![Followee](https://github.com/final-kms/main/assets/150432433/040ec2a7-183e-48d5-89fe-efee479b52bb)|
+
+### [Chat] 
+- 
+-
+
+| Chat |
 |----------|
 ||
-
-
 
 <br>
 
