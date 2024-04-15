@@ -37,4 +37,4 @@ build/
 node_modules
 
 ### Spring Boot ###
-application.properties
+# application.properties
