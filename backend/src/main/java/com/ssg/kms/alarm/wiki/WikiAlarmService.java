@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import com.ssg.kms.common.CommonUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.socket.TextMessage;
@@ -31,7 +32,7 @@ public class WikiAlarmService {
 		List<WikiAlarm> wikiAlarms = new ArrayList<>();
 		
 		for(User user : users) {
-			if(user.getId() != me.getId()) {
+			if(CommonUtils.isNotSameId(user.getId(), me.getId())) {
 				WikiAlarm wikiAlarm = WikiAlarm.builder()
 						.user(user)
 						.wiki(wiki)
