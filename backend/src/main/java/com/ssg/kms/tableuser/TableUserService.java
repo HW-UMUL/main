@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import com.ssg.kms.common.CommonUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -113,7 +114,7 @@ public class TableUserService {
     @Transactional
     public Boolean addAdmin(Long tableId, EmailDTO emailDto, Optional<User> user) {
     	TableUser tableUser = tableUserRepository.findTop1ByTableIdOrderByIdAsc(tableId);
-    	if(tableUser.getUser().getId() == user.get().getId()) {
+    	if(CommonUtils.isSameId(tableUser.getUser().getId(), user.get().getId())) {
     		TableUser admin = tableUserRepository.findByUserEmail(emailDto.getEmail());
     		admin.setIsAdmin(true);
     		tableUserRepository.save(admin);
@@ -127,7 +128,7 @@ public class TableUserService {
     @Transactional
     public Boolean removeAdmin(Long tableId, EmailDTO emailDto, Optional<User> user) {
     	TableUser tableUser = tableUserRepository.findTop1ByTableIdOrderByIdAsc(tableId);
-    	if(tableUser.getUser().getId() == user.get().getId()) {
+    	if(CommonUtils.isSameId(tableUser.getUser().getId(), user.get().getId())) {
     		TableUser admin = tableUserRepository.findByUserEmail(emailDto.getEmail());
     		admin.setIsAdmin(false);
     		tableUserRepository.save(admin);
