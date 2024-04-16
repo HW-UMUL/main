@@ -89,10 +89,14 @@
 - Frontend 개발 :
 - 테스트 :
 
-3월 
-![image](https://github.com/final-kms/main/assets/150432433/32f89630-0a45-484d-88ec-3de87bfb3bbf)
+| 3월 |
+|----------|
+|![image](https://github.com/final-kms/main/assets/150432433/32f89630-0a45-484d-88ec-3de87bfb3bbf)|
 
-4월
+| 4월 |
+|----------|
+|![image](https://github.com/final-kms/main/assets/150432433/d4476752-92d5-4971-b183-136f848c476d)|
+
 
 <br>
 
