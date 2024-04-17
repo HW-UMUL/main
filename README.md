@@ -86,6 +86,9 @@
 |Solution Stack|<img src="https://img.shields.io/badge/git-F05032?style=for-the-badge&logo=git&logoColor=white"><img src="https://img.shields.io/badge/github-181717?style=for-the-badge&logo=github&logoColor=white">|
 |---|---|
 
+✔ Collaboration Tool
+|Solution Stack|<img src="https://img.shields.io/badge/googledocs-4285F4?style=for-the-badge&logo=googledocs&logoColor=white"><img src="https://img.shields.io/badge/googlesheets-34A853?style=for-the-badge&logo=googlesheets&logoColor=white"><img src="https://img.shields.io/badge/googleslides-FBBC04?style=for-the-badge&logo=googleslides&logoColor=white"><br><img src="https://img.shields.io/badge/googledrive-ECD53F?style=for-the-badge&logo=googledrive&logoColor=white"><img src="https://img.shields.io/badge/googlecalendar-F40D12?style=for-the-badge&logo=googlecalendar&logoColor=white"><img src="https://img.shields.io/badge/zoom-0B5CFF?style=for-the-badge&logo=zoom&logoColor=white">|
+|---|:---|
 <br>
 
 ## 02 프로젝트 구조
@@ -101,6 +104,12 @@
 <br>
 
 ## 04 브런치 전략
+ - 대호 작성 필요. 그림 있으면 좋음
+
+<br>
+
+## 04 Agile 전략
+ - 규혁 작성 필요. 그림 있으면 좋음
 
 <br>
 
@@ -112,7 +121,7 @@
 
 | 3월 |
 |----------|
-|![image](https://github.com/final-kms/main/assets/150432433/32f89630-0a45-484d-88ec-3de87bfb3bbf)|
+|![image](https://github.com/final-kms/main/assets/150432433/1099909c-2b40-454a-9078-24d060f0a530)|
 
 | 4월 |
 |----------|
