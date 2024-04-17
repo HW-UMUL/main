@@ -13,7 +13,7 @@
 ## 프로젝트 소개
 - 우물(UMUL)은 지식을 자유롭게 질문하고, 대화하며, 좋아할 수 있는 SNS 형태의 지식 관리 시스템입니다.
 - 회사 임직원들의 참여도를 높이기 위해 지식 관리 시스템에 Wiki, Post, 채팅, 추천-즐겨찾기 등의 기능을 구현했습니다.
-- 팀 협업 기능인 '조직(Table)’공간을 만들어 공동체 소속감을 바탕으로 사용자의 업무 집중력을 높였습니다. 
+- 팀 기능-인 '조직(Table)’공간을 만들어 공동체 소속감을 바탕으로 사용자의 업무 집중력을 높였습니다. 
 - 빠르고 쉽게 얻는 지식을 바탕으로 문제 해결력을 높여 기업 경쟁력을 높이는 것이 UMUL의 목표입니다.
 - 우물에 모여 지식을 떠가고, 자유로이 잡담을 나눠보세요!
 
@@ -68,7 +68,7 @@
 |Language|<img src="https://img.shields.io/badge/java-007396?style=for-the-badge&logo=java&logoColor=white"><img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=white">|
 |Framework|<img src="https://img.shields.io/badge/springboot-6DB33F?style=for-the-badge&logo=springboot&logoColor=white">|
 |Database|<img src="https://img.shields.io/badge/mariadb-003545?style=for-the-badge&logo=mariadb&logoColor=white">|
-|Cloud Service|<img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white">|
+|Cloud Service|<img src="https://img.shields.io/badge/amazonec2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white"><img src="https://img.shields.io/badge/amazonroute53-8C4FFF?style=for-the-badge&logo=amazonroute53&logoColor=white">|
 |Server|<img src="https://img.shields.io/badge/nginx-009639?style=for-the-badge&logo=nginx&logoColor=white">|
 
 ✔ Frontend
@@ -115,9 +115,9 @@
 
 ## 05 개발 일정
 - 개발 기간 : 2024-03-04 ~ 2024-04-25
-- Backend 개발 :
-- Frontend 개발 :
-- 테스트 :
+- Backend 개발(Work Day 31) : 2024-03-06 ~ 2024-04-19
+- Frontend 개발(Work Day 30) : 2024-03-07 ~ 2024-04-19
+- 테스트(Work Day 4) : 2024-03-21 ~ 2024-04-19
 
 | 3월 |
 |----------|
@@ -277,8 +277,13 @@
 |----------|
 ![rank](https://github.com/final-kms/main/assets/76561901/c4e60fa5-5601-4f7a-8646-c20f9a80a6db)
 
+## [검색]
+- 검색기능으로 원하는 Post, Wiki를 찾을 수 있습니다.
+- Post, Wiki 검색 조건을 선택해 찾도록 만들어 정확성을 높였습니다. 
+
+
 ## [마이페이지]
-- 마이페이지에서는 개인정보수정 및 작성한 글과 추천 글 등을 확인할 수 있습니다.
+- 마이페이지에서는 개인정보수정 및 작성하고 즐겨찾기한 글들을 확인할 수 있습니다.
 
 ### [마이페이지 My Info]
 - 마이페이지 My Info 에서는 개인 정보를 수정할 수 있습니다. ~~(Account Setting 이름 변경하기)~~
@@ -307,7 +312,6 @@
 |----------|
 |![마이페이지 My Wiki](https://github.com/final-kms/main/assets/150432433/9faaeff9-a1b3-4a23-87c6-c96a764d6310)|
 
-
 ### [마이페이지 My Reply]
 - 마이페이지 My Reply 에서는 '내가' 작성한 Reply를 확인할 수 있습니다.
 - 댓글을 Post에 달리기 때문에 My Reply 에서는 Post가 보여집니다. 
@@ -316,7 +320,6 @@
 | 마이페이지 My Reply |
 |----------|
 |![My Reply](https://github.com/final-kms/main/assets/150432433/875e223b-e580-4ff1-8066-d0f2b40413fe)|
-
 
 ### [마이페이지 Like]
 - 마이페이지 Like 에서는 '내가' 추천한 Post와 Wiki를 확인할 수 있습니다.~~(위키는 작동 안됨)~~
@@ -333,6 +336,10 @@
 |----------|
 |![마이페이지 Star](https://github.com/final-kms/main/assets/150432433/9764cc0b-c6e5-435a-8a9b-69034821550d)|
 
+## [팔로우]
+- 팔로우 기능을 통해 유저간의 연결을 높였습니다.
+- 팔로우를 하면 알람 기능을 통해 상대방의 업데이트를 실시간으로 확인할 수 있습니다.
+
 ### [Follow]
 - 원하는 사용자를 Follow, UnFollow할 수 있습니다.
 - 사용자의 email을 검색해 Follow 기능을 이용할 수 있습니다.
@@ -343,7 +350,7 @@
 |![Follow](https://github.com/final-kms/main/assets/150432433/6aae6318-b9a0-4cfa-bffc-bb1636c36bec)|
 
 
-### [Followee] 
+### [Followee]
 - Followee 기능을 통해 나를 follow한 사용자를 확인할 수 있습니다. ~~(folowee 오타있음)~~
 
 | Followee |
@@ -356,7 +363,6 @@
 - 조직원들이 작성한 글을 열람할 수 있습니다.
 - private 상태의 조직에서 글을 작성하면 조직 외부의 사용자들은 그 조직의 게시글을 열람할 수 없습니다. 
 
-
 ### [조직 생성]
 - 조직의 이름, 설명을 작성하여 조직을 생성할 수 있습니다.
 
@@ -364,11 +370,9 @@
 |----------|
 ![createtable](https://github.com/final-kms/main/assets/76561901/4913a3b2-d9b9-4acd-81a4-af46703e5b40)
 
- 
-
 ### [조직 초대]
 - 초대할 사람의 이메일을 기입하여 조직에 초대할 수 있습니다.
-- 초대를 받은 사람은 초대를 수락할 수도, 거절할 수도 있습니다.
+- 초대를 받은 사람은 초대를 수락 및 거절할 수 있습니다.
 - 초대를 수락하여 조직원이 되면 조직 내에서 게시글을 작성할 수 있고, 작성된 게시글은 조직 내에 표출됩니다.
 
 | 조직 초대 |
@@ -392,6 +396,9 @@
 |----------|
 ![admin](https://github.com/final-kms/main/assets/76561901/94e31826-3f83-45f9-8c06-4c29bf62a088)
 
+## [채팅]
+- 채팅 기능은 사람들이 서로 자유롭게 대화하기 위해 만들어 졌습니다. 
+- 1:1로 대화할 수 있을 뿐 아니라, 팀 단체 채팅도 가능합니다.
 
 ### [ChatRoom] 
 - 채팅방 생성
