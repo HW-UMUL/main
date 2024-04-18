@@ -2,9 +2,7 @@
 ![umul-update](https://github.com/final-kms/main/assets/150432433/3600fcad-ce1d-4015-96a6-266d6b4ca245)
 
 - 서비스 접속 URL : https://umul.site/
-- UMUL Wiki : https://github.com/final-kms/main/wiki
-
-<br>
+- UMUL Wiki : https://github.com/final-kms/main/wiki <br>
 
 ## 프로젝트 소개
 > 우리들의 물음표, **우물(UMUL)** 입니다. <br>
