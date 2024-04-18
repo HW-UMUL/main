@@ -1,8 +1,7 @@
 # <img src="https://github.com/final-kms/main/assets/150432433/b85e9a6c-267c-4788-9aeb-dea171711574" width="28" height="28"> 우리들의 물음표, UMUL
 
-![20240306232331_d45caee97f9b95d9d00cc14d02ce00e3_wo9p](https://github.com/final-kms/main/assets/150432433/9d27f79d-5ed2-4364-8779-df9c8cb10ff3)
+![umul-png](https://github.com/final-kms/main/assets/150432433/443b72d3-a691-4b61-837f-543d9cc91bd9)
 
-~~(변경될 이미지 입니다)~~
 
 - 배포 접속 주소 : https://umul.site/
 - UMUL Wiki : https://github.com/final-kms/main/wiki
