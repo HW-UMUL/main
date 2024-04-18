@@ -1,4 +1,3 @@
-# <img src="https://github.com/final-kms/main/assets/150432433/b85e9a6c-267c-4788-9aeb-dea171711574" width="28" height="28"> 우리들의 물음표, UMUL
 
 ![umul-update](https://github.com/final-kms/main/assets/150432433/3600fcad-ce1d-4015-96a6-266d6b4ca245)
 
@@ -6,6 +5,7 @@
 - 배포 접속 주소 : https://umul.site/
 - UMUL Wiki : https://github.com/final-kms/main/wiki
 
+# <img src="https://github.com/final-kms/main/assets/150432433/b85e9a6c-267c-4788-9aeb-dea171711574" width="28" height="28"> 우리들의 물음표, UMUL
 
 <br>
 
