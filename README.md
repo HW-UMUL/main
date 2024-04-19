@@ -1,5 +1,6 @@
-# TEAM 1 KMS
-![image](https://github.com/final-kms/main/assets/44054359/ee167743-9c9e-4470-9d94-56baa296ac30)
+# TEAM 1 UMUL
+![umul-README](https://github.com/final-kms/main/assets/150432433/51aa722a-c35d-494a-a81e-a3f117c226bd)
+
 
 ### FRONTEND
 - 참조 : https://github.com/final-kms/main/pull/92
