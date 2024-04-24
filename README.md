@@ -514,9 +514,9 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 ## [App]
 - 웹 서비스를 모바일 app으로 동일하게 경험할 수 있습니다.(안드로이드 전용)
 
-| Login | Post | Table | Chat | Alarm |
-|-------|------|-------|------|-------|
-| <img src="https://github.com/HW-UMUL/main/assets/150432433/df674616-8ec3-4fb7-8370-535ce5ffedc3" height=400 width=200> | <img src="https://github.com/HW-UMUL/main/assets/150432433/12096b53-385c-407a-81bd-60b07a51bc35" height=400 width=200> | <img src="https://github.com/HW-UMUL/main/assets/150432433/88d2285b-b888-4096-a21d-46e4fe6f9ef6" height=400 width=200> | <img src="https://github.com/HW-UMUL/main/assets/150432433/9eeb1fce-0540-4f2e-9f7d-81ddf0c309ac" height=400 width=200> | <img src="https://github.com/HW-UMUL/main/assets/150432433/e71e98d0-3ec1-4202-a8a1-4e4a4c3948b7" height=400 width=200>| 
+| Login | Post | Table | Chat |
+|-------|------|-------|------|
+| <img src="https://github.com/HW-UMUL/main/assets/150432433/df674616-8ec3-4fb7-8370-535ce5ffedc3" height=450 width=250> | <img src="https://github.com/HW-UMUL/main/assets/150432433/12096b53-385c-407a-81bd-60b07a51bc35" height=450 width=250> | <img src="https://github.com/HW-UMUL/main/assets/150432433/88d2285b-b888-4096-a21d-46e4fe6f9ef6" height=450 width=250> | <img src="https://github.com/HW-UMUL/main/assets/150432433/9eeb1fce-0540-4f2e-9f7d-81ddf0c309ac" height=450 width=250> |
 
 
 </details>
