@@ -1,4 +1,4 @@
-![modal](https://github.com/HW-UMUL/main/assets/76561901/df165ca7-9e82-492b-bbdb-ebd47ea8a473)## 남은 할일
+## 남은 할일
 - 단위 테스트, 성능 테스트
 - 리드미 마무리(사용 기술, 프로젝트 구성도, 역할, 느낀점, 전략, 검색 영상, 모바일 영상, 테스트 과정 및 결과, )
 - 위키 마무리(실행 방법)
@@ -254,7 +254,7 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 
 | Post 순위 모달창 표시 |
 |----------|
-|![Post 순위 모달창 표시](![modal](https://github.com/HW-UMUL/main/assets/76561901/9fe64036-5478-475a-afd8-ff41cff66c3f)|
+|![modal](https://github.com/HW-UMUL/main/assets/76561901/df165ca7-9e82-492b-bbdb-ebd47ea8a473)|
 
 ### [Post 게시글 열람]
 - 스크롤로 게시글을 열람할 수 있습니다.
@@ -262,7 +262,7 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 
 | Post 게시글 열람 |
 |----------|
-|![Post 게시글 열람](![post unlimited scroll](https://github.com/HW-UMUL/main/assets/76561901/113842ee-ca2c-4a2e-8bb0-f65d733d2ef4)|
+|![post unlimited scroll](https://github.com/HW-UMUL/main/assets/76561901/39bf362f-d426-48b7-88a1-27c8791459a6)|
 
 
 
