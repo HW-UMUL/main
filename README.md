@@ -24,7 +24,7 @@
 ## 팀원 구성
 | **이경민(PM)** | **김민우(TL)** | **심규혁(AC)** | **박대호(GM)** |
 | :------: |  :------: | :------: | :------: |
-| [<img src="https://github.com/final-kms/main/assets/150432433/79a75da8-f761-47e6-9460-450f0bac1e7b" height=150 width=150> <br/> @papercrane55123](https://github.com/papercrane55123) | [<img src="https://avatars.githubusercontent.com/u/44054359?v=4" height=150 width=150> <br/> @minu1215](https://github.com/minu1215) | [<img src="https://avatars.githubusercontent.com/u/80744883?s=400&u=3d8e4f1ce558e4f1c21670f19ac2cc2668524aed&v=4" height=150 width=150> <br/> @](https://github.com/shimguh) | [<img src="https://avatars.githubusercontent.com/u/76561901?v=4" height=150 width=150> <br/> @pdh4869](https://github.com/pdh4869)| 
+| [<img src="https://github.com/final-kms/main/assets/150432433/79a75da8-f761-47e6-9460-450f0bac1e7b" height=150 width=150> <br/> @papercrane55123](https://github.com/papercrane55123) | [<img src="https://avatars.githubusercontent.com/u/44054359?v=4" height=150 width=150> <br/> @minu1215](https://github.com/minu1215) | [<img src="https://avatars.githubusercontent.com/u/80744883?s=400&u=3d8e4f1ce558e4f1c21670f19ac2cc2668524aed&v=4" height=150 width=150> <br/> @shimguh](https://github.com/shimguh) | [<img src="https://avatars.githubusercontent.com/u/76561901?v=4" height=150 width=150> <br/> @pdh4869](https://github.com/pdh4869)| 
 
 <br>
 
