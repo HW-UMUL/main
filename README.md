@@ -94,8 +94,16 @@
 <br>
 
 ## 03 브런치 전략
- - 대호 작성 필요. 그림 있으면 좋음
+![image](https://github.com/final-kms/main/assets/76561901/abbb568d-b08d-4ffd-8a39-fae7b5c8c08e)
 
+1. Git / Github 활용
+2. Backend / Frontend로 나누어 코드 관리 
+3. Backend, Frontend를 local에서 같은 폴더에 위치하여 함께 업로드되어 2번 방법 폐기
+   => 이후, 팀원별 브랜치 나누어 관리
+   => 각자 개발 이후 병합하여 배포
+4. tag / releases 만들어 현재까지 작업한 내용 설명 및 버전 관리
+
+   
 <br>
 
 ## 04 Agile 전략
