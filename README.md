@@ -5,8 +5,7 @@
 - ppt 제작
 - 발표
 
-
-![umul-update](https://github.com/final-kms/main/assets/150432433/3600fcad-ce1d-4015-96a6-266d6b4ca245)
+<img src="https://github.com/final-kms/main/assets/150432433/3600fcad-ce1d-4015-96a6-266d6b4ca245" alt="umul-update" width="90%" height="90%">
 
 - 서비스 접속 URL : https://umul.site/
 - UMUL Wiki : https://github.com/final-kms/main/wiki <br>
@@ -29,7 +28,9 @@
 
 <br>
 
-## 역할 분담
+<details>
+     <summary> 역할 분담 </summary>
+     
 ### ⛵ 이경민
 - **Project Manager**
      - 일정 관리, 기획 문서 정리, 일일 및 멘토링 회고 정리, 의견 수립 및 전달, README-Wiki 작성, PPT 작업
@@ -53,6 +54,7 @@
      - 역할에 따른 업무
 - **구현 기능**
      - 개인 업무
+</details>
 
 <br>
 
@@ -99,6 +101,9 @@
 <br>
 
 ## 04 Agile 전략
+<details>
+     <summary> agile 전략</summary>
+
  ![agile](https://github.com/final-kms/main/assets/80744883/5c267d73-1864-48b9-b268-7f3717c9357b)  
 소프트웨어 개발 방법론에는 다양한 종류가 있습니다.
 그 중에서 많은 기업들이 사용하고 있다고 배웠으며, 여러번 개발할 있고 변수에 대처가 빠른 장점이 있는 애자일 방법론을 채택했습니다.
@@ -119,10 +124,14 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 단점
 - 세부적인 계획 필요
 - 시간이 부족할 수 있음
+</details>
 
 <br>
 
 ## 05 개발 일정
+<details>
+     <summary> 개발 일정</summary>
+     
 - 개발 기간 : 2024-03-04 ~ 2024-04-25
 - Backend 개발(Work Day 31) : 2024-03-06 ~ 2024-04-19
 - Frontend 개발(Work Day 30) : 2024-03-07 ~ 2024-04-19
@@ -136,13 +145,17 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 |----------|
 |![image](https://github.com/final-kms/main/assets/150432433/d4476752-92d5-4971-b183-136f848c476d)|
 
+</details>
 
 <br>
 
-## 06 구현 기능 설명
+## 06 기능 설명
 
+<details>
+     <summary>기능 설명</summary>
+     
 ## [사이트 접속]
-- 사이트에 처음 접속 시 초기 로딩 화면과 함께 회원가입 또는 로그인 페이지로 이동합니다.
+- 사이트에 처음 접속 시 초기 로딩 화면과 함께 로그인 페이지로 이동합니다.
 
 ### [초기화면]
 - '우물'은 회사 임직원용 서비스 이므로 로그인 후 세부 기능 사용 가능합니다.
@@ -464,13 +477,18 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 <br>
 
 ## [App]
-- 웹 서비스를 모바일 app으로 동일하게 경험할 수 있습니다.
+- 웹 서비스를 모바일 app으로 동일하게 경험할 수 있습니다.(안드로이드 전용)
 - ㅁㅁㅁ를 사용해 모바일 최적화 했습니다.
 
+</details>
 
+<br>
 
 ## 07 테스트
 
+<details>
+     <summary> 테스트 </summary>
+</details>
 
 
 
@@ -478,12 +496,19 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 
 ## 08 성능 개선
 
+<details>
+     <summary> 성능 개선 </summary>
+</details>
 
 
 
 <br>
 
 ## 09 프로젝트 후기
+
+<details>
+     <summary> 프로젝트 후기 </summary>
+     
 ### ⛵ 이경민
 53일 간의 final 프로젝트가 막을 내렸다. WBS 같은 일정 관리부터 프로젝트 계획서, UI 설계서, ERD 등의 문서작업, 그리고 Backend와 Frontend 까지 프로젝트 전체를 경험했다. 개발에 처음 발을 들인 초보 개발자로서 이보다 값진 경험은 없으리라 생각한다. 추위와 따듯함이 연결되던 날씨처럼 작은 것에도 울고 웃을 수 있던 오늘의 프로젝트는 마음속 깊이 자리 잡아 새로운 시작이 되어 줄 것이다.
 
@@ -493,3 +518,5 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 
 ### 박대호
 팀을 이루어 프로젝트를 수행해 볼 수 있었던 좋은 경험이었다고 생각함. html/css/js등 바닐라로 개발하는 것이 아닌 프레임워크를 활용하여 컴포넌트 기반 개발을 경험할 수 있어서 좋았음. 
+
+</details>
