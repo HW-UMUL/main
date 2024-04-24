@@ -1,4 +1,4 @@
-## 남은 할일
+![modal](https://github.com/HW-UMUL/main/assets/76561901/df165ca7-9e82-492b-bbdb-ebd47ea8a473)## 남은 할일
 - 단위 테스트, 성능 테스트
 - 리드미 마무리(사용 기술, 프로젝트 구성도, 역할, 느낀점, 전략, 검색 영상, 모바일 영상, 테스트 과정 및 결과, )
 - 위키 마무리(실행 방법)
@@ -249,6 +249,24 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 |----------|
 |![Post 좋아요 즐겨찾기 최신순 정렬](https://github.com/final-kms/main/assets/150432433/0489fef0-5e7c-489e-8e76-6cd859c3e49c)|
 
+### [Post 순위 모달창 표시]
+- 순위에 표시된 게시글을 모달창에서 확인할 수 있습니다.
+
+| Post 순위 모달창 표시 |
+|----------|
+|![Post 순위 모달창 표시](![modal](https://github.com/HW-UMUL/main/assets/76561901/9fe64036-5478-475a-afd8-ff41cff66c3f)|
+
+### [Post 게시글 열람]
+- 스크롤로 게시글을 열람할 수 있습니다.
+- 한 번에 백엔드에 게시글을 10개씩 요청하고, 이후 스크롤 시 게시글을 재요청합니다. 
+
+| Post 게시글 열람 |
+|----------|
+|![Post 게시글 열람](![post unlimited scroll](https://github.com/HW-UMUL/main/assets/76561901/113842ee-ca2c-4a2e-8bb0-f65d733d2ef4)|
+
+
+
+
 
 ## [Wiki]
 - Wiki는 업무에 관한 정보를 카테고리로 관리하는 시스템입니다.
@@ -269,6 +287,14 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 | Wiki 게시글 열람 |
 |----------|
 ![PagingWiki](https://github.com/final-kms/main/assets/76561901/eafb391d-e9bf-4415-8f90-1e5a8debf2fd)
+
+### [Wiki 게시글 카테고리별 열람] 
+- 카테고리에 맞는 게시글만 열람할 수 있습니다.
+
+| Wiki 게시글 열람 |
+|----------|
+![wiki category](https://github.com/HW-UMUL/main/assets/76561901/59269d93-79ca-4f03-aeb1-fe184f107389)
+
 
 ### [Wiki 게시글 수정]
 - Wiki 게시글 수정 시에도 작성 시와 마찬가지로 빈 요소를 허용하지 않습니다.
