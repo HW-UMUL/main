@@ -88,10 +88,8 @@
 |---|:---|
 <br>
 
-## 02 채택한 개발 기술
-- axios
-- WebSocket
-- 
+## 02 산출물
+
 
 <br>
 
@@ -481,26 +479,6 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 - ㅁㅁㅁ를 사용해 모바일 최적화 했습니다.
 
 </details>
-
-<br>
-
-## 07 테스트
-
-<details>
-     <summary> 테스트 </summary>
-</details>
-
-
-
-<br>
-
-## 08 성능 개선
-
-<details>
-     <summary> 성능 개선 </summary>
-</details>
-
-
 
 <br>
 
