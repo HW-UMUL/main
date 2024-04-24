@@ -89,7 +89,7 @@
 <br>
 
 ## 02 산출물
-
+[wiki](https://github.com/HW-UMUL/main/wiki) 참고
 
 <br>
 
