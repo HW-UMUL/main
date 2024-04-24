@@ -281,17 +281,18 @@ msa 구조로 변경, 나머지 기능 개발과 세부적인 UI 제작
 ![WikiWrite](https://github.com/final-kms/main/assets/76561901/2894cd07-3882-4354-86b7-b3544210aed8)
 
 ### [Wiki 게시글 열람] 
-- 게시글을 5개, 10개, 20개씩 볼 수 있도록 선택할 수 있습니다.
+- 게시글을 10개씩 열람할 수 있습니다.
 - 페이지 당 게시글의 개수를 초과하면 다음 버튼을 클릭하여 이후의 게시글을 열람할 수 있도록 합니다.
 
 | Wiki 게시글 열람 |
 |----------|
-![PagingWiki](https://github.com/final-kms/main/assets/76561901/eafb391d-e9bf-4415-8f90-1e5a8debf2fd)
+![wiki list](https://github.com/HW-UMUL/main/assets/76561901/b8c63af2-1cf0-4428-8f0c-8eae3a17cce7)
+
 
 ### [Wiki 게시글 카테고리별 열람] 
 - 카테고리에 맞는 게시글만 열람할 수 있습니다.
 
-| Wiki 게시글 열람 |
+| Wiki 게시글 카테고리별 열람 |
 |----------|
 ![wiki category](https://github.com/HW-UMUL/main/assets/76561901/59269d93-79ca-4f03-aeb1-fe184f107389)
 
