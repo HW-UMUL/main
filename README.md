@@ -5,7 +5,7 @@
 - ppt 제작
 - 발표
 
-<img src="https://github.com/final-kms/main/assets/150432433/3600fcad-ce1d-4015-96a6-266d6b4ca245" alt="umul-update" width="90%" height="90%">
+<img src="https://github.com/final-kms/main/assets/150432433/3600fcad-ce1d-4015-96a6-266d6b4ca245" alt="umul-update" width="100%" height="100%">
 
 - 서비스 접속 URL : https://umul.site/
 - UMUL Wiki : https://github.com/final-kms/main/wiki <br>
