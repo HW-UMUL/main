@@ -94,7 +94,7 @@
 <br>
 
 ## 03 브런치 전략
-<details>
+ <details>
      <summary> 브런치 전략 </summary>
      
 ![image](https://github.com/final-kms/main/assets/76561901/abbb568d-b08d-4ffd-8a39-fae7b5c8c08e)
