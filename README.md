@@ -21,9 +21,6 @@
 
 <br>
 
-<details>
-     <summary> 역할 분담 </summary>
-     
 ### ⛵ 이경민
 - **Project Manager**
      - 일정 관리, 기획 문서 정리, 일일 및 멘토링 회고 정리, 의견 수립 및 전달, README-Wiki 작성, PPT 작업, 발표
@@ -47,7 +44,6 @@
      - 형상 관리 계획 수립, 형상 관리 활동 검토, Tag/Relese 관리
 - **구현 기능**
      - Wiki 기능, 페이징 기능, 무한 스크롤 기능 
-</details>
 
 <br>
 
